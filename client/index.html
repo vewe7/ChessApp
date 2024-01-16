@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth. Debug</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<!--THIS IS A PLACEHOLDER FOR DEBUGGING THE BACKEND ROUTES.-->
+<body>
+    <div class="form-container">
+        <h1>REGISTER</h1>
+        <form action="http://localhost:5000/register" method="post">
+            <div class="input-container">
+                <div class="input-block">
+                    <label for="user_name">USERNAME</label>
+                    <input required type="text" id="user_name">
+                </div> 
+
+                <div class="input-block">
+                    <label for="user_password">PASSWORD</label>
+                    <input required type="password" id="user_password">
+                </div>
+                <!--
+                <div class="input-block">
+                    <label for="confirm_password">CONFIRM PASSWORD</label>
+                    <input required type="password" id="confirm_password">
+                </div>-->
+
+                <button type="submit">Sign Up</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
