@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth. Debug</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<!--THIS IS A PLACEHOLDER FOR DEBUGGING THE BACKEND ROUTES.-->
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>LOGIN</h1>
+            <div id="flashMessage"></div>
+            <form action="http://localhost:5000/login" method="post">
+                <div class="input-container">
+                    <div class="input-block">
+                        <label for="user_name">USERNAME</label>
+                        <input required type="text" id="user_name" name="username">
+                    </div> 
+
+                    <div class="input-block">
+                        <label for="user_password">PASSWORD</label>
+                        <input required type="password" id="user_password" name="password">
+                    </div>
+                    <button type="submit">Sign In</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-container">
+            <h1>REGISTER</h1>
+            <form id="registrationForm" action="http://localhost:5000/register" method="post">
+                <div class="input-container">
+                    <div class="input-block">
+                        <label for="r_user_name">USERNAME</label>
+                        <input required type="text" id="r_user_name" name="username">
+                    </div> 
+
+                    <div class="input-block">
+                        <label for="r_user_password">PASSWORD</label>
+                        <input id="rPass" required type="password" id="r_user_password" name="password">
+                    </div>
+    
+                    <div class="input-block">
+                        <label for="confirm_password">CONFIRM PASSWORD</label>
+                        <input id="rConfirmPass" required type="password" id="confirm_password">
+                    </div>
+
+                    <button type="button" onclick="validatePasswords()">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function validatePasswords() {
+          var password = document.getElementById('rPass').value;
+          var confirmPassword = document.getElementById('rConfirmPass').value;
+    
+          if (password === confirmPassword) {
+            document.getElementById('registrationForm').submit();
+
+          } else {
+            alert('Passwords do not match. Please try again.');
+          }
+        }
+
+        const flashErrorMessage = window.messages ? window.messages.error : '';
+        console.log(window.messages);
+        if (flashErrorMessage) {
+            document.getElementById('flashMessage').innerHTML = `<p>${flashErrorMessage}</p>`;
+        }
+      </script>    
+</body>
+</html>

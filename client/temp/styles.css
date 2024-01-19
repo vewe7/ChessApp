@@ -43,8 +43,15 @@ button {
     color: white;
 }
 
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    margin: auto;
+    margin-top: 200px;
+}
+
 .form-container {
-    margin: 200px 600px;
     padding: 20px;
     display: flex;
     flex-direction: column;
