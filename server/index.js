@@ -8,18 +8,11 @@ const cors = require("cors");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const initializePassport = require('./passport-config')
-initializePassport(
-    passport, 
-    user => users.find(element => element.username === user) , // replace with database SELECT
-    id => users.find(element => element.id === id) // replace with database SELECT
-);
+initializePassport(passport);
 const session = require('express-session')
 const path = require("path");
 const app = express();
 const PORT = 5000;
-
-// Placeholder for database
-const users = []
 
 app.use(cors());
 app.use(express.json());
@@ -50,18 +43,15 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        users.push({  // replace with database INSERT
-            id: Date.now().toString(), 
-            username: req.body.username,
-            password: hashedPassword
-        }); 
-        res.redirect('/login');
-    } catch {
-        res.redirect('/error');
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // check if username already exists
+    const userExistsQuery = await pool.query("SELECT * FROM player WHERE username = $1", [req.body.username]);
+    if (userExistsQuery.rows.length > 0) {
+        return res.status(400).json({ error: "Username already exists"});
     }
-    console.log(users)
+    // insert new user into database
+    const insertQuery = await pool.query("INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *", [req.body.username, hashedPassword]);
+    res.status(201).json({ message: "User registered successfully" });
 });
 
 app.get("/error", (req, res) => {

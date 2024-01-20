@@ -1,13 +1,24 @@
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt")
+const pool = require("./db");
 
-function initialize(passport, getUser, getUserById) {
+async function getUserById(id) {
+    const query = await pool.query("SELECT * FROM player WHERE user_id = $1", [id]);
+    const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id};
+    return user;
+}
+
+function initialize(passport) {
     const authenticateUser = async (username, password, done) => {
-        const user = getUser(username);
+        const query = await pool.query("SELECT * FROM player WHERE username = $1", [username]);
+        // check if username exists
+        if(query.rows.length == 0) {
+            return done(null, false, { message: "Incorrect username."});
+        }
+        const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id};
         if (user == null) {
             return done(null, false)
         }
-
         try {
             if (await bcrypt.compare(password, user.password)) {
                 return done(null, user)
@@ -24,4 +35,4 @@ function initialize(passport, getUser, getUserById) {
     passport.deserializeUser((id, done) => {return done(null, getUserById(id))});
 }
 
-module.exports = initialize
+module.exports = initialize;
