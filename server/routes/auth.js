@@ -24,9 +24,9 @@ router.use(session({
 router.use(passport.initialize())
 router.use(passport.session())
 
-// AUTH ROUTES  
+// ROUTES  
 router.get('/session', checkAuthenticated, (req, res) => {
-    // redirect to homepage
+    // Redirect to homepage
     res.sendFile(path.join(CLIENT_PATH, 'session.html'));
 })
 
@@ -36,19 +36,21 @@ router.post("/login", passport.authenticate('local', {
 }));
 
 router.get("/login", (req, res) => {
-    // redirect to login page
+    // Redirect to login page
     res.sendFile(path.join(CLIENT_PATH, 'login.html'));
 });
 
 router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    // check if username already exists
-    const userExistsQuery = await pool.query("SELECT * FROM player WHERE username = $1", [req.body.username]);
+    // Check if username already exists
+    const userExistsCom = "SELECT * FROM player WHERE username = $1";
+    const userExistsQuery = await pool.query(userExistsCom, [req.body.username]);
     if (userExistsQuery.rows.length > 0) {
         return res.status(400).json({ error: "Username already exists"});
     }
-    // insert new user into database
-    const insertQuery = await pool.query("INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *", [req.body.username, hashedPassword]);
+    // Insert new user into database
+    const insertCom = "INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *";
+    const insertQuery = await pool.query(insertCom, [req.body.username, hashedPassword]);
     // TO-DO: error handling for insert fail
     res.status(201).json({ message: "User registered successfully" });
 });
@@ -57,7 +59,7 @@ router.get("/error", (req, res) => {
     res.sendFile(path.join(CLIENT_PATH, 'error.html'));
 })
 
-// Used by '/' route to redirect to login page if user does not have a valid session
+// Used by /session to check if user has a valid session
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();

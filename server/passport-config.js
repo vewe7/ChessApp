@@ -11,11 +11,12 @@ async function getUserById(id) {
 function initialize(passport) {
     const authenticateUser = async (username, password, done) => {
         const query = await pool.query("SELECT * FROM player WHERE username = $1", [username]);
-        // check if username exists
+        // Check if username exists
         if(query.rows.length == 0) {
             return done(null, false, { message: "Incorrect username."});
         }
-        const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id};
+        // Construct user object from database query 
+        const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id };
         if (user == null) {
             return done(null, false)
         }
