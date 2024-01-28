@@ -18,16 +18,16 @@ function initialize(passport) {
         // Construct user object from database query 
         const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id };
         if (user == null) {
-            return done(null, false)
+            return done(null, false);
         }
         try {
             if (await bcrypt.compare(password, user.password)) {
-                return done(null, user)
+                return done(null, user);
             } else {
-                return done(null, false)
+                return done(null, false);
             }
         } catch (e) {
-            return done(e)
+            return done(e);
         }
     }
 

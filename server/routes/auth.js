@@ -21,14 +21,14 @@ router.use(session({
     resave: false,
     saveUninitialized: false
 }));
-router.use(passport.initialize())
-router.use(passport.session())
+router.use(passport.initialize());
+router.use(passport.session());
 
 // ROUTES  
 router.get('/session', checkAuthenticated, (req, res) => {
     // Redirect to homepage
     res.sendFile(path.join(CLIENT_PATH, 'session.html'));
-})
+});
 
 router.post("/login", passport.authenticate('local', {
     successRedirect: '/session',
@@ -38,6 +38,13 @@ router.post("/login", passport.authenticate('local', {
 router.get("/login", (req, res) => {
     // Redirect to login page
     res.sendFile(path.join(CLIENT_PATH, 'login.html'));
+});
+
+router.post('/logout', function(req, res, next){
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('/');
+    });
 });
 
 router.post("/register", async (req, res) => {
@@ -57,7 +64,7 @@ router.post("/register", async (req, res) => {
 
 router.get("/error", (req, res) => {
     res.sendFile(path.join(CLIENT_PATH, 'error.html'));
-})
+});
 
 // Used by /session to check if user has a valid session
 function checkAuthenticated(req, res, next) {
@@ -65,6 +72,6 @@ function checkAuthenticated(req, res, next) {
         return next();
     }
     res.redirect('/login');
-}
+}   
 
 module.exports = router;
