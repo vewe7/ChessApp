@@ -1,5 +1,7 @@
 CREATE DATABASE chessapp;
 
+\c chessapp 
+
 CREATE TABLE player (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(20),
