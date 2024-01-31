@@ -12,7 +12,7 @@ const bcrypt = require("bcrypt");
 const initializePassport = require('../passport-config');
 initializePassport(passport);
 
-const CLIENT_PATH = path.join(__dirname, '../..', 'client', 'temp');
+const CLIENT_PATH = path.join(__dirname, '../..', 'temp');
 
 router.use(express.urlencoded({ extended: false }));
 router.use(express.static(CLIENT_PATH));
