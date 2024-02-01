@@ -11,7 +11,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const initializePassport = require('../passport-config');
 initializePassport(passport);
-
+const jwt = require('jsonwebtoken');
 const CLIENT_PATH = path.join(__dirname, '../..', 'temp');
 
 router.use(express.urlencoded({ extended: false }));
@@ -27,15 +27,21 @@ router.use(passport.session());
 // ROUTES  
 router.get('/session', checkAuthenticated, (req, res) => {
     // Redirect to homepage
-    res.sendFile(path.join(CLIENT_PATH, 'session.html'));
+    res.status(200).send('Success');
 });
 
-router.post("/login", passport.authenticate('local', {
-    successRedirect: '/session',
-    failureRedirect: '/login'
-}));
+router.post("/login", checkNotAuthenticated, passport.authenticate('local'), (req, res) => {
+    const token = generateSecureToken(req.user);
+    res.status(200).json({ token, user: req.user.user, message: 'Login successful'});
+});
 
-router.get("/login", (req, res) => {
+const generateSecureToken = (user) => {
+    // Use jsonwebtoken to create a secure JWT
+    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn: '2h' });
+    return token;
+  };
+
+router.get("/login", checkNotAuthenticated, (req, res) => {
     // Redirect to login page
     res.sendFile(path.join(CLIENT_PATH, 'login.html'));
 });
@@ -43,8 +49,9 @@ router.get("/login", (req, res) => {
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
         if (err) { return next(err); }
-        res.redirect('/');
+        res.redirect('/session');
     });
+    res.json({ message: 'Logged out successfully.' });
 });
 
 router.post("/register", async (req, res) => {
@@ -73,5 +80,14 @@ function checkAuthenticated(req, res, next) {
     }
     res.redirect('/login');
 }   
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        res.redirect('/session');
+    }
+    return next();
+}
+
+
 
 module.exports = router;
