@@ -27,10 +27,12 @@ router.use(passport.session());
 // ROUTES  
 router.get('/session', checkAuthenticated, (req, res) => {
     // Redirect to homepage
+    console.log("GET /session");
     res.status(200).send('Success');
 });
 
 router.post("/login", checkNotAuthenticated, passport.authenticate('local'), (req, res) => {
+    console.log("POST /login")
     const token = generateSecureToken(req.user);
     res.status(200).json({ token, user: req.user.user, message: 'Login successful'});
 });
@@ -43,6 +45,7 @@ const generateSecureToken = (user) => {
 
 router.get("/login", checkNotAuthenticated, (req, res) => {
     // Redirect to login page
+    console.log("GET /login");
     res.sendFile(path.join(CLIENT_PATH, 'login.html'));
 });
 
@@ -78,11 +81,13 @@ function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/login');
+    console.log("unauthorized res.");
+    res.status(401).json({ message: "Unauthorized" });
 }   
 
 function checkNotAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
+        console.log("Authentication passed.");
         res.redirect('/session');
     }
     return next();

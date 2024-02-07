@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    try {
+    try { 
+      // Send login request to bcakend 
       const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
         credentials: 'include', // Include credentials (cookies) in the request
@@ -14,17 +17,15 @@ const Login = () => {
         },
         body: JSON.stringify({ username, password }),
       })
-
+      // Throw error if login failed
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Login successful, set session cookie and redirect to home
       const data = await response.json();
-
       document.cookie = `yourAuthToken=${data.token}; path=/; HttpOnly`;
-      /*
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Login successful. User:', data.user);
-      } else {
-        console.log('Login failed. Unauthorized.');
-      }*/
+      navigate("/");
+
     } catch (error) {
       console.error('Error during login:', error);
     }

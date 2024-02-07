@@ -30,7 +30,7 @@ function App() {
       alert(e);
     }
   }*/
-
+  window.console.log("App loaded");
   return (
     <div className="App container">
       <h1>Welcome to my app</h1>
