@@ -32,7 +32,7 @@ function App() {
   }*/
   window.console.log("App loaded");
   return (
-    <div className="App container">
+    <div className="App container animated-gradient">
       <h1>Welcome to my app</h1>
       <BrowserRouter>
         <Routes>
