@@ -54,8 +54,8 @@
 }
 
 .porple {
-  background-color: #301e61;
-  color: white;
+  background-color: white;
+  color: #301e61;
 }
 
 .Header {
@@ -65,6 +65,19 @@
   flex-direction: column;
   align-items: baseline;
   margin-bottom: 2em;
+  background-color: #301e61;
+  color: white;
+}
+
+.BoxBackground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: content-box;
+  border-radius: 30px;
+  width: 50%;
+  padding: 30px 0px 30px;
+  margin: auto;
   background-color: #301e61;
   color: white;
 }

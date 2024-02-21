@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="BoxBackground">
       <h1>Login</h1>
       <label>
         Username:
