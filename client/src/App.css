@@ -62,8 +62,7 @@
   box-sizing: border-box;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: baseline;
+  flex-direction: row;
   margin-bottom: 2em;
   background-color: #301e61;
   color: white;
@@ -84,4 +83,7 @@
 
 .Title {
   margin: 0;
+  padding-top: 0;
+  padding: 0;
+  overflow: hidden;
 }
