@@ -52,9 +52,8 @@ router.get("/login", checkNotAuthenticated, (req, res) => {
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
         if (err) { return next(err); }
-        res.redirect('/session');
+        res.json({ message: 'Logged out successfully.' });
     });
-    res.json({ message: 'Logged out successfully.' });
 });
 
 router.post("/register", async (req, res) => {
