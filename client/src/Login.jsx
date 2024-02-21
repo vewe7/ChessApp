@@ -32,19 +32,36 @@ const Login = () => {
   };
 
   return (
-    <div className="BoxBackground">
-      <h1>Login</h1>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button className="porple" onClick={handleLogin} >Login</button>
+    <div>
+      <div className="BoxBackground">
+        <h1>Login</h1>
+        <label>
+          Username:
+          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        </label>
+        <br />
+          <label>
+            Password:
+            < input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
+        <br />
+        <button className="porple" onClick={handleLogin} >Login</button>
+      </div>
+
+      <div className="revBackground">
+        <div class="rev">
+          <body>My mom and I play on this site! It's so awesome!!!</body>  
+          <label>-Nikki</label>
+        </div>
+        <div class="rev">
+          <body>I keep losing to so manny different people :( But atleast I'm learning!</body>
+          <label>-Michael</label>
+        </div>
+        <div class="rev">
+          <body> 9/10 chess players reccomend this site. The last one was being a silly billy ;)</body>
+          <label>-Shadman</label>
+        </div>
+      </div>
     </div>
   );
 };
