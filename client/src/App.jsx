@@ -1,46 +1,27 @@
-import React, {useState, useEffect} from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 
-import AuthenticatedRoute from './AuthenticatedRoute';
-import UnauthenticatedRoute from './UnauthenticatedRoute';
-import PrivateRoute from './PrivateRoute';
-import Home from './Home';
-import Login from './Login';
-import Header from './Header.jsx';
+import AuthenticatedRoute from "./AuthenticatedRoute";
+import UnauthenticatedRoute from "./UnauthenticatedRoute";
+import PrivateRoute from "./PrivateRoute";
+import Home from "./Home";
+import Login from "./Login";
+import Header from "./Header.jsx";
 
 function App() {
-  /*
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    onLoad();
-  }, []);
-
-  async function onLoad() {
-    try {
-      const response = await fetch("http://localhost:5000/session", {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        userHasAuthenticated(true);
-      }
-    } catch (e) {
-      alert(e);
-    }
-  }*/
   window.console.log("App loaded");
   return (
-    <div className="App container animated-gradient">
+    <div className="App animated-gradient container">
       <Header className="Header" />
       <BrowserRouter>
         <Routes>
-          <Route exact path='/' element={<PrivateRoute/>}>
-            <Route exact path='/' element={<Home/>}/>
+          <Route exact path="/" element={<PrivateRoute />}>
+            <Route exact path="/" element={<Home />} />
           </Route>
-          <Route exact path='/login' element={<Login/>}/>
+          <Route exact path="/login" element={<Login usernameUpdate={setUsername} />} />
         </Routes>
       </BrowserRouter>
     </div>
