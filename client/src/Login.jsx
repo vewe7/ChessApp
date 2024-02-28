@@ -33,32 +33,39 @@ const Login = () => {
 
   return (
     <div>
-      <div className="BoxBackground">
-        <h1>Login</h1>
-        <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </label>
-        <br />
+      <div className="LoginRegisterBoxes">
+        <div className="BoxBackground">
+          <h1>Login</h1>
           <label>
-            Password:
-            < input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            Username:
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
           </label>
-        <br />
-        <button className="porple" onClick={handleLogin} >Login</button>
+          <br />
+            <label>
+              Password:
+              < input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </label>
+          <br />
+          <button className="porple" onClick={handleLogin} >Sign In</button>
+        </div>
+
+        <div className="BoxBackground">
+          <h1>Don't Have An Account?</h1>
+          <button className="porple" >Sign Up</button>
+        </div>
       </div>
 
-      <div className="revBackground">
+      <div className="porple">
         <div class="rev">
-          <body>My mom and I play on this site! It's so awesome!!!</body>  
+          <p>My mom and I play on this site! It's so awesome!!!</p>  
           <label>-Nikki</label>
         </div>
         <div class="rev">
-          <body>I keep losing to so manny different people :( But atleast I'm learning!</body>
+          <p>I keep losing to so manny different people :( But atleast I'm learning!</p>
           <label>-Michael</label>
         </div>
         <div class="rev">
-          <body> 9/10 chess players reccomend this site. The last one was being a silly billy ;)</body>
+          <p> 9/10 chess players reccomend this site. The last one was being a silly billy ;)</p>
           <label>-Shadman</label>
         </div>
       </div>

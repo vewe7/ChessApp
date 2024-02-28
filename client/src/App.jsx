@@ -7,7 +7,6 @@ import UnauthenticatedRoute from './UnauthenticatedRoute';
 import PrivateRoute from './PrivateRoute';
 import Home from './Home';
 import Login from './Login';
-import Header from './Header.jsx';
 
 function App() {
   /*
@@ -34,7 +33,6 @@ function App() {
   window.console.log("App loaded");
   return (
     <div className="App container animated-gradient">
-      <Header className="Header" />
       <BrowserRouter>
         <Routes>
           <Route exact path='/' element={<PrivateRoute/>}>
