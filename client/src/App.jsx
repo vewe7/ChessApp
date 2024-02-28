@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
-import AuthenticatedRoute from "./AuthenticatedRoute";
-import UnauthenticatedRoute from "./UnauthenticatedRoute";
 import PrivateRoute from "./PrivateRoute";
 import Home from "./Home";
 import Login from "./Login";
