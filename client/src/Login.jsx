@@ -33,6 +33,7 @@ const Login = ({ usernameUpdate }) => {
 
   return (
     <div>
+<<<<<<< HEAD
       <div className="BoxBackground">
         <h1>Login</h1>
         <label>
@@ -48,10 +49,33 @@ const Login = ({ usernameUpdate }) => {
         <button className="porple" onClick={handleLogin}>
           Login
         </button>
+=======
+      <div className="LoginRegisterBoxes">
+        <div className="BoxBackground">
+          <h1>Login</h1>
+          <label>
+            Username:
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+          </label>
+          <br />
+            <label>
+              Password:
+              < input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </label>
+          <br />
+          <button className="porple" onClick={handleLogin} >Sign In</button>
+        </div>
+
+        <div className="BoxBackground">
+          <h1>Don't Have An Account?</h1>
+          <button className="porple" >Sign Up</button>
+        </div>
+>>>>>>> logoBranch
       </div>
 
-      <div className="revBackground">
+      <div className="porple">
         <div class="rev">
+<<<<<<< HEAD
           <body>My mom and I play on this site! It's so awesome!!!</body>
           <label>-Nikki</label>
         </div>
@@ -68,6 +92,17 @@ const Login = ({ usernameUpdate }) => {
             9/10 chess players reccomend this site. The last one was being a
             silly billy ;)
           </body>
+=======
+          <p>My mom and I play on this site! It's so awesome!!!</p>  
+          <label>-Nikki</label>
+        </div>
+        <div class="rev">
+          <p>I keep losing to so manny different people :( But atleast I'm learning!</p>
+          <label>-Michael</label>
+        </div>
+        <div class="rev">
+          <p> 9/10 chess players reccomend this site. The last one was being a silly billy ;)</p>
+>>>>>>> logoBranch
           <label>-Shadman</label>
         </div>
       </div>

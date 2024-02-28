@@ -5,15 +5,13 @@ import "./App.css";
 import PrivateRoute from "./PrivateRoute";
 import Home from "./Home";
 import Login from "./Login";
-import Header from "./Header.jsx";
 
 function App() {
   const [username, setUsername] = useState("");
 
   window.console.log("App loaded");
   return (
-    <div className="App animated-gradient container">
-      <Header className="Header" />
+    <div className="App container animated-gradient">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
