@@ -17,7 +17,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/" element={<Home username={username}/>} />
           </Route>
           <Route exact path="/login" element={<Login usernameUpdate={setUsername} />} />
         </Routes>

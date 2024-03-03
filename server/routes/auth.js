@@ -14,15 +14,43 @@ initializePassport(passport);
 const jwt = require('jsonwebtoken');
 const CLIENT_PATH = path.join(__dirname, '../..', 'temp');
 
-router.use(express.urlencoded({ extended: false }));
-router.use(express.static(CLIENT_PATH));
-router.use(session({
+const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET, // TO-DO: GENERATE RANDOM SECRET
     resave: false,
     saveUninitialized: false
-}));
+});
+
+router.use(express.urlencoded({ extended: false }));
+router.use(express.static(CLIENT_PATH));
+router.use(sessionMiddleware);
 router.use(passport.initialize());
 router.use(passport.session());
+
+function onlyForHandshake(middleware) {
+return (req, res, next) => {
+    const isHandshake = req._query.sid === undefined;
+    if (isHandshake) {
+    middleware(req, res, next);
+    } else {
+    next();
+    }
+};
+}
+
+function initializeIo(io) {
+    io.engine.use(onlyForHandshake(sessionMiddleware));
+    io.engine.use(onlyForHandshake(passport.session()));
+    io.engine.use(
+    onlyForHandshake((req, res, next) => {
+        if (req.user) {
+        next();
+        } else {
+        res.writeHead(401);
+        res.end();
+        }
+    }),
+    );
+}
 
 // ROUTES  
 router.get('/session', checkAuthenticated, (req, res) => {
@@ -42,12 +70,6 @@ const generateSecureToken = (user) => {
     const token = jwt.sign({ userId: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn: '2h' });
     return token;
   };
-
-router.get("/login", checkNotAuthenticated, (req, res) => {
-    // Redirect to login page
-    console.log("GET /login");
-    res.sendFile(path.join(CLIENT_PATH, 'login.html'));
-});
 
 router.post('/logout', function(req, res, next){
     req.logout(function(err) {
@@ -92,6 +114,7 @@ function checkNotAuthenticated(req, res, next) {
     return next();
 }
 
-
-
-module.exports = router;
+module.exports = {
+    router:router,
+    initializeIo: initializeIo
+}
