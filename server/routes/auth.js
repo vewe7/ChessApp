@@ -62,7 +62,7 @@ router.get('/session', checkAuthenticated, (req, res) => {
 router.post("/login", checkNotAuthenticated, passport.authenticate('local'), (req, res) => {
     console.log("POST /login")
     const token = generateSecureToken(req.user);
-    res.status(200).json({ token, user: req.user.user, message: 'Login successful'});
+    res.status(200).json({ token, user: req.user.username, message: 'Login successful'});
 });
 
 const generateSecureToken = (user) => {
