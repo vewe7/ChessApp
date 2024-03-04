@@ -1,5 +1,6 @@
-function socketInitialize (io) {
+const db = require("./db-access");
 
+function socketInitialize (io) {
   io.on("connection", (socket) => {
 
     const userId = socket.request.session.passport.user;
@@ -13,6 +14,7 @@ function socketInitialize (io) {
 
     socket.on("invite", ({ from, to }) => {
       console.log(`${from} is inviting ${to}`);
+      recipientUser = 
     });
 
     socket.on("disconnect", () => {

@@ -6,7 +6,6 @@ import io from "socket.io-client";
 const SOCKET_SERVER_URL = "http://localhost:5000";
 
 const Invite = ({username}) => {
-    const usernameRef = useRef(username);
     const [inviteName, setInviteName] = useState("");
     const [socket, connectSocket] = useState(null);
 
@@ -27,7 +26,7 @@ const Invite = ({username}) => {
 
     const sendInvite = () => {
         // Send invite to socket server
-        socket.emit('invite', {from: usernameRef, to: inviteName});
+        socket.emit('invite', inviteName);
     }
       
     return (
