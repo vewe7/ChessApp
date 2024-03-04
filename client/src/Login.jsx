@@ -24,7 +24,6 @@ const Login = () => {
       // Login successful, set session cookie and redirect to home
       const data = await response.json();
       document.cookie = `yourAuthToken=${data.token}; path=/; HttpOnly`;
-      usernameUpdate(username);
       navigate("/");
     } catch (error) {
       console.error("Error during login:", error);

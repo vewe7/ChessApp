@@ -17,6 +17,10 @@ const Invite = ({username}) => {
 
         socket.emit('joinInvite');
 
+        socket.on("invite", (message) => {
+            window.console.log(message);
+        });
+
         // Cleanup on component unmount
         return () => {
             socket.emit('leaveInvite');
@@ -32,7 +36,7 @@ const Invite = ({username}) => {
     return (
         <>
             <div className="BoxBackground">
-                <h1>Login</h1>
+                <h1>Invite</h1>
                 <label>
                 Invite User:
                 <input type="text" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
