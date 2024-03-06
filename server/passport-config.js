@@ -4,7 +4,7 @@ const pool = require("./db");
 
 async function getUserById(id) {
     const query = await pool.query("SELECT * FROM player WHERE user_id = $1", [id]);
-    const user = { user: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id};
+    const user = { username: query.rows[0].username, password: query.rows[0].password_hash, id: query.rows[0].user_id};
     return user;
 }
 

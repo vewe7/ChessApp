@@ -1,13 +1,31 @@
-const socketInitialize = (server) => {
-  const io = require("socket.io")(server, {
-    cors: {
-      origin: "http://localhost:5173",
-      credentials: true,
-    },
-  });
+const db = require("./db-access");
 
-  io.on("connection", (socket) => {
-    console.log("A user connected");
+function socketInitialize (io) {
+  io.on("connection", async (socket) => {
+
+    const userId = socket.request.session.passport.user;
+    const username = await db.getUsernameById(userId);
+    // Emit to a specific user by emitting to their room
+    socket.join(`user:${userId}`);
+    console.log(`user ${userId} connected`);
+
+    socket.on("joinInvite", () => {
+      socket.join("inviteRoom");
+    });
+
+    socket.on("invite", async (to) => {
+      const recipientUser = await db.getUserByUsername(to);
+      if (recipientUser == null) {
+        socket.emit("invite", "User not found");
+        return;
+      } else if (recipientUser.id == userId) {
+        socket.emit("invite", "Cannot invite self");
+        return;
+      }
+      console.log(`user ${userId} is inviting user ${recipientUser.id}`);
+      io.to(`user:${recipientUser.id}`).emit("invite", `User ${username} has invited you`);
+      socket.emit("invite", "Invite sent");
+    });
 
     socket.on("disconnect", () => {
       console.log("User disconnected");

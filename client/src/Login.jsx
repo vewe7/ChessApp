@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ usernameUpdate }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -24,7 +24,6 @@ const Login = ({ usernameUpdate }) => {
       // Login successful, set session cookie and redirect to home
       const data = await response.json();
       document.cookie = `yourAuthToken=${data.token}; path=/; HttpOnly`;
-      usernameUpdate(username);
       navigate("/");
     } catch (error) {
       console.error("Error during login:", error);

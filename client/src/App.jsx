@@ -7,8 +7,6 @@ import Home from "./Home";
 import Login from "./Login";
 
 function App() {
-  const [username, setUsername] = useState("");
-
   window.console.log("App loaded");
   return (
     <div className="App container animated-gradient">
@@ -17,7 +15,7 @@ function App() {
           <Route exact path="/" element={<PrivateRoute />}>
             <Route exact path="/" element={<Home />} />
           </Route>
-          <Route exact path="/login" element={<Login usernameUpdate={setUsername} />} />
+          <Route exact path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>
