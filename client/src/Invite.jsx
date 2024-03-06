@@ -17,8 +17,9 @@ const Invite = ({username}) => {
 
         socket.emit('joinInvite');
 
-        socket.on("invite", (message) => {
+        socket.on("invite-ask", (message, inviteId) => {
             window.console.log(message);
+            window.console.log(`invite id is ${inviteId}`);
         });
 
         // Cleanup on component unmount
