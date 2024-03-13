@@ -1,4 +1,5 @@
 import './App.css';
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
@@ -8,6 +9,7 @@ function Header() {
                 <h2>Free And Fun Online Chess</h2>
             </div>
             <img class="logo" src ="../FAFOCHESS.svg"></img>
+            <Link to='/game'>Chess Game</Link>
         </div>
         
     )

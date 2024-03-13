@@ -1,0 +1,20 @@
+.piece {
+    position: absolute;
+    width: 12.5%;
+    height: 12.5%;
+    background-size: 100%;
+}
+
+/* Images for the pieces */
+.piece.bb { background-image: url('../../images/bb.svg'); }
+.piece.bk { background-image: url('../../images/bk.svg'); }
+.piece.bn { background-image: url('../../images/bn.svg'); }
+.piece.bp { background-image: url('../../images/bp.svg'); }
+.piece.bq { background-image: url('../../images/bq.svg'); }
+.piece.br { background-image: url('../../images/br.svg'); }
+.piece.wb { background-image: url('../../images/wb.svg'); }
+.piece.wk { background-image: url('../../images/wk.svg'); }
+.piece.wn { background-image: url('../../images/wn.svg'); }
+.piece.wp { background-image: url('../../images/wp.svg'); }
+.piece.wq { background-image: url('../../images/wq.svg'); }
+.piece.wr { background-image: url('../../images/wr.svg'); }
