@@ -25,8 +25,8 @@ export function initialPosition() {
 }
 
 export function makeNewPosition(position, type, f0, r0, f1, r1) {
-    const position2 = new Array(8).fill('').map(x => new Array(8).fill(''));
-
+    const position2 = [...position];
+    
     function convertFile(f) {
         return (f.charCodeAt(0) - 'a'.charCodeAt(0));
     }
@@ -41,24 +41,8 @@ export function makeNewPosition(position, type, f0, r0, f1, r1) {
     r0 = convertRank(r0);
     r1 = convertRank(r1);
 
-    for (let r = 0; r < 8; r++) {
-        for (let f = 0; f < 8; f++) {
-            // Remove from initial square
-            if (f === f0 && r === r0) {
-                position2[r][f] = '';
-            }
-
-            // Add to destination square
-            else if (f === f1 && r === r1) {
-                position2[r][f] = type;
-            }
-
-            // Copy everything else
-            else {
-                position2[r][f] = position[r][f];
-            }
-        }
-    }
+    position2[r0][f0] = '';
+    position2[r1][f1] = type;
 
     return position2;
 }
