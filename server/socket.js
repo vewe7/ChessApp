@@ -1,18 +1,35 @@
+import { Chess } from './Chess.js';
+
 const db = require("./db-access");
 const invites = new Map();
 let inviteIterator = 1;
 
+const matches = new Map();
+
+function startMatch(player1, player2) {
+  return new Chess();
+}
+
+// Temp line
+matches.set(1, startMatch(1, 2));
+
 function socketInitialize (io) {
   io.on("connection", async (socket) => {
-
     const userId = socket.request.session.passport.user;
     const username = await db.getUsernameById(userId);
+    let currentMatchId = 1;
+    let currentMatch = matches.get(currentMatchId);
     // Emit to a specific user by emitting to their room
     socket.join(`user:${userId}`);
     console.log(`user ${userId} connected`);
 
+    // INVITE EVENTS
     socket.on("joinInvite", () => {
       socket.join("inviteRoom");
+    });
+
+    socket.on("leaveInvite", () => {
+      socket.leave("inviteRoom");
     });
 
     socket.on("invite", async (to) => {
@@ -52,6 +69,18 @@ function socketInitialize (io) {
       } else { 
         console.log("User declined invite with id " + inviteId);
         // Do decline stuff
+      }
+    });
+
+    // MATCH EVENTS
+    socket.on("move", (move) => {
+      // Validate move
+      const moveRes = currentMatch.makeMove(move);
+
+      if (moveRes) {
+        io.to(`match:${currentMatchId}`).emit("move", move);
+      } else {
+        socket.emit("move", "Invalid move");
       }
     });
 
