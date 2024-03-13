@@ -2,33 +2,15 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
-import io from "socket.io-client";
-const SOCKET_SERVER_URL = "http://localhost:5000";
-
-const Invite = ({username}) => {
+const Invite = ({socket}) => {
     const [inviteName, setInviteName] = useState("");
-    const [socket, connectSocket] = useState(null);
-
     useEffect(() => {
-        // Connect to socket server
-        const socket = io(SOCKET_SERVER_URL, {withCredentials: true});
-
-        connectSocket(socket);
-
         socket.emit('joinInvite');
-
-        socket.on("invite-ask", (message, inviteId) => {
-            window.console.log(message);
-            window.console.log(`invite id is ${inviteId}`);
-        });
-
-        // Cleanup on component unmount
         return () => {
             socket.emit('leaveInvite');
-            socket.disconnect();
         };
-    }, []); // Empty array means this effect runs only once on mount
-
+    }, []);
+    
     const sendInvite = () => {
         // Send invite to socket server
         socket.emit('invite', inviteName);

@@ -5,7 +5,7 @@ import viteLogo from "/vite.svg";
 import Logout from "./Logout";
 import Invite from "./Invite";
 
-const Home = () => {
+const Home = (socket) => {
   return (
     <>
       <div>
@@ -16,7 +16,7 @@ const Home = () => {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <Invite />
+      <Invite socket={socket}/>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
