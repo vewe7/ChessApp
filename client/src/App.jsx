@@ -6,7 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import Home from "./Home";
 import Login from "./Login";
 import Header from "./Header.jsx";
-import Game from "./chess-game/Game";
+import Game from "./Game";
 
 function App() {
   window.console.log("App loaded");

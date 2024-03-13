@@ -6,7 +6,7 @@ import { useRef  } from 'react'
 
 function Pieces() {
     const ref = useRef();
-    const [currentPosition, setState] = useState(initialPosition());
+    const [currentPosition, setPosition] = useState(initialPosition());
 
     function dropSquare(e) {
         // Get and initialize x-pos of left side, and y-pos of bottom side of board
@@ -33,7 +33,7 @@ function Pieces() {
         const nextPosition = makeNewPosition(currentPosition, type, file, rank, newFile, newRank);
 
         // Make the new position the current one
-        setState(nextPosition);
+        setPosition(nextPosition);
     }
 
     function onDragOver(e) {

@@ -1,4 +1,4 @@
-import Pieces from './Pieces/Pieces'
+import Pieces from './Pieces'
 import './Board.css'
 import '../constants.css'
 
