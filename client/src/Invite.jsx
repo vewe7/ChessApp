@@ -2,12 +2,27 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
-const Invite = ({socket}) => {
+import { socket } from "./socket.js";
+
+
+const Invite = () => {
     const [inviteName, setInviteName] = useState("");
     useEffect(() => {
+        socket.on("invite-ask", (message, inviteId) => {
+            window.console.log(message);
+            window.console.log(`invite id is ${inviteId}`);
+        });
+        
+        socket.on("invite", (message) => {
+            window.console.log(message);
+        });
+
         socket.emit('joinInvite');
         return () => {
             socket.emit('leaveInvite');
+            socket.off("invite-ask");
+            socket.off("invite");
+            socket.disconnect();
         };
     }, []);
     

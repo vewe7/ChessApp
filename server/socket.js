@@ -1,4 +1,4 @@
-import { Chess } from './Chess.js';
+const Chess = require("./Chess.js");
 
 const db = require("./db-access");
 const invites = new Map();
@@ -43,7 +43,7 @@ function socketInitialize (io) {
         return;
       }
       // Check if user is online
-      const recipientSockets = await io.in(`user:${userId}`).fetchSockets();
+      const recipientSockets = await io.in(`user:${recipientUser.id}`).fetchSockets();
       if (recipientSockets.length == 0) {
         socket.emit("invite", "User not online");
         return;

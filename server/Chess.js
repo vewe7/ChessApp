@@ -1,4 +1,4 @@
-export class Chess {
+class Chess {
     constructor () {
 
     }
@@ -8,3 +8,5 @@ export class Chess {
         return true;
     }   
 }
+
+module.exports = Chess;

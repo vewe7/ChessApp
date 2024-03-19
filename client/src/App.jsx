@@ -8,16 +8,15 @@ import Login from "./Login";
 import Header from "./Header.jsx";
 import Game from "./Game";
 
-import { socketInitialize, socketDismount } from "./socket.js"
+import { socket } from "./socket.js"
 
 function App() {
-  const [socket, setSocket] = useState(null);
+
   useEffect(() => {
-    setSocket(socketInitialize(newSocket));
 
     // Cleanup on component unmount
     return () => {
-      socketDismount(socket);
+      socket.disconnect();
     };
   }, []); // Empty array means this effect runs only once on mount
 
@@ -28,9 +27,9 @@ function App() {
         <Header className="Header" />
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
-            <Route exact path="/" element={<Home socket={socket}/>} />
+            <Route exact path="/" element={<Home/>} />
           </Route>
-          <Route exact path="/login" element={<Login socket={socket}/>} />
+          <Route exact path="/login" element={<Login/>} />
           <Route exact path="/game" element={<Game />} />
         </Routes>
       </BrowserRouter>
