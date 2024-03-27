@@ -7,8 +7,16 @@ let matchIterator = 1;
 
 const matches = new Map();
 
-function startMatch(whiteID, blackID) {
-  return new Chess(whiteID, blackID);
+function startMatch(whiteId, blackId) {
+  return new Chess(whiteId, blackId);
+}
+
+async function saveGame(matchId) {
+  const match = matches.get(matchId);
+  const pgn = match.getPGN();
+  const whiteId = match.whiteId;
+  const blackId = match.blackId;
+  // return await db.saveGame(whiteId, blackId, pgn);
 }
 
 function socketInitialize (io) {
@@ -76,15 +84,23 @@ function socketInitialize (io) {
     });
     
     // MATCH EVENTS
-    socket.on("makeMove", (matchId, move) => {
+    socket.on("makeMove", async (matchId, move) => {
       // Validate move
       const moveRes = matches.get(matchId).makeMove(move);
 
-      if (moveRes) { 
+      if (moveRes.valid) { 
         // move successful, emit to both users in match 
         io.to(`match:${matchId}`).emit("validMove", move);
       } else {
         socket.emit("makeMove", "Invalid move");
+      }
+
+      if (moveRes.result != null)
+      {
+        io.to(`match:${matchId}`).emit("gameOver", moveRes.result);
+        if (await saveGame(matchId) == false) 
+          console.log("Error saving game");
+        matches.delete(matchId);
       }
     });
 
