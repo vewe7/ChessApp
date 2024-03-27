@@ -22,7 +22,7 @@ const Invite = () => {
             socket.emit('leaveInvite');
             socket.off("invite-ask");
             socket.off("invite");
-            socket.disconnect();
+            socket.disconnect(); // Remember to reconnect socket on match page mount
         };
     }, []);
     

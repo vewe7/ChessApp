@@ -5,7 +5,7 @@ class Chess {
 
     // Return false for an invalid move. Otherwise, update board state and return true. 
     makeMove(move) {
-        return true;
+        return true; // placeholder, implement later
     }   
 }
 

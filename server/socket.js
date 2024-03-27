@@ -1,24 +1,21 @@
 const Chess = require("./Chess.js");
 
 const db = require("./db-access");
-const invites = new Map();
+const pendingInvites = new Map();
 let inviteIterator = 1;
+let matchIterator = 1;
 
 const matches = new Map();
 
-function startMatch(player1, player2) {
-  return new Chess();
+function startMatch(whiteID, blackID) {
+  return new Chess(whiteID, blackID);
 }
-
-// Temp line
-matches.set(1, startMatch(1, 2));
 
 function socketInitialize (io) {
   io.on("connection", async (socket) => {
     const userId = socket.request.session.passport.user;
     const username = await db.getUsernameById(userId);
-    let currentMatchId = 1;
-    let currentMatch = matches.get(currentMatchId);
+    
     // Emit to a specific user by emitting to their room
     socket.join(`user:${userId}`);
     console.log(`user ${userId} connected`);
@@ -49,38 +46,45 @@ function socketInitialize (io) {
         return;
       }
       // Create and send invite
-      console.log(`user ${userId} is inviting user ${recipientUser.id}`);
+      console.log(`user ${userId} is inviting user ${recipientUser.id}`); // DEBUG
 
-      invites.set(inviteIterator, {inviter: userId, recipient: recipientUser.id});
-      io.to(`user:${recipientUser.id}`).emit("invite-ask", `User ${username} has invited you`, inviteIterator);
-      inviteIterator++;
+      pendingInvites.set(inviteIterator, {inviter: userId, recipient: recipientUser.id});
+      io.to(`user:${recipientUser.id}`).emit("invite-ask", 
+                                            `User ${username} has invited you`, 
+                                            inviteIterator++);
       socket.emit("invite", "Invite sent");
     });
 
     socket.on("invite-answer", async (answer, inviteId) => {
       // Check that invite id is valid
-      if (!invites.has(inviteId)) {
+      if (!pendingInvites.has(inviteId)) {
         socket.emit("invite-answer", "Invalid invite id");
         return;
       }
-      if (answer == "accept") {
-        console.log("User accepted invite with id " + inviteId);
-        // Do accept stuff
-      } else { 
-        console.log("User declined invite with id " + inviteId);
-        // Do decline stuff
+      if (answer == "accept") { // Accept invite
+        const colorIds = [pendingInvites.get(inviteId).inviter, pendingInvites.get(inviteId).recipient];
+        shuffle(colorIds); // Randomize white/black player
+        matches.set(matchIterator, startMatch(colorIds[0], colorIds[1]));
+        // args for startMatch are (matchId, color)
+        io.to(`user:${colorIds[0]}`).emit("startMatch", matchIterator, "white");
+        io.to(`user:${colorIds[1]}`).emit("startMatch", matchIterator, "black");
+        matchIterator++;
+      } else { // Decline invite
+        io.to(`user:${pendingInvites.get(inviteId).inviter}`).emit("invite-answer", "User declined invite");
+        pendingInvites.delete(inviteId);
       }
     });
-
+    
     // MATCH EVENTS
-    socket.on("move", (move) => {
+    socket.on("makeMove", (matchId, move) => {
       // Validate move
-      const moveRes = currentMatch.makeMove(move);
+      const moveRes = matches.get(matchId).makeMove(move);
 
-      if (moveRes) {
-        io.to(`match:${currentMatchId}`).emit("move", move);
+      if (moveRes) { 
+        // move successful, emit to both users in match 
+        io.to(`match:${matchId}`).emit("validMove", move);
       } else {
-        socket.emit("move", "Invalid move");
+        socket.emit("makeMove", "Invalid move");
       }
     });
 
