@@ -87,3 +87,47 @@
   padding: 0;
   overflow: hidden;
 }
+
+.viewInvites {
+  background-color: #0e7c52;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 23px;
+  right: 28px;
+  width: 215px;
+}
+
+.invites {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 28px;
+  border: 3px solid grey;
+  z-index: 9;
+}
+
+
+.inviteContainer {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+}
+
+.inviteContainer .accept {
+  background-color: #04aa6d;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.inviteContainer .decline {
+  background-color: red;
+}
