@@ -28,7 +28,7 @@ function socketInitialize (io) {
     socket.join(`user:${userId}`);
     console.log(`user ${userId} connected`);
 
-    // INVITE EVENTS
+    // INVITE EVENTS ================
     socket.on("joinInvite", () => {
       socket.join("inviteRoom");
     });
@@ -58,7 +58,7 @@ function socketInitialize (io) {
 
       pendingInvites.set(inviteIterator, {inviter: userId, recipient: recipientUser.id});
       io.to(`user:${recipientUser.id}`).emit("invite-ask", 
-                                            `User ${username} has invited you`, 
+                                            username, 
                                             inviteIterator++);
       socket.emit("invite", "Invite sent");
     });
@@ -83,7 +83,7 @@ function socketInitialize (io) {
       }
     });
     
-    // MATCH EVENTS
+    // MATCH EVENTS ================
     socket.on("makeMove", async (matchId, move) => {
       // Validate move
       const moveRes = matches.get(matchId).makeMove(move);
