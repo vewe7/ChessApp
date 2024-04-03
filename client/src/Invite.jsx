@@ -7,6 +7,8 @@ import { socket } from "./socket.js";
 
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
+    const [invitesOpen, setInvitesOpen] = useState(false);
+
     useEffect(() => {
         socket.on("invite-ask", (username, inviteId) => {
             window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
@@ -52,12 +54,12 @@ const Invite = () => {
                 </button>
                 
             </div>
-            <button class="viewInvites" onClick={openInvites}>View Invites</button>
-            <div class="invites" id="invites">
-                <form  class="inviteContainer">
+            <button className="viewInvites" onClick={openInvites}>View Invites</button>
+            <div className="invites" id="invites">
+                <form  className="inviteContainer">
                    <h1>Invites</h1> 
-                   <button class="accept">Accept</button>
-                   <button class="decline" onClick={closeInvites}>Decline</button>
+                   <button className="accept">Accept</button>
+                   <button className="decline" onClick={closeInvites}>Decline</button>
                 </form>
             </div>
         </div>
