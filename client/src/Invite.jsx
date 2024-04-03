@@ -8,9 +8,8 @@ import { socket } from "./socket.js";
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
     useEffect(() => {
-        socket.on("invite-ask", (message, inviteId) => {
-            window.console.log(message);
-            window.console.log(`invite id is ${inviteId}`);
+        socket.on("invite-ask", (username, inviteId) => {
+            window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
         });
         
         socket.on("invite", (message) => {
