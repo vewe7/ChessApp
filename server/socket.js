@@ -1,4 +1,4 @@
-const Chess = require("./Chess.js");
+const { Chess } = require('chess.js')
 
 const db = require("./db-access");
 const pendingInvites = new Map();
@@ -7,8 +7,14 @@ let matchIterator = 1;
 
 const matches = new Map();
 
-function startMatch(whiteId, blackId) {
-  return new Chess(whiteId, blackId);
+function startMatch(whiteUsername, blackUsername) {
+  const chess = new Chess();
+  chess.header("White", whiteUsername, "Black", blackUsername);
+
+  const date = new Date();
+  chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
+
+  return chess;
 }
 
 async function saveGame(matchId) {
@@ -17,6 +23,12 @@ async function saveGame(matchId) {
   const whiteId = match.whiteId;
   const blackId = match.blackId;
   // return await db.saveGame(whiteId, blackId, pgn);
+}
+
+async function endGame(matchId) {
+  if (await saveGame(matchId) == false) 
+    console.log("Error saving game");
+  matches.delete(matchId);
 }
 
 function socketInitialize (io) {
@@ -56,51 +68,61 @@ function socketInitialize (io) {
       // Create and send invite
       console.log(`user ${userId} is inviting user ${recipientUser.id}`); // DEBUG
 
-      pendingInvites.set(inviteIterator, {inviter: userId, recipient: recipientUser.id});
-      io.to(`user:${recipientUser.id}`).emit("invite-ask", 
+      pendingInvites.set(inviteIterator, {inviter: {id: userId, username: username}, recipientUser});
+      io.to(`user:${recipientUser.id}`).emit("inviteAsk", 
                                             username, 
                                             inviteIterator++);
       socket.emit("invite", "Invite sent");
     });
 
-    socket.on("invite-answer", async (answer, inviteId) => {
+    socket.on("inviteAnswer", async (answer, inviteId) => {
       // Check that invite id is valid
       if (!pendingInvites.has(inviteId)) {
-        socket.emit("invite-answer", "Invalid invite id");
+        socket.emit("inviteAnswer", "Invalid invite id");
         return;
       }
       if (answer == "accept") { // Accept invite
-        const colorIds = [pendingInvites.get(inviteId).inviter, pendingInvites.get(inviteId).recipient];
-        shuffle(colorIds); // Randomize white/black player
-        matches.set(matchIterator, startMatch(colorIds[0], colorIds[1]));
-        // args for startMatch are (matchId, color)
+        const invite = pendingInvites.get(inviteId);
+        const players = [invite.inviter, invite.recipient];
+        shuffle(players); // Randomize white/black player
+
+        // Maps match id to new Chess object 
+        matches.set(matchIterator, startMatch(players[0].username, players[1].username));
+
         io.to(`user:${colorIds[0]}`).emit("startMatch", matchIterator, "white");
         io.to(`user:${colorIds[1]}`).emit("startMatch", matchIterator, "black");
         matchIterator++;
       } else { // Decline invite
-        io.to(`user:${pendingInvites.get(inviteId).inviter}`).emit("invite-answer", "User declined invite");
+        io.to(`user:${pendingInvites.get(inviteId).inviter}`).emit("inviteAnswer", "User declined invite");
         pendingInvites.delete(inviteId);
       }
     });
     
     // MATCH EVENTS ================
     socket.on("makeMove", async (matchId, move) => {
-      // Validate move
-      const moveRes = matches.get(matchId).makeMove(move);
+      try {
+        let newStatus = "none";
+        chess.move(move);
 
-      if (moveRes.valid) { 
-        // move successful, emit to both users in match 
-        io.to(`match:${matchId}`).emit("validMove", move);
-      } else {
+        // Check if move caused game state to change
+        if (chess.isGameOver()) {
+          if (chess.isCheckmate()) 
+            newStatus = "checkmate";
+          if (chess.isDraw()) 
+            newStatus = "draw";
+          if (chess.isStalemate())
+            newStatus = "stalemate";
+          if (chess.isThreefoldRepetition())
+            newStatus = "threefold";
+
+          endGame(matchId);
+        } else if (chess.in_check()) {
+          newStatus = "check";
+        }
+
+        io.to(`match:${matchId}`).emit("validMove", move, newStatus);
+      } catch (error) {
         socket.emit("makeMove", "Invalid move");
-      }
-
-      if (moveRes.result != null)
-      {
-        io.to(`match:${matchId}`).emit("gameOver", moveRes.result);
-        if (await saveGame(matchId) == false) 
-          console.log("Error saving game");
-        matches.delete(matchId);
       }
     });
 

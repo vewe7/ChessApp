@@ -10,7 +10,7 @@ const Invite = () => {
     const [invitesOpen, setInvitesOpen] = useState(false);
 
     useEffect(() => {
-        socket.on("invite-ask", (username, inviteId) => {
+        socket.on("inviteAsk", (username, inviteId) => {
             window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
         });
         
@@ -21,7 +21,7 @@ const Invite = () => {
         socket.emit('joinInvite');
         return () => {
             socket.emit('leaveInvite');
-            socket.off("invite-ask");
+            socket.off("inviteAsk");
             socket.off("invite");
             socket.disconnect(); // Remember to reconnect socket on match page mount
         };
