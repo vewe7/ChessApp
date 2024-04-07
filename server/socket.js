@@ -1,7 +1,7 @@
 const db = require("./db-access");
 
-const initializeMatchHandlers = require('./socket_handlers/match-handlers');
-const initializeInviteHandlers = require('./socket_handlers/invite-handlers');
+const { initializeMatchHandlers } = require('./socket_handlers/match-handlers');
+const { initializeInviteHandlers } = require('./socket_handlers/invite-handlers');
 
 function socketInitialize (io) {
   io.on("connection", async (socket) => {
