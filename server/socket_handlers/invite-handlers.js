@@ -4,7 +4,7 @@ const { matches, matchIterator } = require("./match-handlers");
 const pendingInvites = new Map();
 let inviteIterator = 1;
 
-function startMatch(whitePlayer, blackPlayer) {
+function generateNewMatch(whitePlayer, blackPlayer) {
     // Generate new Chess object which tracks game state
     const chess = new Chess();
     chess.header("White", whitePlayer.username, "Black", blackPlayer.username);
@@ -14,10 +14,10 @@ function startMatch(whitePlayer, blackPlayer) {
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
     // Couple game state with player data in one match object
-    return {chess: chess, whiteId: whitePlayer.id, blackId: blackPlayer.id};
+    return {chess: chess, whiteId: whitePlayer.id, blackId: blackPlayer.id, whiteDrawAsk: false, blackDrawAsk: false};
 }
 
-module.exports = (io, socket, socketUser) => {
+function initializeInviteHandlers(io, socket, socketUser)  {
     // INVITE EVENTS ================
     socket.on("joinInvite", () => {
         socket.join("inviteRoom");
@@ -66,7 +66,7 @@ module.exports = (io, socket, socketUser) => {
             shuffle(players); // Randomize white/black player
 
             // Maps match id to new Chess object 
-            matches.set(matchIterator, startMatch(players[0].username, players[1].username));
+            matches.set(matchIterator, generateNewMatch(players[0].username, players[1].username));
 
             io.to(`user:${colorIds[0]}`).emit("startMatch", matchIterator, "white");
             io.to(`user:${colorIds[1]}`).emit("startMatch", matchIterator, "black");
@@ -79,3 +79,5 @@ module.exports = (io, socket, socketUser) => {
         }
     });
 };
+
+module.exports = { initializeInviteHandlers };
