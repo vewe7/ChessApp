@@ -1,5 +1,4 @@
 const db = require("../db-access");
-const { socketUser } = require("../socket");
 const { Chess } = require('chess.js');
 
 const matches = new Map();
