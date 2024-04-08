@@ -4,14 +4,17 @@ const { matches, matchIterator } = require("./match-handlers");
 const pendingInvites = new Map();
 let inviteIterator = 1;
 
-function startMatch(whiteUsername, blackUsername) {
+function startMatch(whitePlayer, blackPlayer) {
+    // Generate new Chess object which tracks game state
     const chess = new Chess();
-    chess.header("White", whiteUsername, "Black", blackUsername);
+    chess.header("White", whitePlayer.username, "Black", blackPlayer.username);
 
+    chess.header("Site", "Fun and Free Online Chess");
     const date = new Date();
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
-    return chess;
+    // Couple game state with player data in one match object
+    return {chess: chess, whiteId: whitePlayer.id, blackId: blackPlayer.id};
 }
 
 module.exports = (io, socket, socketUser) => {

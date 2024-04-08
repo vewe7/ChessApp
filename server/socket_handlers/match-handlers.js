@@ -1,4 +1,5 @@
 const db = require("../db-access");
+const { socketUser } = require("../socket");
 const { Chess } = require('chess.js');
 
 const matches = new Map();
@@ -9,7 +10,7 @@ async function saveGame(matchId) {
     const pgn = match.getPGN();
     const whiteId = match.whiteId;
     const blackId = match.blackId;
-    // return await db.saveGame(whiteId, blackId, pgn);
+    return await db.saveGame(whiteId, blackId, pgn);
 }
 
 async function endGame(matchId) {
@@ -52,7 +53,7 @@ function initializeMatchHandlers(io, socket, socketUser) {
         }
     });
 
-    socket.on("resign", async (matchId, color) => {
+    socket.on("resign", async (matchId) => {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
@@ -60,14 +61,31 @@ function initializeMatchHandlers(io, socket, socketUser) {
             return;
         }
 
+        // Determine color of resigning player and emit
+        const color = (socketUser.id == match.whiteId) ? "w" : "b";
         io.to(`match:${matchId}`).emit("resign", color);
         
+        // Save result to pgn
         const result = (color == "w") ? "1-0" : "0-1";
         match.setComment(result);
         match.header("Result", result);
 
         endGame(matchId);
     });
+
+    socket.on("offerDraw", async (matchId) => {
+        // Make sure match exists
+        const match = matches.get(matchId);
+        if (match == undefined) {
+            return;
+        }
+
+        // Determine id of the player being offered a draw
+        const opponentId = (socketUser.id == match.whiteId) ? match.blackId : match.whiteId;
+        io.to(`user:${opponentId}`).emit("offerDraw");
+    });
+
+    // need separate event for "accept draw"
 };
 
 module.exports = {
