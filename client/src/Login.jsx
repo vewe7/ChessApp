@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 import { socket } from "./socket.js";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Stack from 'react-bootstrap/Stack';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -38,47 +42,29 @@ const Login = () => {
   return (
     <div>
       <div className="LoginRegisterBoxes">
-        <div className="BoxBackground">
+        <div className="LoginLogoBoxes pink">
+          <h1>FAFOChess</h1>
+          <div className="LoginLogoBoxes white">
+          <img src ="FAFOLogo .svg"></img>
+          </div>
+        </div>
+        <Stack className="BoxBackground">
           <h1>Login</h1>
-          <label>
-            Username:
-            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-          </label>
-          <br />
-            <label>
-              Password:
-              < input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            </label>
-          <br />
-          <button className="porple" onClick={handleLogin} >Sign In</button>
-        </div>
-
-        <div className="BoxBackground">
-          <h1>Don't Have An Account?</h1>
-          <button className="porple" >Sign Up</button>
-        </div>
+          <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+            <Form.Control type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+            <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+          </FloatingLabel>
+          <Button variant="dark" size="lg" className="porple" onClick={handleLogin} >Sign In</Button>
+          <Stack className="justify-content-center" direction="horizontal" gap={2} style={{width:"40vw"}}>
+            <h3 style={{fontSize:"20px"}}>Don't have an account?</h3>
+            <Link to="/register"><Button variant="outline-secondary">Create Account</Button></Link>
+          </Stack>
+        </Stack>
+        
       </div>
 
-      <div className="revBackground">
-        <div class="rev">
-          <body>My mom and I play on this site! It's so awesome!!!</body>
-          <label>-Nikki</label>
-        </div>
-        <div class="rev">
-          <body>
-            I keep losing to so manny different people :( But atleast I'm
-            learning!
-          </body>
-          <label>-Michael</label>
-        </div>
-        <div class="rev">
-          <body>
-            {" "}
-            9/10 chess players reccomend this site. The last one was being a
-            silly billy ;)
-          </body>
-        </div>
-      </div>
     </div>
   );
 };

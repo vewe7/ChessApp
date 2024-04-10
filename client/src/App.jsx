@@ -5,8 +5,9 @@ import "./App.css";
 import PrivateRoute from "./PrivateRoute";
 import Home from "./Home";
 import Login from "./Login";
-import Header from "./Header.jsx";
 import Game from "./Game";
+import Register from "./Register";
+import Profile from "./Profile";
 
 import { socket } from "./socket.js"
 
@@ -22,15 +23,16 @@ function App() {
 
   window.console.log("App loaded");
   return (
-    <div className="App animated-gradient container">
+    <div className="App blankbackground container">
       <BrowserRouter>
-        <Header className="Header" />
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
             <Route exact path="/" element={<Home/>} />
           </Route>
           <Route exact path="/login" element={<Login/>} />
           <Route exact path="/game" element={<Game />} />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>
