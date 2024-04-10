@@ -76,7 +76,7 @@ function initializeInviteHandlers(io, socket, socketUser)  {
         const players = shuffleTwo(invite.inviter, invite.recipient); // Randomize white/black player
 
         // Maps match id to new Chess object 
-        matches.set(matchIterator, generateNewMatch(players[0].username, players[1].username));
+        matches.set(matchIterator, generateNewMatch(players[0], players[1]));
         io.to(`user:${players[0].id}`).emit("startMatch", matchIterator, "white");
         io.to(`user:${players[1].id}`).emit("startMatch", matchIterator, "black");
         matchIterator++;

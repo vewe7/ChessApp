@@ -35,18 +35,26 @@ function initializeMatchHandlers(io, socket, socketUser) {
             console.log("Move received from matchId: " + matchId);
             console.log(move);
 
-            matchId = parseInt(matchId);
-
             // Make sure match exists
+            matchId = parseInt(matchId);
             const match = matches.get(matchId);
             if (match == undefined) {
                 socket.emit("moveError", "Match id not found");
                 return;
             }
-            // TO-DO: only allow moves from player who is to move
-            const opponentId = (socketUser.id == match.whiteId) ? match.blackId : match.whiteId;
-
             const chess = match.chess;
+
+            // Prevent player from moving for opponent
+            const turn = chess.turn()
+            if (turn == 'w' && socketUser.id == match.blackId) {
+                socket.emit("moveError", "Not your turn");
+                return;
+            } 
+            if (turn == 'b' && socketUser.id == match.whiteId) {
+                socket.emit("moveError", "Not your turn");
+                return;
+            }
+
             let newStatus = "none";
             chess.move(move);
 
