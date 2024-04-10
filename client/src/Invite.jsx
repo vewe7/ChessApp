@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 
 import { socket } from "./socket.js";
@@ -7,32 +8,56 @@ import { socket } from "./socket.js";
 
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
+    const [inviteId, setInviteId] = useState(0);
+    const [invitesOpen, setInvitesOpen] = useState(false);
+
+    const navigate = useNavigate();
+
     useEffect(() => {
-        socket.on("invite-ask", (message, inviteId) => {
-            window.console.log(message);
-            window.console.log(`invite id is ${inviteId}`);
+        socket.on("inviteAsk", (username, incomingInviteId) => {
+            // window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
+            setInviteId(incomingInviteId);
         });
         
         socket.on("invite", (message) => {
             window.console.log(message);
         });
 
+        socket.on("startMatch", (matchId, color) => {
+            window.console.log(`Match started with id ${matchId} as ${color}`);
+            navigate("/game");
+        });
+
+
         socket.emit('joinInvite');
         return () => {
             socket.emit('leaveInvite');
-            socket.off("invite-ask");
+            socket.off("inviteAsk");
             socket.off("invite");
-            socket.disconnect();
         };
     }, []);
     
-    const sendInvite = () => {
+    function sendInvite() {
         // Send invite to socket server
         socket.emit('invite', inviteName);
+    }
+
+    function acceptInvite() {
+        socket.emit("inviteAnswer", "accept", inviteId);
+        navigate("/game");
+    }
+
+    //(BUG)Currently Both of the buttons that use these cause the page to refresh
+    function openInvites() {
+        document.getElementById("invites").style.display="block";
+    }
+    function closeInvites() {
+        document.getElementById("invites").style.display="none";
     }
       
     return (
         <>
+        <div>
             <div className="BoxBackground">
                 <h1>Invite</h1>
                 <label>
@@ -42,7 +67,18 @@ const Invite = () => {
                 <button onClick={sendInvite}>
                 Invite
                 </button>
+                
             </div>
+            <button className="viewInvites" onClick={openInvites}>View Invites</button>
+            <div className="invites" id="invites">
+                <form  className="inviteContainer">
+                   <h1>Invites</h1> 
+                   <button className="accept" onClick={acceptInvite}>Accept</button>
+                   <button className="decline" onClick={closeInvites}>Decline</button>
+                </form>
+            </div>
+        </div>
+            
         </>
     );
 }

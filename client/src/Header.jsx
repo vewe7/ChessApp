@@ -10,9 +10,9 @@ function Header() {
             </div>
             <img className="logo" src ="FAFOLogo .svg"></img>
             <Link to='/game'>Chess Game</Link>
-        </div>
-        
+        </div>  
     )
+    
 }
 
 export default Header

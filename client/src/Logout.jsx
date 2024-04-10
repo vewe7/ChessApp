@@ -5,7 +5,6 @@ const Logout = () => {
     const navigate = useNavigate();
     const handleLogout = async () => {
         try { 
-            // Send login request to bcakend 
             const response = await fetch('http://localhost:5000/logout', {
               method: 'POST',
               credentials: 'include', // Include credentials (cookies) in the request
