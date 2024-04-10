@@ -1,11 +1,12 @@
 import Pieces from './Pieces'
 import './Board.css'
 import '../constants.css'
+import { useEffect } from 'react';
 
-function Board() {
+function Board({matchId}) {
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
-    
+
     function getSquareClass(i, j) {
         return ((i + j) % 2 === 0 ? "square-light" : "square-dark");
     }
@@ -15,7 +16,7 @@ function Board() {
     return (
         <div className='board'>
             <div className='squares'>{board}</div>
-            <Pieces/>
+            <Pieces matchId={matchId}/>
         </div>
     )
 }

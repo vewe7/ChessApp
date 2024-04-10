@@ -14,6 +14,10 @@ const Invite = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        socket.removeAllListeners("inviteAsk");
+        socket.removeAllListeners("invite");
+        socket.removeAllListeners("startMatch");
+
         socket.on("inviteAsk", (username, incomingInviteId) => {
             // window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
             setInviteId(incomingInviteId);
@@ -25,9 +29,9 @@ const Invite = () => {
 
         socket.on("startMatch", (matchId, color) => {
             window.console.log(`Match started with id ${matchId} as ${color}`);
-            navigate("/game");
+            socket.emit("joinMatchRoom", matchId);
+            navigate(`/game/${matchId}`);
         });
-
 
         socket.emit('joinInvite');
         return () => {
@@ -44,7 +48,6 @@ const Invite = () => {
 
     function acceptInvite() {
         socket.emit("inviteAnswer", "accept", inviteId);
-        navigate("/game");
     }
 
     //(BUG)Currently Both of the buttons that use these cause the page to refresh

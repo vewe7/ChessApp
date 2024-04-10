@@ -13,11 +13,11 @@ import { socket } from "./socket.js"
 
 function App() {
 
-  useEffect(() => {
+  useEffect(() => { // useEffect RUNS TWICE IN DEV ENVIRONMENT
 
     // Cleanup on component unmount
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
     };
   }, []); // Empty array means this effect runs only once on mount
 
@@ -29,10 +29,10 @@ function App() {
           <Route exact path="/" element={<PrivateRoute />}>
             <Route exact path="/" element={<Home/>} />
           </Route>
-          <Route exact path="/login" element={<Login/>} />
-          <Route exact path="/game" element={<Game />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route exact path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/game/:matchId" element={<Game />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>
