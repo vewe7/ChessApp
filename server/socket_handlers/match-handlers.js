@@ -1,12 +1,13 @@
 const db = require("../db-access");
-const { Chess } = require('chess.js');
+const { Chess } = require("chess.js");
 
 const matches = new Map();
 let matchIterator = 1; // Should probably make a better id generator
 
 async function saveGame(matchId) {
     const match = matches.get(matchId);
-    const pgn = match.getPGN();
+    const pgn = match.chess.pgn(); // TO-DO: add username headers to pgn
+    console.log(pgn); // DEBUG
     const whiteId = match.whiteId;
     const blackId = match.blackId;
     return await db.saveGame(whiteId, blackId, pgn);
@@ -19,36 +20,56 @@ async function endGame(matchId) {
 }
   
 function initializeMatchHandlers(io, socket, socketUser) {
+    socket.on("joinMatchRoom", (matchId) => {
+        console.log("User id " + socketUser.id + " joined match room: " + matchId);
+        socket.join(`match:${matchId}`);
+    });
+
+    socket.on("leaveMatchRoom", (matchId) => {
+        socket.leave(`match:${matchId}`);
+    });
+    
     // MATCH EVENTS ================
-    socket.on("makeMove", async (matchId, move) => {
+    socket.on("makeMove", async (matchId, move) => { // move has form {from: "e2", to: "e4"}
         try {
+            console.log("Move received from matchId: " + matchId);
+            console.log(move);
+
+            matchId = parseInt(matchId);
+
             // Make sure match exists
             const match = matches.get(matchId);
             if (match == undefined) {
-                socket.emit("makeMove", "Match id not found");
+                socket.emit("moveError", "Match id not found");
                 return;
             }
+            // TO-DO: only allow moves from player who is to move
+            const opponentId = (socketUser.id == match.whiteId) ? match.blackId : match.whiteId;
 
+            const chess = match.chess;
             let newStatus = "none";
-            match.move(move);
+            chess.move(move);
 
             // Check if move caused game state to change
-            if (match.isGameOver()) {
-                if (match.isCheckmate()) 
+            if (chess.isGameOver()) {
+                if (chess.isCheckmate()) 
                     newStatus = "checkmate";
-                if (match.isDraw()) 
+                if (chess.isDraw()) 
                     newStatus = "draw";
-                if (match.isStalemate())
+                if (chess.isStalemate())
                     newStatus = "stalemate";
-                if (match.isThreefoldRepetition())
+                if (chess.isThreefoldRepetition())
                     newStatus = "threefold";
                 endGame(matchId);
-            } else if (match.inCheck()) {
+            } else if (chess.inCheck()) {
                 newStatus = "check";
             }
+
+            console.log("Emitting validMove now");
             io.to(`match:${matchId}`).emit("validMove", move, newStatus);
         } catch (error) {
-            socket.emit("makeMove", "Invalid move");
+            console.log(error);
+            socket.emit("moveError", "Invalid move");
         }
     });
 
