@@ -1,5 +1,5 @@
 import './App.css';
-import { Link } from 'react-router-dom';
+import { MDBCardImage } from 'mdb-react-ui-kit';
 
 function Header() {
     return (
@@ -8,9 +8,14 @@ function Header() {
                 <h1 className="Title">FAFOChess</h1> 
                 <h2>Free And Fun Online Chess</h2>
             </div>
-            <img className="logo" src ="FAFOLogo .svg"></img>
-            <Link to='/game'>Chess Game</Link>
-        </div>  
+            <MDBCardImage
+                  src="FAFOLogo .svg"
+                  alt="avatar"
+                  className="rounded-circle"
+                  style={{ width: '100px', background:"black" }}
+                  fluid />
+        </div>
+        
     )
     
 }
