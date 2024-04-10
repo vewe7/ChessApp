@@ -70,15 +70,14 @@ const Invite = () => {
                 <button onClick={sendInvite}>
                 Invite
                 </button>
-                
             </div>
             <button className="viewInvites" onClick={openInvites}>View Invites</button>
             <div className="invites" id="invites">
-                <form  className="inviteContainer">
+                <div  className="inviteContainer">
                    <h1>Invites</h1> 
                    <button className="accept" onClick={acceptInvite}>Accept</button>
                    <button className="decline" onClick={closeInvites}>Decline</button>
-                </form>
+                </div>
             </div>
         </div>
             
