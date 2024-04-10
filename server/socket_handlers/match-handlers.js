@@ -2,7 +2,7 @@ const db = require("../db-access");
 const { Chess } = require('chess.js');
 
 const matches = new Map();
-let matchIterator = 1;
+let matchIterator = 1; // Should probably make a better id generator
 
 async function saveGame(matchId) {
     const match = matches.get(matchId);

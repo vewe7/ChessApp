@@ -1,8 +1,9 @@
 const db = require("../db-access");
-const { matches, matchIterator } = require("./match-handlers");
+let { matches, matchIterator } = require("./match-handlers");
+const { Chess } = require('chess.js');
 
 const pendingInvites = new Map();
-let inviteIterator = 1;
+let inviteIterator = 1; // Should probably make a better id generator 
 
 function generateNewMatch(whitePlayer, blackPlayer) {
     // Generate new Chess object which tracks game state
@@ -14,7 +15,13 @@ function generateNewMatch(whitePlayer, blackPlayer) {
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
     // Couple game state with player data in one match object
-    return {chess: chess, whiteId: whitePlayer.id, blackId: blackPlayer.id, whiteDrawAsk: false, blackDrawAsk: false};
+    return {chess: chess,
+            whiteId: whitePlayer.id, blackId: blackPlayer.id, 
+            whiteDrawAsk: false, blackDrawAsk: false};
+}
+
+function shuffleTwo(val1, val2) {
+    return Math.random() < 0.5 ? [val2, val1] : [val1, val2];
 }
 
 function initializeInviteHandlers(io, socket, socketUser)  {
@@ -46,7 +53,7 @@ function initializeInviteHandlers(io, socket, socketUser)  {
         // Create and send invite
         console.log(`user ${socketUser.id} is inviting user ${recipientUser.id}`); // DEBUG
 
-        pendingInvites.set(inviteIterator, {inviter: socketUser, recipientUser});
+        pendingInvites.set(inviteIterator, {inviter: socketUser, recipient: recipientUser});
         io.to(`user:${recipientUser.id}`).emit("inviteAsk", 
                                             socketUser.username, 
                                             inviteIterator++);
@@ -54,29 +61,28 @@ function initializeInviteHandlers(io, socket, socketUser)  {
     });
 
     socket.on("inviteAnswer", async (answer, inviteId) => {
+        if (answer == "decline") {
+            io.to(`user:${pendingInvites.get(inviteId).inviter}`).emit("inviteAnswer", "User declined invite");
+            pendingInvites.delete(inviteId);
+        }
         // Check that invite id is valid
         if (!pendingInvites.has(inviteId)) {
             socket.emit("inviteAnswer", "Invalid invite id");
             return;
         }
 
-        if (answer == "accept") { // Accept invite
-            const invite = pendingInvites.get(inviteId);
-            const players = [invite.inviter, invite.recipient];
-            shuffle(players); // Randomize white/black player
+        // ACCEPT INVITE  
+        const invite = pendingInvites.get(inviteId);
+        const players = shuffleTwo(invite.inviter, invite.recipient); // Randomize white/black player
 
-            // Maps match id to new Chess object 
-            matches.set(matchIterator, generateNewMatch(players[0].username, players[1].username));
+        // Maps match id to new Chess object 
+        matches.set(matchIterator, generateNewMatch(players[0].username, players[1].username));
+        io.to(`user:${players[0].id}`).emit("startMatch", matchIterator, "white");
+        io.to(`user:${players[1].id}`).emit("startMatch", matchIterator, "black");
+        matchIterator++;
 
-            io.to(`user:${colorIds[0]}`).emit("startMatch", matchIterator, "white");
-            io.to(`user:${colorIds[1]}`).emit("startMatch", matchIterator, "black");
-            matchIterator++;
-            // Clean up 
-            pendingInvites.delete(inviteId);
-        } else { // Decline invite
-            io.to(`user:${pendingInvites.get(inviteId).inviter}`).emit("inviteAnswer", "User declined invite");
-            pendingInvites.delete(inviteId);
-        }
+        // Clean up 
+        pendingInvites.delete(inviteId);
     });
 };
 
