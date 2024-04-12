@@ -14,7 +14,7 @@ function generateNewMatch(whitePlayer, blackPlayer) {
     const date = new Date();
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
-    // Couple game state with player data in one match object
+    // Couple game state with player data in one object
     return {chess: chess,
             whiteId: whitePlayer.id, blackId: blackPlayer.id, 
             whiteDrawAsk: false, blackDrawAsk: false};
@@ -44,13 +44,18 @@ function initializeInviteHandlers(io, socket, socketUser)  {
             socket.emit("invite", "Cannot invite self");
             return;
         }
-        // Check if user is online
+        
+        // Check if user is online and in invite room
         const recipientSockets = await io.in(`user:${recipientUser.id}`).fetchSockets();
         if (recipientSockets.length == 0) {
             socket.emit("invite", "User not online");
             return;
+        } else if (recipientSockets[0].rooms.has("inviteRoom") == false) {
+            socket.emit("invite", "User not in invite room");
+            return;
         }
-        // Create and send invite
+
+        // All validations passed, create and send invite
         console.log(`user ${socketUser.id} is inviting user ${recipientUser.id}`); // DEBUG
 
         pendingInvites.set(inviteIterator, {inviter: socketUser, recipient: recipientUser});

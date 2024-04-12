@@ -46,17 +46,17 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
             // Prevent player from moving for opponent
             const turn = chess.turn()
-            if (turn == 'w' && socketUser.id == match.blackId) {
+            if (turn == 'w' && socketUser.id == match.blackId || 
+                turn == 'b' && socketUser.id == match.whiteId) {
                 socket.emit("moveError", "Not your turn");
                 return;
             } 
-            if (turn == 'b' && socketUser.id == match.whiteId) {
-                socket.emit("moveError", "Not your turn");
-                return;
-            }
 
             let newStatus = "none";
-            chess.move(move);
+            chess.move(move); // Anything below this line should only run on valid move 
+            
+            match.whiteDrawAsk = false; 
+            match.blackDrawAsk = false;
 
             // Check if move caused game state to change
             if (chess.isGameOver()) {
@@ -97,23 +97,57 @@ function initializeMatchHandlers(io, socket, socketUser) {
         const result = (color == "w") ? "1-0" : "0-1";
         match.setComment(result);
         match.header("Result", result);
-
         endGame(matchId);
     });
 
-    socket.on("offerDraw", async (matchId) => {
+    socket.on("offerDraw", (matchId) => {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
             return;
         }
 
-        // Determine id of the player being offered a draw
-        const opponentId = (socketUser.id == match.whiteId) ? match.blackId : match.whiteId;
+        const color = (socketUser.id == match.whiteId) ? "w" : "b";
+        if (color == "w") 
+            match.whiteDrawAsk = true;
+        else 
+            match.blackDrawAsk = true;
+
+        // Emit draw offer to opponent
+        const opponentId = (color == "w") ? match.blackId : match.whiteId;
         io.to(`user:${opponentId}`).emit("offerDraw");
     });
 
-    // need separate event for "accept draw"
+    socket.on("acceptDraw", async (matchId) => {
+        // Make sure match exists
+        const match = matches.get(matchId);
+        if (match == undefined) {
+            return;
+        }
+        
+        // Abort if a draw was not offered
+        const color = (socketUser.id == match.whiteId) ? "w" : "b";
+        if (color == "w" && !blackDrawAsk || color == "b" && !whiteDrawAsk) 
+            return;
+
+        // Save result to pgn
+        match.setComment("1/2-1/2");
+        match.header("Result", "1/2-1/2");
+        endGame(matchId);
+    });
+
+    socket.on("declineDraw", (matchId) => {
+        // Make sure match exists
+        const match = matches.get(matchId);
+        if (match == undefined) {
+            return;
+        }
+
+        match.whiteDrawAsk = false;
+        match.blackDrawAsk = false;
+
+        io.to(`match:${matchId}`).emit("declineDraw");
+    });
 };
 
 module.exports = {
