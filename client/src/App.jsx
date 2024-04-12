@@ -13,7 +13,7 @@ import { socket } from "./socket.js"
 
 function App() {
 
-  useEffect(() => { // useEffect RUNS TWICE IN DEV ENVIRONMENT
+  useEffect(() => { 
 
     // Cleanup on component unmount
     return () => {

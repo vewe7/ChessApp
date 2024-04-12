@@ -43,7 +43,7 @@ function Pieces({matchId}) {
 
     function sendMove(from, to) {
         window.console.log("Pieces sending move with matchId: " + matchId);
-        socket.emit("makeMove", matchId, {from: from, to: to});
+        socket.emit("makeMove", parseInt(matchId), {from: from, to: to});
     }
 
     function dropSquare(e) {

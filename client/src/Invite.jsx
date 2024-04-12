@@ -8,7 +8,6 @@ import {Button} from "react-bootstrap";
 
 import { socket } from "./socket.js";
 
-
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
     const [inviteId, setInviteId] = useState(0);
@@ -19,6 +18,8 @@ const Invite = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        socket.connect();
+
         socket.removeAllListeners("inviteAsk");
         socket.removeAllListeners("invite");
         socket.removeAllListeners("startMatch");
