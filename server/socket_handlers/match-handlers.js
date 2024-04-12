@@ -4,8 +4,7 @@ const { Chess } = require("chess.js");
 const matches = new Map();
 let matchIterator = 1; // Should probably make a better id generator
 
-async function saveGame(matchId) {
-    const match = matches.get(matchId);
+async function saveGame(match) {
     const pgn = match.chess.pgn(); // TO-DO: add username headers to pgn
     console.log(pgn); // DEBUG
     const whiteId = match.whiteId;
@@ -14,15 +13,99 @@ async function saveGame(matchId) {
 }
 
 async function endGame(matchId) {
-    if (await saveGame(matchId) == false) 
+    const match = matches.get(matchId);
+    if (match == undefined)
+        return;
+
+    stopMatchClock(match);
+    match.live = false;
+
+    if (await saveGame(match) == false) 
         console.log("Error saving game");
     matches.delete(matchId);
 }
+
+// End game, where [color] loses on time
+async function endGameOnFlag(matchId, color) {
+    const match = matches.get(matchId);
+    if (match == undefined)
+        return;
+
+    const result = (color == "w") ? "0-1" : "1-0";
+    match.chess.setComment((color == "b" ? "White" : "Black") + "wins on time.");
+    match.chess.setComment(result);
+    match.chess.header("Result", result);
+
+    endGame(matchId);
+}
+
+// Start [color]'s clock and pause opponent's
+function switchClock(match, color) { 
+    if (color == "b") {
+        match.clock.blackClock.timeReference = process.hrtime();
+        match.clock.activeClock = match.clock.blackClock;
+    } else {
+        match.clock.whiteClock.timeReference = process.hrtime();
+        match.clock.activeClock = match.clock.whiteClock;
+    }
+}
+
+function updateActiveClock(match, matchId, io) {
+    const activeClock = match.clock.activeClock;
+
+    // Get elapsed time since last update
+    const elapsed = process.hrtime(activeClock.timeReference); 
+    const elapsedMilliseconds = elapsed[0] * 1000 + elapsed[1] / 1000000;
+    activeClock.remainingTime -= elapsedMilliseconds;
+
+    if (activeClock.remainingTime < 50) {
+        io.to(`match:${matchId}`).emit("updateClock", match.chess.turn(), 0);
+        stopMatchClock(match);
+        endGameOnFlag(matchId, match.chess.turn());
+    };
+
+    activeClock.timeReference = process.hrtime();
+}
+
+function startMatchClock(matchId, io) {
+    const match = matches.get(matchId);
+    if (match == undefined | match.live)
+        return;
+
+    match.live = true;
+    io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.blackClock.remainingTime);
+    io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.whiteClock.remainingTime);
+
+    match.clock.clockInterval = setInterval(() => { 
+        updateActiveClock(match, matchId, io);
+    }, 10);
+
+    match.clock.pollInterval = setInterval(() => {
+        io.to(`match:${matchId}`).emit("updateClock", 
+                                        match.chess.turn(), 
+                                        match.clock.activeClock.remainingTime);
+    }, 500);
+}
+
+function stopMatchClock(match) {
+    clearInterval(match.clock.clockInterval);
+    clearInterval(match.clock.pollInterval);
+}
   
 function initializeMatchHandlers(io, socket, socketUser) {
-    socket.on("joinMatchRoom", (matchId) => {
+    socket.on("joinMatchRoom", async (matchId) => {
+        if (socket.rooms.has(`match:${matchId}`))
+            return;
+
         console.log("User id " + socketUser.id + " joined match room: " + matchId);
         socket.join(`match:${matchId}`);
+
+        // Start clock when both players have joined
+        const matchSockets = await io.in(`match:${matchId}`).fetchSockets();
+        if (matchSockets.length > 1) {
+            console.log("Both players have joined match room: " + matchId);
+            startMatchClock(matchId, io);
+        }
     });
 
     socket.on("leaveMatchRoom", (matchId) => {
@@ -36,10 +119,12 @@ function initializeMatchHandlers(io, socket, socketUser) {
             console.log(move);
 
             // Make sure match exists
-            matchId = parseInt(matchId);
             const match = matches.get(matchId);
             if (match == undefined) {
                 socket.emit("moveError", "Match id not found");
+                return;
+            } else if (!match.live) {
+                socket.emit("moveError", "Match has ended");
                 return;
             }
             const chess = match.chess;
@@ -54,20 +139,27 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
             let newStatus = "none";
             chess.move(move); // Anything below this line should only run on valid move 
+
+            switchClock(match, turn)
             
-            match.whiteDrawAsk = false; 
-            match.blackDrawAsk = false;
+            match.drawState.whiteOffer = false; 
+            match.drawState.blackOffer = false;
 
             // Check if move caused game state to change
             if (chess.isGameOver()) {
-                if (chess.isCheckmate()) 
+                if (chess.isCheckmate()) {
                     newStatus = "checkmate";
-                if (chess.isDraw()) 
+                    chess.header("Result", (turn == "w" ? "1-0" : "0-1"));
+                } else if (chess.isDraw()) {
                     newStatus = "draw";
-                if (chess.isStalemate())
+                    chess.header("Result", "1/2-1/2");
+                } else if (chess.isStalemate()) {
                     newStatus = "stalemate";
-                if (chess.isThreefoldRepetition())
+                    chess.header("Result", "1/2-1/2");
+                } else if (chess.isThreefoldRepetition()) {
                     newStatus = "threefold";
+                    chess.header("Result", "1/2-1/2");
+                }
                 endGame(matchId);
             } else if (chess.inCheck()) {
                 newStatus = "check";
@@ -94,9 +186,10 @@ function initializeMatchHandlers(io, socket, socketUser) {
         io.to(`match:${matchId}`).emit("resign", color);
         
         // Save result to pgn
-        const result = (color == "w") ? "1-0" : "0-1";
-        match.setComment(result);
-        match.header("Result", result);
+        const result = (color == "w") ? "0-1" : "1-0";
+        match.chess.setComment((color == "w" ? "White" : "Black") + "resigns.");
+        match.chess.setComment(result);
+        match.chess.header("Result", result);
         endGame(matchId);
     });
 
@@ -109,9 +202,9 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
         const color = (socketUser.id == match.whiteId) ? "w" : "b";
         if (color == "w") 
-            match.whiteDrawAsk = true;
+            match.drawState.whiteOffer = true;
         else 
-            match.blackDrawAsk = true;
+            match.drawState.whiteOffer = true;
 
         // Emit draw offer to opponent
         const opponentId = (color == "w") ? match.blackId : match.whiteId;
@@ -131,8 +224,8 @@ function initializeMatchHandlers(io, socket, socketUser) {
             return;
 
         // Save result to pgn
-        match.setComment("1/2-1/2");
-        match.header("Result", "1/2-1/2");
+        match.chess.setComment("1/2-1/2");
+        match.chess.header("Result", "1/2-1/2");
         endGame(matchId);
     });
 
@@ -143,8 +236,8 @@ function initializeMatchHandlers(io, socket, socketUser) {
             return;
         }
 
-        match.whiteDrawAsk = false;
-        match.blackDrawAsk = false;
+        match.drawState.whiteOffer = false;
+        match.drawState.blackOffer = false;
 
         io.to(`match:${matchId}`).emit("declineDraw");
     });

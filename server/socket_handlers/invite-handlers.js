@@ -15,10 +15,28 @@ function generateNewMatch(whitePlayer, blackPlayer) {
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
     // Couple game state with player data in one object
-    return {chess: chess,
-            whiteId: whitePlayer.id, blackId: blackPlayer.id, 
-            whiteDrawAsk: false, blackDrawAsk: false};
-}
+
+    const whiteClock = { timeReference: process.hrtime(), remainingTime: 300000 }; //milliseconds
+    const blackClock = { timeReference: process.hrtime(), remainingTime: 300000 }; //milliseconds
+
+    return {
+        chess: chess, 
+        live: false,
+        whiteId: whitePlayer.id, 
+        blackId: blackPlayer.id,
+        drawState: {
+            whiteOffer: false, 
+            blackOffer: false
+        }, 
+        clock: {
+            clockInterval: null, 
+            pollInterval: null,
+            whiteClock: whiteClock,
+            blackClock: blackClock,
+            activeClock: whiteClock
+        }
+    }
+};
 
 function shuffleTwo(val1, val2) {
     return Math.random() < 0.5 ? [val2, val1] : [val1, val2];
