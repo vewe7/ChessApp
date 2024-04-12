@@ -15,15 +15,12 @@ function Game() {
     const { matchId, color } = useParams();
 
     useEffect(() => {
-        window.addEventListener("load", () => {
-            // Page is fully loaded
-            socket.emit("joinMatchRoom", matchId);
-            window.console.log(`Match started with id ${matchId} as ${color}`);
-        });
+        socket.emit("joinMatchRoom", matchId);
+        window.console.log(`Joined match with id ${matchId} as ${color}`);
 
         // Cleanup
         return () => {
-            // socket.emit("leaveMatchRoom", matchId);
+            socket.emit("leaveMatchRoom", matchId);
         };
     }, []);
 
