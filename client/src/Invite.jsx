@@ -2,6 +2,9 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
+import {Alert} from 'react-bootstrap';
+import {Button} from "react-bootstrap";
+//import InviteBox from "./inviteBox.jsx";
 
 import { socket } from "./socket.js";
 
@@ -9,7 +12,9 @@ import { socket } from "./socket.js";
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
     const [inviteId, setInviteId] = useState(0);
-    const [invitesOpen, setInvitesOpen] = useState(false);
+    const [show, setShow] = useState(false);
+    const [username, setUsername] = useState("");
+
 
     const navigate = useNavigate();
 
@@ -19,12 +24,14 @@ const Invite = () => {
         socket.removeAllListeners("startMatch");
 
         socket.on("inviteAsk", (username, incomingInviteId) => {
-            // window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
+            window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
             setInviteId(incomingInviteId);
+            setUsername(username);
+            setShow(true);
         });
         
         socket.on("invite", (message) => {
-            window.console.log(message);
+            window.console.log(message);  
         });
 
         socket.on("startMatch", (matchId, color) => {
@@ -50,13 +57,11 @@ const Invite = () => {
         socket.emit("inviteAnswer", "accept", inviteId);
     }
 
-    //(BUG)Currently Both of the buttons that use these cause the page to refresh
-    function openInvites() {
-        document.getElementById("invites").style.display="block";
+    function declineInvite() {
+        socket.emit("inviteAnswer", "decline", inviteId);
     }
-    function closeInvites() {
-        document.getElementById("invites").style.display="none";
-    }
+    
+
       
     return (
         <>
@@ -69,15 +74,20 @@ const Invite = () => {
                 </label>
                 <button onClick={sendInvite}>
                 Invite
-                </button>
-            </div>
-            <button className="viewInvites" onClick={openInvites}>View Invites</button>
-            <div className="invites" id="invites">
-                <div  className="inviteContainer">
-                   <h1>Invites</h1> 
-                   <button className="accept" onClick={acceptInvite}>Accept</button>
-                   <button className="decline" onClick={closeInvites}>Decline</button>
+                </button>     
+                <Alert show={show} variant="success">
+                <Alert.Heading>New invite from</Alert.Heading>
+                <h4>{username}</h4>
+                <div className="d-flex justify-content-end">
+                    <Button onClick={() => {setShow(false); acceptInvite()}} variant="outline-success">Accept</Button>
                 </div>
+                <div className="d-flex justify-content-end">
+                  <Button onClick={() => {setShow(false); declineInvite()}} variant="danger">
+                    Decline
+                  </Button>
+                </div>
+              </Alert>
+
             </div>
         </div>
             
