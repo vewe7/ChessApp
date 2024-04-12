@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Luckiest+Guy&display=swap');
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -13,7 +15,10 @@ img {
   border-radius: 50%
 }
 */
-
+.backgroundpinkColor{
+  background: #978897;
+  border-width: 0;
+}
 .blankbackground {
     background: #978897;
     min-height: 100%;
@@ -78,7 +83,8 @@ img {
   flex-direction: row;
   margin-bottom: 0em;
   padding: 0px 0px 0px;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: flex-start;
   background-color: #B18FCF;
   color: white;
 }
@@ -121,13 +127,14 @@ img {
   box-sizing: content-box;
   width: 100%;
   padding: 0px 0px 0px;
-  color: white;
 }
 .pink {
   background-color: #B18FCF;
+  color: white;
 }
 .white {
   background-color: white;
+  color: black;
 }
 
 .Title {
@@ -139,7 +146,7 @@ img {
 
 body {
   background-color: #333;
-  font-family: 'Luckiest Guy', cursive;
+  font-family: 'Josefin Sans', cursive;
 }
 
 .viewInvites {
@@ -253,4 +260,13 @@ body {
 .topPadding {
   padding-top: 15%;
   padding-bottom: 0%;
+}
+
+.newPadding {
+  padding-top: 5%;
+  padding-bottom: 5%;
+}
+
+.longPadding {
+  padding-top: 30%;
 }

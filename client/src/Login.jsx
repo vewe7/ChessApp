@@ -1,11 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 import { socket } from "./socket.js";
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Stack from 'react-bootstrap/Stack';
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Form from "react-bootstrap/Form";
+import Stack from "react-bootstrap/Stack";
+import {
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBRow,
+  MDBCol
+}
+from "mdb-react-ui-kit";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -40,32 +49,41 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className="LoginRegisterBoxes">
-        <div className="LoginLogoBoxes pink">
-          <h1>FAFOChess</h1>
-          <div className="LoginLogoBoxes white">
-          <img src ="FAFOLogo .svg"></img>
-          </div>
-        </div>
-        <Stack className="BoxBackground">
-          <h1>Login</h1>
-          <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
-            <Form.Control type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
-          </FloatingLabel>
-          <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
-            <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-          </FloatingLabel>
-          <Button variant="dark" size="lg" className="porple" onClick={handleLogin} >Sign In</Button>
-          <Stack className="justify-content-center" direction="horizontal" gap={2} style={{width:"40vw"}}>
-            <h3 style={{fontSize:"20px"}}>Don't have an account?</h3>
-            <Link to="/register"><Button variant="outline-secondary">Create Account</Button></Link>
-          </Stack>
-        </Stack>
-        
-      </div>
+    <MDBContainer className="my-5">
 
-    </div>
+      <MDBCard className="backgroundpinkColor">
+        <MDBRow className="g-0 pink">
+
+          <MDBCol md="6" style={{paddingTop:"40px"}}>
+            <span className="h1 fw-bold mb-0">FAFOChess</span>
+            <MDBCardImage src="FAFOLogo .svg" alt="login form" className="white w-100"/>
+          </MDBCol>
+
+          <MDBCol md="6 white">
+            <MDBCardBody className="d-flex flex-column">
+              <h5 className="fw-normal my-4 h2" style={{letterSpacing: "1px"}}>Sign into your account</h5>
+              <Stack gap={4} className="newPadding">
+                <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
+                  <Form.Control type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+                </FloatingLabel>
+                <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
+                  <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
+                </FloatingLabel>
+              </Stack>
+              <Button variant="dark" size="lg" className="porple" onClick={handleLogin} >Login</Button>
+
+              <div className="d-flex flex-column justify-content-flex-end longPadding">
+              <h3 style={{fontSize:"20px"}}>Don't have an account?</h3>
+              <Link to="/register"><Button variant="outline-secondary">Create Account</Button></Link>
+              </div>
+
+            </MDBCardBody>
+          </MDBCol>
+
+        </MDBRow>
+      </MDBCard>
+
+    </MDBContainer>
   );
 };
 
