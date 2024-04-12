@@ -12,10 +12,14 @@ const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
 function Game() {
-    const { matchId } = useParams();
+    const { matchId, color } = useParams();
 
     useEffect(() => {
-        window.console.log("game started with matchId: " + matchId);
+        window.addEventListener("load", () => {
+            // Page is fully loaded
+            socket.emit("joinMatchRoom", matchId);
+            window.console.log(`Match started with id ${matchId} as ${color}`);
+        });
 
         // Cleanup
         return () => {

@@ -35,9 +35,7 @@ const Invite = () => {
         });
 
         socket.on("startMatch", (matchId, color) => {
-            window.console.log(`Match started with id ${matchId} as ${color}`);
-            socket.emit("joinMatchRoom", matchId);
-            navigate(`/game/${matchId}`);
+            navigate(`/game/${matchId}/${color}`);
         });
 
         socket.emit('joinInvite');
