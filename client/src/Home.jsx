@@ -3,7 +3,7 @@ import Logout from "./Logout";
 import Invite from "./Invite";
 import Header from "./Header";
 
-const Home = () => {
+function Home() {
   return (
     <>
       <Header className="Header" />

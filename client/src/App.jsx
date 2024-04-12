@@ -23,7 +23,7 @@ function App() {
 
   window.console.log("App loaded");
   return (
-    <div className="App blankbackground container">
+    <div className="App blankbackground">
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
@@ -33,6 +33,7 @@ function App() {
           <Route path="/game/:matchId" element={<Game />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,54 +2,105 @@ import './App.css';
 import { MDBCardImage } from 'mdb-react-ui-kit';
 import Stack from 'react-bootstrap/Stack';
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Collapse from 'react-bootstrap/Collapse';
+
+function toggleSearch() {
+    var searchBar = document.getElementById("searchBar");
+    var displaySetting = searchBar.style.display;
+
+    if (displaySetting == "block")
+    {
+        searchBar.style.display = "none";
+    }
+    else
+    {
+        searchBar.style.display = "block";
+    }
+}
+
+function activateHome() {
+    var navBar = document.getElementById("NavigationBar")
+    navBar.active = document.getElementById("home");
+    navBar.disabled = document.getElementById("profile");
+}
+
+function activateProfile() {
+    var navBar = document.getElementById("NavigationBar")
+    navBar.active = document.getElementById("profile");
+    navBar.disabled = document.getElementById("home");
+}
+
+function setHBold() {
+    var boldItem = document.getElementById("H");
+    var normItem = document.getElementById("P");
+
+    boldItem.style.fontWeight = "bold";
+    normItem.style.fontWeight = "normal";
+}
+
+function setPBold() {
+    var boldItem = document.getElementById("P");
+    var normItem = document.getElementById("H");
+
+    boldItem.style.fontWeight = "bold";
+    normItem.style.fontWeight = "normal";
+}
 
 function Header() {
     return (
-        /*
-        <div className="Header">
-            <div style={{width:"20%"}}>
-                <Stack gap={1} style={{width:"120%"}}>
-                    <h1 className="Title">FAFOChess</h1> 
-                    <h3>Free And Fun Online Chess</h3>
+        <Navbar className="navbar navbar-expand-md py-1 pink">
+        <Container style={{width:"100vw", paddingLeft:"0px"}}>
+            <Navbar.Brand href="/home">
+                <Stack direction="horizontal">
+                    <h2>FAFOChess</h2>
                 </Stack>
-            </div>
-            <MDBCardImage
-                  src="FAFOLogo .svg"
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{width: '100px', background:"black"}}
-                  fluid />
-        </div>
-        */
+            </Navbar.Brand>
 
-        <Navbar className="navbar navbar-expand-md py-4 pink">
-        <div class="container">
-                <div style={{width:"35%"}}>
-                <Stack gap={1} style={{width:"100%"}}>
-                    <h1 className="Title">FAFOChess</h1> 
-                    <h3>Free And Fun Online Chess</h3>
-                </Stack>
-                 </div>
-                 <MDBCardImage
-                  src="FAFOLogo .svg"
-                  alt="avatar"
-                  className="rounded-circle"
-                  style={{width: '100px', background:"black"}}
-                  fluid />
+            <Nav variant="underline" id="NavigationBar">
+                <Nav.Item>
+                    <Nav.Link id="H" href="/home" onSelect={setHBold}>Home</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link id="P" href="/profile" onSelect={setPBold}>Profile</Nav.Link>
+                </Nav.Item>  
+            </Nav>
 
-            <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
-
-            <div id="navbarSupportedContent2" class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="#" class="nav-link">Home <span class="sr-only">(current)</span></a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Services</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
-            </ul>
-            </div>
-        </div>
-        </Navbar>
-    )
+          <Navbar.Collapse className="justify-content-end">
+          <Form inline>
+                <Row>
+                    <Col xs="auto">
+                        <Button className="porple" 
+                        variant="secondary"
+                        onClick={toggleSearch}
+                        >
+                            <img src="search.svg"></img>
+                        </Button>
+                    </Col>
+                    <Col xs="auto">
+                        <Form.Control
+                            type="text"
+                            placeholder="Search for User"
+                            className=" mr-sm-2"
+                            id="searchBar"
+                            style={{background:"none", display:"none"}}
+                        />
+                    </Col>
+                </Row>
+            </Form>
+            <div style={{width:"10px"}} />
+          <Navbar.Text>
+            Signed in as: <a href="/profile">John Doe</a>
+          </Navbar.Text>
+        </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    );
     
 }
 
