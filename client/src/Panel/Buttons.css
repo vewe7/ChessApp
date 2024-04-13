@@ -1,0 +1,20 @@
+.buttons {
+    padding: 10px;
+    border-radius: 0px 15px 15px 0px;
+    font-size: 20px;
+    text-align: center;
+    display: flex;
+    gap: 5px;
+}
+
+.panel-button {
+    background-color: #282424;
+}
+
+#draw {
+    color: green;
+}
+
+#resign {
+    color: red;
+}

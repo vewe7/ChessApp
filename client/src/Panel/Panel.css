@@ -1,0 +1,9 @@
+.panel {
+    background-color: #181414;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 36px;
+
+    display: grid;
+    justify-items: center;
+}

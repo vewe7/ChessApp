@@ -84,7 +84,7 @@ function startMatchClock(matchId, io) {
         io.to(`match:${matchId}`).emit("updateClock", 
                                         match.chess.turn(), 
                                         match.clock.activeClock.remainingTime);
-    }, 500);
+    }, 50);
 }
 
 function stopMatchClock(match) {
