@@ -7,3 +7,5 @@ CREATE TABLE player (
     username VARCHAR(20),
     password_hash VARCHAR(60)
 );
+
+ALTER TABLE player ADD CONSTRAINT username_unique UNIQUE (username);

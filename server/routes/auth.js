@@ -79,18 +79,19 @@ router.post('/logout', function(req, res, next){
 });
 
 router.post("/register", async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    // Check if username already exists
-    const userExistsCom = "SELECT * FROM player WHERE username = $1";
-    const userExistsQuery = await pool.query(userExistsCom, [req.body.username]);
-    if (userExistsQuery.rows.length > 0) {
-        return res.status(400).json({ error: "Username already exists"});
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        // Insert new user into database
+        const insertCom = "INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *";
+        const insertQuery = await pool.query(insertCom, [req.body.username, hashedPassword]);
+        // TO-DO: error handling for insert fail
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        // Check if the error is due to a duplicate username
+        if (error.code === '23505') { // PostgreSQL error code for unique constraint violation
+            return res.status(400).json({ error: "Username already exists" });
+        }
     }
-    // Insert new user into database
-    const insertCom = "INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *";
-    const insertQuery = await pool.query(insertCom, [req.body.username, hashedPassword]);
-    // TO-DO: error handling for insert fail
-    res.status(201).json({ message: "User registered successfully" });
 });
 
 router.get("/error", (req, res) => {

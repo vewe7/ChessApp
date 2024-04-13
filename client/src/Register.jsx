@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { Link } from 'react-router-dom';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -18,6 +19,52 @@ import {
 from 'mdb-react-ui-kit';
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log('Name:', name);
+    console.log('Value:', value);
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (formData.password !== formData.confirmPassword) throw new Error("Passwords do not match!");
+
+      const body = {
+        username: formData.username,
+        password: formData.password
+      };
+
+      const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.error);
+      }
+
+      navigate("../login");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <MDBContainer fluid>
 
@@ -28,22 +75,22 @@ function Register() {
             <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
 
               <h2 className="fw-bold mb-2 text-uppercase" style={{paddingBottom:"20px"}}>Create Account</h2>
-
+              
               <Stack gap={4} className="newPadding">
                 <FloatingLabel controlId="floatingInput" label="Username" className="mb-3">
-                  <Form.Control type="text" placeholder="Username" />
+                  <Form.Control type="text" name="username" value={formData.username} onChange={handleChange}/>
                 </FloatingLabel>
                 <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
-                  <Form.Control type="password" placeholder="Password"/>
+                  <Form.Control type="password" name="password" value={formData.password} onChange={handleChange}/>
                 </FloatingLabel>
-                <FloatingLabel controlId="floatingPassword" label="Confirm Password" className="mb-3">
-                  <Form.Control type="password" placeholder="Password"/>
+                <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
+                  <Form.Control type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
                 </FloatingLabel>
               </Stack>
 
 
-              <p className="small mb-3 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
-              <Button variant="dark" size="lg" className="porple">Create Account</Button>{' '}
+              <p className="small mb-3 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
+              <Button variant="dark" size="lg" className="porple" onClick={handleSubmit}>Create Account</Button>{' '}
 
 
               <Stack className="topPadding" direction="horizontal" gap={5}>
