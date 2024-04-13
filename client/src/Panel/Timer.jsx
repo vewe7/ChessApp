@@ -1,7 +1,7 @@
 import "./Timer.css"
 
 function Timer({ color, time }) {
-    // Convert milliseconds to string with format "MM:SS" 
+    // Convert milliseconds to string with format "MM:SS.d" 
     function msToTimeString(milliseconds) {
         const totalSeconds = Math.floor(milliseconds / 1000);
         const minutes = Math.floor(totalSeconds / 60);

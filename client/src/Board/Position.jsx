@@ -41,6 +41,25 @@ export function makeNewPosition(position, type, f0, r0, f1, r1) {
     r0 = convertRank(r0);
     r1 = convertRank(r1);
 
+    // Check castle
+    if (type.charAt(1) == 'k' && Math.abs(f1 - f0) == 2) {
+        // Kingside
+        if (f1 > f0) {
+            position2[r0][7] = '';
+            position2[r0][5] = type.substring(0, 1) + "r";
+        }
+        // Queenside
+        else {
+            position2[r0][0] = '';
+            position2[r0][3] = type.substring(0, 1) + "r";
+        }
+    }
+
+    // Check en passant
+    else if (type.charAt(1) == 'p' && f0 != f1 && position[r1][f1] == '') {
+        position2[r0][f1] = '';
+    }
+
     position2[r0][f0] = '';
     position2[r1][f1] = type;
 
