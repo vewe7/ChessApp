@@ -46,10 +46,12 @@ function initializeInviteHandlers(io, socket, socketUser)  {
     // INVITE EVENTS ================
     socket.on("joinInvite", () => {
         socket.join("inviteRoom");
+        console.log(`user ${socketUser.id} joined invite room`);
     });
 
     socket.on("leaveInvite", () => {
         socket.leave("inviteRoom");
+        console.log(`user ${socketUser.id} left invite room`);
     });
 
     socket.on("invite", async (to) => {

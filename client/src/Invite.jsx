@@ -18,7 +18,7 @@ const Invite = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        socket.connect();
+        // socket.connect();
 
         socket.removeAllListeners("inviteAsk");
         socket.removeAllListeners("invite");
@@ -40,6 +40,7 @@ const Invite = () => {
         });
 
         socket.emit('joinInvite');
+
         return () => {
             socket.emit('leaveInvite');
             socket.off("inviteAsk");

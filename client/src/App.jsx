@@ -13,11 +13,11 @@ import { socket } from "./socket.js"
 
 function App() {
 
-  useEffect(() => { 
-
+  useEffect(() => {
+    socket.connect();
     // Cleanup on component unmount
     return () => {
-      // socket.disconnect();
+      socket.disconnect();
     };
   }, []); // Empty array means this effect runs only once on mount
 

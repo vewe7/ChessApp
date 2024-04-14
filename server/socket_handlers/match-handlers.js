@@ -69,10 +69,11 @@ function updateActiveClock(match, matchId, io) {
 
 function startMatchClock(matchId, io) {
     const match = matches.get(matchId);
-    if (match == undefined | match.live)
-        return;
-
+    if (match == undefined || match.live)
+        return true;
+    
     match.live = true;
+
     io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.blackClock.remainingTime);
     io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.whiteClock.remainingTime);
 
