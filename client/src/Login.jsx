@@ -34,6 +34,9 @@ const Login = () => {
       });
       // Throw error if login failed
       if (!response.ok) {
+        var warning = document.getElementById("warningLabel");
+        warning.style.display = "block";
+
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       // Login successful, set session cookie and redirect to home
@@ -69,6 +72,10 @@ const Login = () => {
                 <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
                   <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                 </FloatingLabel>
+                <h5 id="warningLabel" 
+                  className="fw-normal my-1 h6" 
+                  style={{letterSpacing: "1px", color:"red", display:"none"}}
+                  >Invalid Login</h5>
               </Stack>
               <Button variant="dark" size="lg" className="porple" onClick={handleLogin} >Login</Button>
 
