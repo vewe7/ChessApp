@@ -39,19 +39,8 @@ async function endGameOnFlag(matchId, color) {
     endGame(matchId);
 }
 
-// Start [color]'s clock and pause opponent's
-function switchClock(match, color) { 
-    if (color == "b") {
-        match.clock.blackClock.timeReference = process.hrtime();
-        match.clock.activeClock = match.clock.blackClock;
-    } else {
-        match.clock.whiteClock.timeReference = process.hrtime();
-        match.clock.activeClock = match.clock.whiteClock;
-    }
-}
-
 function updateActiveClock(match, matchId, io, rate) {
-    const activeClock = match.clock.activeClock;
+    let activeClock = match.chess.turn() == "w" ? match.clock.white : match.clock.black;
 
     // Get elapsed time since last update
     // const elapsed = process.hrtime(activeClock.timeReference); 
@@ -67,6 +56,12 @@ function updateActiveClock(match, matchId, io, rate) {
     // activeClock.timeReference = process.hrtime();
 }
 
+function pollClocks(match, matchId, io) {
+    const turn = match.chess.turn();
+    const clock = turn == "w" ? match.clock.white : match.clock.black;
+    io.to(`match:${matchId}`).emit("updateClock", turn, clock.remainingTime);
+}
+
 function startMatchClock(matchId, io) {
     const match = matches.get(matchId);
     if (match == undefined || match.live)
@@ -74,17 +69,15 @@ function startMatchClock(matchId, io) {
 
     match.live = true;
 
-    io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.blackClock.remainingTime);
-    io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.whiteClock.remainingTime);
+    io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.black.remainingTime);
+    io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.white.remainingTime);
 
     match.clock.clockInterval = setInterval(() => { 
         updateActiveClock(match, matchId, io, 10);
     }, 10);
 
     match.clock.pollInterval = setInterval(() => {
-        io.to(`match:${matchId}`).emit("updateClock", 
-                                        match.chess.turn(), 
-                                        match.clock.activeClock.remainingTime);
+        pollClocks(match, matchId, io);
     }, 200);
 }
 
@@ -140,8 +133,6 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
             let newStatus = "none";
             chess.move(move); // Anything below this line should only run on valid move 
-
-            switchClock(match, turn)
             
             match.drawState.whiteOffer = false; 
             match.drawState.blackOffer = false;

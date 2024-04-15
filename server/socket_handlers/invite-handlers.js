@@ -15,10 +15,6 @@ function generateNewMatch(whitePlayer, blackPlayer) {
     chess.header("Date", `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`);
 
     // Couple game state with player data in one object
-
-    const whiteClock = { timeReference: process.hrtime(), remainingTime: 300000 }; //milliseconds
-    const blackClock = { timeReference: process.hrtime(), remainingTime: 300000 }; //milliseconds
-
     return {
         chess: chess, 
         live: false,
@@ -31,9 +27,8 @@ function generateNewMatch(whitePlayer, blackPlayer) {
         clock: {
             clockInterval: null, 
             pollInterval: null,
-            whiteClock: whiteClock,
-            blackClock: blackClock,
-            activeClock: whiteClock
+            white: { remainingTime: 300000 },
+            black: { remainingTime: 300000}
         }
     }
 };

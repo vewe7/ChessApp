@@ -3,7 +3,7 @@ import './Board.css'
 import '../constants.css'
 import { useEffect } from 'react';
 
-function Board({matchId}) {
+function Board({currentPosition, setPosition, sendMove}) {
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -16,7 +16,7 @@ function Board({matchId}) {
     return (
         <div className='board'>
             <div className='squares'>{board}</div>
-            <Pieces matchId={matchId}/>
+            <Pieces currentPosition={currentPosition} setPosition={setPosition} sendMove={sendMove}/>
         </div>
     )
 }

@@ -3,51 +3,8 @@ import Piece from "./Piece"
 import { initialPosition, makeNewPosition } from "./Position"
 import { useState, useRef, useEffect } from "react";
 
-import { socket } from "../socket.js";
-
-function Pieces({matchId}) {
+function Pieces({currentPosition, setPosition, sendMove}) {
     const ref = useRef();
-    const [currentPosition, setPosition] = useState(initialPosition());
-    let queuePosition = initialPosition();
-
-    function convertFile(f) {
-        return (f.charCodeAt(0) - 'a'.charCodeAt(0));
-    }
-
-    function convertRank(r) {
-        return (8 - r);
-    }
-
-    useEffect(() => {
-
-        socket.on("validMove", (move, newStatus) => {
-            window.console.log("Move received from backend:");
-            window.console.log(move);
-
-            const file = move.from[0], rank = move.from[1];
-            const newFile = move.to[0], newRank = move.to[1];
-            const type = currentPosition[convertRank(rank)][convertFile(file)];
-
-            window.console.log("Moving " + type + " to " + newFile + newRank);
-
-            const nextPosition = makeNewPosition(currentPosition, type, file, rank, newFile, newRank);
-            setPosition(nextPosition);
-        });
-
-        socket.on("moveError", (error) => {
-            window.console.log("Got move error event: " + error);
-        });
-
-        return () => {
-            socket.off("validMove");
-            socket.off("moveError");
-        };
-    }, [currentPosition]);
-
-    function sendMove(from, to) {
-        window.console.log("Pieces sending move with matchId: " + matchId);
-        socket.emit("makeMove", parseInt(matchId), {from: from, to: to});
-    }
 
     function dropSquare(e) {
         // Get and initialize x-pos of left side, and y-pos of bottom side of board
