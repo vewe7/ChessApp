@@ -19,8 +19,6 @@ function Pieces({matchId}) {
     }
 
     useEffect(() => {
-        socket.removeAllListeners("validMove");
-        socket.removeAllListeners("moveError");
 
         socket.on("validMove", (move, newStatus) => {
             window.console.log("Move received from backend:");
@@ -39,6 +37,11 @@ function Pieces({matchId}) {
         socket.on("moveError", (error) => {
             window.console.log("Got move error event: " + error);
         });
+
+        return () => {
+            socket.off("validMove");
+            socket.off("moveError");
+        };
     }, [currentPosition]);
 
     function sendMove(from, to) {

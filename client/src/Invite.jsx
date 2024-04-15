@@ -20,10 +20,6 @@ const Invite = () => {
     useEffect(() => {
         // socket.connect();
 
-        socket.removeAllListeners("inviteAsk");
-        socket.removeAllListeners("invite");
-        socket.removeAllListeners("startMatch");
-
         socket.on("inviteAsk", (username, incomingInviteId) => {
             window.console.log(`invite from username '${username}' | invite id ${inviteId}`);
             setInviteId(incomingInviteId);
@@ -45,6 +41,7 @@ const Invite = () => {
             socket.emit('leaveInvite');
             socket.off("inviteAsk");
             socket.off("invite");
+            socket.off("startMatch");
         };
     }, []);
     

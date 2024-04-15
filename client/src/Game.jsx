@@ -18,7 +18,6 @@ function Game() {
     const [blackTime, setBlackTime] = useState(0);
 
     useEffect(() => {
-        socket.removeAllListeners("updateClock");
         socket.on("updateClock", (color, time) => {
             if (color == "w") 
                 setWhiteTime(time);
@@ -32,6 +31,7 @@ function Game() {
         // Cleanup
         return () => {
             socket.emit("leaveMatchRoom", parseInt(matchId));
+            socket.off("updateClock");
         };
     }, []);
 

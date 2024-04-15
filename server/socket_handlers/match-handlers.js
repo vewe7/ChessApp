@@ -50,13 +50,13 @@ function switchClock(match, color) {
     }
 }
 
-function updateActiveClock(match, matchId, io) {
+function updateActiveClock(match, matchId, io, rate) {
     const activeClock = match.clock.activeClock;
 
     // Get elapsed time since last update
-    const elapsed = process.hrtime(activeClock.timeReference); 
-    const elapsedMilliseconds = elapsed[0] * 1000 + elapsed[1] / 1000000;
-    activeClock.remainingTime -= elapsedMilliseconds;
+    // const elapsed = process.hrtime(activeClock.timeReference); 
+    // const elapsedMilliseconds = elapsed[0] * 1000 + elapsed[1] / 1000000;
+    activeClock.remainingTime -= rate;
 
     if (activeClock.remainingTime < 50) {
         io.to(`match:${matchId}`).emit("updateClock", match.chess.turn(), 0);
@@ -64,28 +64,28 @@ function updateActiveClock(match, matchId, io) {
         endGameOnFlag(matchId, match.chess.turn());
     };
 
-    activeClock.timeReference = process.hrtime();
+    // activeClock.timeReference = process.hrtime();
 }
 
 function startMatchClock(matchId, io) {
     const match = matches.get(matchId);
     if (match == undefined || match.live)
         return true;
-    
+
     match.live = true;
 
     io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.blackClock.remainingTime);
     io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.whiteClock.remainingTime);
 
     match.clock.clockInterval = setInterval(() => { 
-        updateActiveClock(match, matchId, io);
+        updateActiveClock(match, matchId, io, 10);
     }, 10);
 
     match.clock.pollInterval = setInterval(() => {
         io.to(`match:${matchId}`).emit("updateClock", 
                                         match.chess.turn(), 
                                         match.clock.activeClock.remainingTime);
-    }, 50);
+    }, 200);
 }
 
 function stopMatchClock(match) {
