@@ -9,3 +9,12 @@ CREATE TABLE player (
 );
 
 ALTER TABLE player ADD CONSTRAINT username_unique UNIQUE (username);
+
+CREATE TABLE profile (
+    user_id INT PRIMARY KEY REFERENCES player(user_id) ON DELETE CASCADE,
+    username VARCHAR(20) REFERENCES player(username),
+    bio TEXT DEFAULT '',
+    wins INT DEFAULT 0,
+    losses INT DEFAULT 0,
+    draws INT DEFAULT 0
+);
