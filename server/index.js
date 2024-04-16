@@ -23,6 +23,22 @@ app.get("/", (req, res) => {
   res.redirect("/session");
 });
 
+// Get player by username
+app.get("/player/username/:username", async (req, res) => {
+  try {
+      const { username } = req.params;
+      const player = await pool.query("SELECT * FROM player WHERE username = $1", [username]);
+
+      if (player.rows.length === 0) {
+        return res.status(404).json({ error: "Username not found" });
+      }
+      
+      res.json(player.rows[0]);
+  } catch (err) {
+      console.error(err.message);
+  }
+});
+
 // Get profile by username
 app.get("/profile/username/:username", async (req, res) => {
   try {

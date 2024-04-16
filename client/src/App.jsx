@@ -8,17 +8,20 @@ import Login from "./Login";
 import Game from "./Game";
 import Register from "./Register";
 import Profile from "./Profile";
+import SearchedProfile from "./SearchedProfile";
 
 import { socket } from "./socket.js"
 
 function App() {
-  // Temporarily used to get username from login component
   const [curUsername, setCurUsername] = useState(localStorage.getItem('curUsername') || '');
+  const [searchedUsername, setSearchedUsername] =useState(localStorage.getItem('searchedUsername') || '');
 
-  // Save username to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('curUsername', curUsername);
   }, [curUsername]);
+  useEffect(() => {
+    localStorage.setItem('searchedUsername', searchedUsername);
+  }, [searchedUsername]);
 
   useEffect(() => {
     socket.connect();
@@ -34,13 +37,49 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
-            <Route exact path="/" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} />} /> {/* Temporarily uses and sets username */}
+            <Route 
+              exact path="/" 
+              element={
+                <Home 
+                  curUsername={curUsername} 
+                  setCurUsername={setCurUsername}
+                  setSearchedUsername={setSearchedUsername}
+                />
+              }
+            />
           </Route>
-          <Route path="/login" element={<Login setCurUsername={setCurUsername} />} /> {/* Temporarily sets username */}
+          <Route path="/login" element={<Login setCurUsername={setCurUsername} />} />
           <Route path="/game/:matchId/:color" element={<Game />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile curUsername={curUsername} />} />
-          <Route path="/home" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} />} /> {/* Temporarily uses and sets username */}
+          <Route 
+            path="/profile" 
+            element={
+              <Profile 
+                curUsername={curUsername} 
+                setSearchedUsername={setSearchedUsername}
+              />
+            } 
+          />
+          <Route 
+            path="/searched-profile" 
+            element={
+              <SearchedProfile 
+                curUsername={curUsername} 
+                searchedUsername={searchedUsername} 
+                setSearchedUsername={setSearchedUsername}
+              />
+            } 
+          />
+          <Route 
+            path="/home" 
+            element={
+              <Home 
+                curUsername={curUsername} 
+                setCurUsername={setCurUsername} 
+                setSearchedUsername={setSearchedUsername}
+              />
+            } 
+          />
         </Routes>
       </BrowserRouter>
     </div>

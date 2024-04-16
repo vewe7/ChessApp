@@ -5,11 +5,15 @@ import Header from "./Header";
 import { socket } from "./socket";
 import { useEffect, useState } from "react";
 
-const Home = ({ curUsername, setCurUsername }) => {
+const Home = ({ curUsername, setCurUsername, setSearchedUsername }) => {
   
   return (
     <>
-      <Header className="Header" curUsername={curUsername} />
+      <Header 
+        className="Header" 
+        curUsername={curUsername} 
+        setSearchedUsername={setSearchedUsername} 
+      />
       <Invite />
       <Logout setCurUsername={setCurUsername} />
     </>

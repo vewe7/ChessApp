@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./Header";
 
-const Profile = ({ curUsername, setSearchedUsername }) => {
+const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername }) => {
   const [profileData, setProfileData] = useState('');
   const [pastGames, setPastGames] = useState([]);
 
   const getProfileData = async () => {
     try {
-      const profileResponse = await fetch(`http://localhost:5000/profile/username/${curUsername}`);
+      const profileResponse = await fetch(`http://localhost:5000/profile/username/${searchedUsername}`);
       const profileResponseData = await profileResponse.json();
 
       setProfileData(profileResponseData);
@@ -58,7 +58,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
         <div className="BoxDiverRows">
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
             <img className="logo" src ="FAFOLogo .svg"></img>
-            <h2 style={{fontSize:"40px"}}>{curUsername}</h2>
+            <h2 style={{fontSize:"40px"}}>{searchedUsername}</h2>
           </div>
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
             <h2 style={{fontSize: "35px"}}>Bio</h2>
@@ -108,4 +108,4 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
   )
 }
 
-export default Profile;
+export default SearchedProfile;

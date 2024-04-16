@@ -1,4 +1,6 @@
 import './App.css';
+import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { MDBCardImage } from 'mdb-react-ui-kit';
 import Stack from 'react-bootstrap/Stack';
 import Navbar from 'react-bootstrap/Navbar';
@@ -52,8 +54,33 @@ function setPBold() {
     normItem.style.fontWeight = "normal";
 }
 
-const Header = ({ curUsername }) => {
-    console.log(curUsername);
+const Header = ({ curUsername, setSearchedUsername }) => {
+    const navigate = useNavigate();
+
+    const [formData, setFormData] = useState('');
+
+    const handleChange = (e) => {
+        setFormData(e.target.value);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:5000/player/username/${formData}`);
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                throw new Error(responseData.error);
+            }
+
+            setSearchedUsername(formData);
+            navigate("../searched-profile");
+            window.location.reload();
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+    
     return (
         <Navbar className="navbar navbar-expand-md py-1 pink">
         <Container style={{width:"100vw", paddingLeft:"0px"}}>
@@ -73,7 +100,7 @@ const Header = ({ curUsername }) => {
             </Nav>
 
           <Navbar.Collapse className="justify-content-end">
-          <Form inline>
+          <Form inline onSubmit={handleSubmit}>
                 <Row>
                     <Col xs="auto">
                         <Button className="porple" 
@@ -90,6 +117,8 @@ const Header = ({ curUsername }) => {
                             className=" mr-sm-2"
                             id="searchBar"
                             style={{background:"none", display:"none"}}
+                            value={formData}
+                            onChange={handleChange} 
                         />
                     </Col>
                 </Row>
