@@ -36,7 +36,7 @@ async function getUserByUsername(username) {
 async function updatePlayerStats(whiteId, blackId, pgn) {
     try {
         const resultRegex = /\[Result "(\d\/\d-\d\/\d|\d+-\d+)"\]/;
-        let match = pgn.match(resultRegex);
+        const match = pgn.match(resultRegex);
 
         if (!match) throw new Error("Result not found.");
 
