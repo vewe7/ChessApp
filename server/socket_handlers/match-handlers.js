@@ -78,18 +78,32 @@ function startMatchClock(matchId, io) {
 
     match.clock.pollInterval = setInterval(() => {
         pollClocks(match, matchId, io);
-    }, 200);
+    }, 50);
 }
 
 function stopMatchClock(match) {
     clearInterval(match.clock.clockInterval);
     clearInterval(match.clock.pollInterval);
 }
+
+// Check if the socket's user is a valid player in the match
+function isSocketMatchParticipant(match, socketUser) {
+    return (socketUser.id == match.whiteId || socketUser.id == match.blackId);
+}
   
 function initializeMatchHandlers(io, socket, socketUser) {
     socket.on("joinMatchRoom", async (matchId) => {
         if (socket.rooms.has(`match:${matchId}`))
             return;
+        const match = matches.get(matchId);
+        if (match == undefined) {
+            socket.emit("joinMatchRoom", "Match id not found");
+            return;
+        };
+        if (!isSocketMatchParticipant(match, socketUser)) {
+            socket.emit("joinMatchRoom", "Invalid user for this match");
+            return;
+        }
 
         console.log("User id " + socketUser.id + " joined match room: " + matchId);
         socket.join(`match:${matchId}`);
@@ -121,6 +135,12 @@ function initializeMatchHandlers(io, socket, socketUser) {
                 socket.emit("moveError", "Match has ended");
                 return;
             }
+
+            if (!isSocketMatchParticipant(match, socketUser)) {
+                socket.emit("moveError", "Invalid user for this match");
+                return;
+            }
+            
             const chess = match.chess;
 
             // Prevent player from moving for opponent
@@ -169,7 +189,11 @@ function initializeMatchHandlers(io, socket, socketUser) {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
-            socket.emit("makeMove", "Match id not found");
+            socket.emit("resign", "Match id not found");
+            return;
+        }
+        if (!isSocketMatchParticipant(match, socketUser)) {
+            socket.emit("moveError", "Invalid user for this match");
             return;
         }
 
@@ -189,6 +213,11 @@ function initializeMatchHandlers(io, socket, socketUser) {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
+            socket.emit("offerDraw", "Match id not found");
+            return;
+        }
+        if (!isSocketMatchParticipant(match, socketUser)) {
+            socket.emit("moveError", "Invalid user for this match");
             return;
         }
 
@@ -207,6 +236,11 @@ function initializeMatchHandlers(io, socket, socketUser) {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
+            socket.emit("acceptDraw", "Match id not found");
+            return;
+        }
+        if (!isSocketMatchParticipant(match, socketUser)) {
+            socket.emit("moveError", "Invalid user for this match");
             return;
         }
         
@@ -225,6 +259,11 @@ function initializeMatchHandlers(io, socket, socketUser) {
         // Make sure match exists
         const match = matches.get(matchId);
         if (match == undefined) {
+            socket.emit("declineDraw", "Match id not found");
+            return;
+        }
+        if (!isSocketMatchParticipant(match, socketUser)) {
+            socket.emit("moveError", "Invalid user for this match");
             return;
         }
 
