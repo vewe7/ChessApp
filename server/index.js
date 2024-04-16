@@ -77,7 +77,7 @@ app.put("/profile/bio/:username", async (req, res) => {
   try {
       const { username } = req.params;
       const { bio } = req.body;
-      const updateProfile = await pool.query("UPDATE profile SET bio = $1 WHERE username = $2;", [bio, username]);
+      const updateProfile = await pool.query("UPDATE profile SET bio = $1 WHERE username = $2", [bio, username]);
       res.json("Bio was updated");
   } catch (err) {
       console.error(err.message);
