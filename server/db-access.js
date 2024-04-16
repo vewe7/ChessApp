@@ -34,25 +34,36 @@ async function getUserByUsername(username) {
 
 // Save game to database
 async function saveGame(whiteId, blackId, pgn) {
-    /*
-    const query = "INSERT INTO match_history (white_id, black_id, pgn) VALUES ($1, $2, $3)";
     // return true if query successful
     try {
-        const result = await pool.query(query, [whiteId, blackId, pgn]);
+        const matchesQuery = "INSERT INTO matches (white_id, black_id, pgn) VALUES ($1, $2, $3) RETURNING *";
 
-        if (result.rowCount === 1) 
-            return true;
+        const matchesResult = await pool.query(matchesQuery, [whiteId, blackId, pgn]);
+        if (matchesResult.rowCount !== 1 ) {
+            console.error("Game failed to save!");
+            return false;
+        }
 
-        console.error("Game failed to save!");
-        return false;
+        const newMatch = matchesResult.rows[0];
+        const playerMatchesQuery = "INSERT INTO player_matches (user_id, match_id) VALUES ($1, $2)  RETURNING *";
+
+        const playerMatchesResult1 = await pool.query(playerMatchesQuery, [whiteId, newMatch.match_id]);
+        if (playerMatchesResult1.rowCount !== 1 ) {
+            console.error("Game failed to save!");
+            return false;
+        }
+
+        const playerMatchesResult2 = await pool.query(playerMatchesQuery, [blackId, newMatch.match_id]);
+        if (playerMatchesResult2.rowCount !== 1 ) {
+            console.error("Game failed to save!");
+            return false;
+        }
+        
+        return true;
     } catch (error) {
         console.error('saveGame() threw an exception:', error);
         return false;
     }
-    */
-
-    // PLACEHOLDER UNTIL DATABASE CONFIGURED
-    return true;
 }
 
 module.exports = {
