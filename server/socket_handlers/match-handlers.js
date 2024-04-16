@@ -5,8 +5,7 @@ const matches = new Map();
 let matchIterator = 1; // Should probably make a better id generator
 
 async function saveGame(match) {
-    const pgn = match.chess.pgn(); // TO-DO: add username headers to pgn
-    console.log(pgn); // DEBUG
+    const pgn = match.chess.pgn();
     const whiteId = match.whiteId;
     const blackId = match.blackId;
     return await db.saveGame(whiteId, blackId, pgn);

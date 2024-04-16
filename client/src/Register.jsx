@@ -40,7 +40,13 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (formData.password !== formData.confirmPassword) throw new Error("Passwords do not match!");
+      if (formData.password !== formData.confirmPassword)
+      {
+        var warning = document.getElementById("notMatching");
+        warning.style.display = "block";
+        
+        throw new Error("Passwords do not match!");
+      }
 
       const body = {
         username: formData.username,
@@ -86,6 +92,10 @@ function Register() {
                 <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
                   <Form.Control type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
                 </FloatingLabel>
+                <h5 id="notMatching" 
+                  className="fw-normal my-1 h6" 
+                  style={{letterSpacing: "1px", color:"red", display:"none"}}
+                  >Passwords do not match</h5>
               </Stack>
 
 

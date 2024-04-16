@@ -80,10 +80,18 @@ router.post('/logout', function(req, res, next){
 
 router.post("/register", async (req, res) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
         // Insert new user into database
-        const insertCom = "INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *";
-        const insertQuery = await pool.query(insertCom, [req.body.username, hashedPassword]);
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const insertCom1 = "INSERT INTO player (username, password_hash) VALUES ($1, $2) RETURNING *";
+        const insertQuery1 = await pool.query(insertCom1, [req.body.username, hashedPassword]);
+
+        // Retrieve new user
+        const newUser = insertQuery1.rows[0];
+
+        // Insert new profile into database
+        const insertCom2 = "INSERT INTO profile (user_id, username) VALUES ($1, $2) RETURNING *";
+        const insertQuery2 = await pool.query(insertCom2, [newUser.user_id, req.body.username]);
+
         // TO-DO: error handling for insert fail
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
