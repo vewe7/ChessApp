@@ -32,7 +32,7 @@ app.get("/player/username/:username", async (req, res) => {
       if (player.rows.length === 0) {
         return res.status(404).json({ error: "Username not found" });
       }
-      
+
       res.json(player.rows[0]);
   } catch (err) {
       console.error(err.message);
@@ -67,6 +67,18 @@ app.get("/matches/match_id/:match_id", async (req, res) => {
       const { match_id } = req.params;
       const match = await pool.query("SELECT * FROM matches WHERE match_id = $1", [match_id]);
       res.json(match.rows[0]);
+  } catch (err) {
+      console.error(err.message);
+  }
+});
+
+// Update profile bio
+app.put("/profile/bio/:username", async (req, res) => {
+  try {
+      const { username } = req.params;
+      const { bio } = req.body;
+      const updateProfile = await pool.query("UPDATE profile SET bio = $1 WHERE username = $2;", [bio, username]);
+      res.json("Bio was updated");
   } catch (err) {
       console.error(err.message);
   }

@@ -20,6 +20,8 @@ CREATE TABLE profile (
     draws INT DEFAULT 0
 );
 
+ALTER TABLE profile ADD COLUMN date_opened DATE DEFAULT CURRENT_DATE;
+
 -- holds information about matches
 CREATE TABLE matches (
     match_id SERIAL PRIMARY KEY,

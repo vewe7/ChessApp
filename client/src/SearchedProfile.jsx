@@ -47,6 +47,12 @@ const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername })
     getPastGames();
   }, [profileData]);
 
+  function truncateDate(dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return date.toLocaleDateString(undefined, options);
+  }
+
   return (
     <div>
       <Header 
@@ -58,7 +64,9 @@ const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername })
         <div className="BoxDiverRows">
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
             <img className="logo" src ="FAFOLogo .svg"></img>
-            <h2 style={{fontSize:"40px"}}>{searchedUsername}</h2>
+            <h2 style={{fontSize:"40px"}}>{profileData.username}</h2>
+            <p style={{fontSize: "20px"}}>Account Opening Date:</p>
+            <p style={{fontSize: "20px"}}>{truncateDate(profileData.date_opened)}</p>
           </div>
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
             <h2 style={{fontSize: "35px"}}>Bio</h2>
