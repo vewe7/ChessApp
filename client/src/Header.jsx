@@ -52,7 +52,8 @@ function setPBold() {
     normItem.style.fontWeight = "normal";
 }
 
-function Header() {
+const Header = ({ curUsername }) => {
+    console.log(curUsername);
     return (
         <Navbar className="navbar navbar-expand-md py-1 pink">
         <Container style={{width:"100vw", paddingLeft:"0px"}}>
@@ -95,7 +96,7 @@ function Header() {
             </Form>
             <div style={{width:"10px"}} />
           <Navbar.Text>
-            Signed in as: <a href="/profile">John Doe</a>
+            Signed in as: <a href="/profile">{curUsername}</a>
           </Navbar.Text>
         </Navbar.Collapse>
         </Container>

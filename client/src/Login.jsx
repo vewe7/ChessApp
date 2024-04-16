@@ -16,7 +16,7 @@ import {
 }
 from "mdb-react-ui-kit";
 
-const Login = () => {
+const Login = ({ setCurUsername }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -42,6 +42,9 @@ const Login = () => {
       // Login successful, set session cookie and redirect to home
       const data = await response.json();
       document.cookie = `yourAuthToken=${data.token}; path=/; HttpOnly`;
+
+      // Temporarily set username to be used elsewhere
+      setCurUsername(username);
 
       socket.connect();
       navigate("/");

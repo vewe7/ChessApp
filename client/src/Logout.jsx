@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Logout = () => {
+const Logout = ({ setCurUsername }) => {
     const navigate = useNavigate();
     const handleLogout = async () => {
         try { 
@@ -16,6 +16,10 @@ const Logout = () => {
               throw new Error(`HTTP error! Status: ${response.status}`);
             }   
             document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
+
+            // Temporarily clear username
+            setCurUsername('');
+
             navigate("/Login");
       
           } catch (error) {
