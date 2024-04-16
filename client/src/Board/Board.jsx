@@ -3,20 +3,36 @@ import './Board.css'
 import '../constants.css'
 import { useEffect } from 'react';
 
-function Board({currentPosition, setPosition, sendMove}) {
+function Board({boardArray, setBoard, currentPosition, setPosition, sendMove}) {
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const ranks = [8, 7, 6, 5, 4, 3, 2, 1];
 
-    function getSquareClass(i, j) {
-        return ((i + j) % 2 === 0 ? "square-light" : "square-dark");
+    function getSquareClass(square) {
+        let curFile = square.charAt(0).charCodeAt() - 'a'.charCodeAt();
+        let curRank = square.charAt(1) - '1';
+        return ((curFile + curRank) % 2 === 0 ? "square-light" : "square-dark");
     }
 
-    const board = ranks.map((r, i) => files.map((f, j) => <div key={f+r} className={getSquareClass(i, j)}></div>));
+    const board = [];
+
+    for (let i = 0; i < 8; i++) {
+        board[i] = [];
+        for (let j = 0; j < 8; j++) {
+            board[i][j] = (
+                <div
+                    key={ranks[i].toString() + files[j]} 
+                    className={getSquareClass(boardArray[i][j])} 
+                    id={boardArray[i][j]+`-square`}
+                >
+                </div>
+            );
+        }
+    }
 
     return (
         <div className='board'>
             <div className='squares'>{board}</div>
-            <Pieces currentPosition={currentPosition} setPosition={setPosition} sendMove={sendMove}/>
+            <Pieces boardArray={boardArray} currentPosition={currentPosition} setPosition={setPosition} sendMove={sendMove}/>
         </div>
     )
 }

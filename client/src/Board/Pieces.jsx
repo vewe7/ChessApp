@@ -3,14 +3,14 @@ import Piece from "./Piece"
 import { initialPosition, makeNewPosition } from "./Position"
 import { useState, useRef, useEffect } from "react";
 
-function Pieces({currentPosition, setPosition, sendMove}) {
+function Pieces({boardArray, currentPosition, setPosition, sendMove}) {
     const ref = useRef();
 
     function dropSquare(e) {
         // Get and initialize x-pos of left side, and y-pos of bottom side of board
-        const {width, bottom, left} = ref.current.getBoundingClientRect();
+        const {width, top, left} = ref.current.getBoundingClientRect();
         const x0 = left;
-        const y0 = bottom;
+        const y0 = top;
         const scale = width/8;
 
         // Get x-pos and y-pos of where the piece was dropped
@@ -18,14 +18,30 @@ function Pieces({currentPosition, setPosition, sendMove}) {
         const y = e.clientY;
         
         // Calculate and return the new file + rank
-        const newFile = String.fromCharCode(97 + Math.floor((x - x0)/scale));
-        const newRank = Math.floor(-1*(y - y0)/scale) + 1;
-        return {newFile, newRank};
+
+        const column = Math.floor((x - x0)/scale);
+        const row = Math.floor((y - y0)/scale);
+
+        const endingSquare = boardArray[row][column];
+
+        const endFile = endingSquare.charAt(0);
+        const endRank = endingSquare.charAt(1);
+        return {endFile, endRank};
     }
 
     async function onDrop(e) {
         const [type, file, rank] = e.dataTransfer.getData("text").split("-");
-        const {newFile, newRank} = dropSquare(e);
+        const row = 8 - parseInt(rank);
+        const column = file.charCodeAt() - 'a'.charCodeAt();
+
+        const startSquare = boardArray[row][column];
+        console.log(startSquare);
+        const startFile = startSquare.charAt(0);
+        const startRank = startSquare.charAt(1);
+
+        const {endFile, endRank} = dropSquare(e);
+
+        console.log(endFile + endRank);
 
         // Make a new position, only changing the position of the piece that was moved
         /*
@@ -33,7 +49,7 @@ function Pieces({currentPosition, setPosition, sendMove}) {
         setPosition(nextPosition);*/
 
         // Send to backend
-        sendMove(file + rank, newFile + newRank);
+        sendMove(startFile + startRank, endFile + endRank);
     }
 
     function onDragOver(e) {

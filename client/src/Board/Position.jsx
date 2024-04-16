@@ -24,34 +24,53 @@ export function initialPosition() {
     return position;
 }
 
-export function makeNewPosition(position, type, f0, r0, f1, r1) {
+export function makeNewPosition(position, type, f0, r0, f1, r1, board) {
     const position2 = [...position];
+
+    const isUnflipped = (board[0][0] === "a8" ? true : false); // White POV -> False
     
-    function convertFile(f) {
-        return (f.charCodeAt(0) - 'a'.charCodeAt(0));
+    function convertFile(f, isUnflipped) {
+        let curFile = f.charCodeAt(0) - 'a'.charCodeAt(0);
+        return (isUnflipped ? curFile : 7 - curFile);
     }
 
-    function convertRank(r) {
-        return (8 - r);
+    function convertRank(r, isUnflipped) {
+        let curRank = 8 - r;
+        return (isUnflipped ? curRank : 7 - curRank);
     }
 
     // Convert conventional file/rank notation to array indexes
-    f0 = convertFile(f0);
-    f1 = convertFile(f1);
-    r0 = convertRank(r0);
-    r1 = convertRank(r1);
+    f0 = convertFile(f0, isUnflipped);
+    f1 = convertFile(f1, isUnflipped);
+    r0 = convertRank(r0, isUnflipped);
+    r1 = convertRank(r1, isUnflipped);
 
     // Check castle
     if (type.charAt(1) == 'k' && Math.abs(f1 - f0) == 2) {
-        // Kingside
-        if (f1 > f0) {
-            position2[r0][7] = '';
-            position2[r0][5] = type.substring(0, 1) + "r";
+        if (isUnflipped) {
+            // Kingside
+            if (f1 > f0) {
+                position2[r0][7] = '';
+                position2[r0][5] = type.substring(0, 1) + "r";
+            }
+            // Queenside
+            else {
+                position2[r0][0] = '';
+                position2[r0][3] = type.substring(0, 1) + "r";
+            }
         }
-        // Queenside
+
         else {
-            position2[r0][0] = '';
-            position2[r0][3] = type.substring(0, 1) + "r";
+            // Queenside
+            if (f1 > f0) {
+                position2[r0][7] = '';
+                position2[r0][4] = type.substring(0, 1) + "r";
+            }
+            // Kingside
+            else {
+                position2[r0][0] = '';
+                position2[r0][2] = type.substring(0, 1) + "r";
+            }
         }
     }
 
@@ -64,4 +83,17 @@ export function makeNewPosition(position, type, f0, r0, f1, r1) {
     position2[r1][f1] = type;
 
     return position2;
+}
+
+export function flipPosition(currentPosition, setPosition) {
+    const newPosition = [];
+
+    for (let i = 0; i < 8; i++) {
+        newPosition[i] = [];
+        for (let j = 0; j < 8; j++) {
+            newPosition[i][j] = currentPosition[7-i][7-j];
+        }
+    }
+
+    setPosition(newPosition);
 }
