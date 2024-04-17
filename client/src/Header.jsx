@@ -84,7 +84,7 @@ const Header = ({ curUsername, setSearchedUsername }) => {
     return (
         <Navbar className="navbar navbar-expand-md py-1 pink">
         <Container style={{width:"100vw", paddingLeft:"0px"}}>
-            <Navbar.Brand href="/home">
+            <Navbar.Brand href="/">
                 <Stack direction="horizontal">
                     <h2>FAFOChess</h2>
                 </Stack>
@@ -92,7 +92,7 @@ const Header = ({ curUsername, setSearchedUsername }) => {
 
             <Nav variant="underline" id="NavigationBar">
                 <Nav.Item>
-                    <Nav.Link id="H" href="/home" onSelect={setHBold}>Home</Nav.Link>
+                    <Nav.Link id="H" href="/" onSelect={setHBold}>Home</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                     <Nav.Link id="P" href="/profile" onSelect={setPBold}>Profile</Nav.Link>

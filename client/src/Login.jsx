@@ -72,7 +72,7 @@ const Login = ({ setCurUsername }) => {
       setCurUsername(username);
 
       socket.connect();
-      navigate("/home");
+      navigate("/");
 
     } catch (error) {
       console.error("Error during login:", error);
