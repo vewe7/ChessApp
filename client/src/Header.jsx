@@ -101,7 +101,7 @@ const Header = ({ curUsername, setSearchedUsername }) => {
             </Nav>
 
           <Navbar.Collapse className="justify-content-end">
-          <Form inline onSubmit={handleSubmit}>
+          <Form inline="true" onSubmit={handleSubmit}>
                 <Row>
                     <Col xs="auto">
                         <Button className="porple" 
