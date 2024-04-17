@@ -56,7 +56,9 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
   }, []);
 
   useEffect(() => {
-    getPastGames();
+    if (profileData.user_id !== undefined) {
+      getPastGames();
+    }
   }, [profileData]);
 
   useEffect(() => {
@@ -178,7 +180,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Profile;
