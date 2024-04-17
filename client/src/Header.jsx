@@ -85,8 +85,9 @@ const Header = ({ curUsername, setSearchedUsername }) => {
         <Navbar className="navbar navbar-expand-md py-1 pink">
         <Container style={{width:"100vw", paddingLeft:"0px"}}>
             <Navbar.Brand href="/">
-                <Stack direction="horizontal">
-                    <h2>FAFOChess</h2>
+                <Stack direction="vertical">
+                    <h2 style={{margin:"0px"}}>FAFOChess</h2>
+                    <p style={{fontSize:"50%", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
                 </Stack>
             </Navbar.Brand>
 

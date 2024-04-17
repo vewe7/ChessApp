@@ -87,7 +87,9 @@ const Login = ({ setCurUsername }) => {
 
           <MDBCol md="6" style={{paddingTop:"40px"}}>
             <span className="h1 fw-bold mb-0">FAFOChess</span>
-            <MDBCardImage src="FAFOLogo .svg" alt="login form" className="white w-100"/>
+            <br />
+            <span className="p fw-bold mb-0">Fun and Free Online Chess</span>
+            <MDBCardImage src="FAFOLogo.svg" alt="login form" className="white w-100"/>
           </MDBCol>
 
           <MDBCol md="6 white">

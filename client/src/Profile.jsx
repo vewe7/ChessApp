@@ -104,7 +104,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
       <div className="BoxDivider" >
         <div className="BoxDiverRows">
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
-            <img className="logo" src ="FAFOLogo .svg"></img>
+            <img className="logo" src ="FAFOLogo.svg"></img>
             <h2 style={{fontSize:"40px"}}>{profileData.username}</h2>
             <p style={{fontSize: "20px"}}>Account Opening Date:</p>
             <p style={{fontSize: "20px"}}>{truncateDate(profileData.date_opened)}</p>
