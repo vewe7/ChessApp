@@ -38,6 +38,16 @@ async function endGameOnFlag(matchId, color) {
     endGame(matchId);
 }
 
+async function endGameOnDraw(matchId) {
+    const match = matches.get(matchId);
+    if (match == undefined)
+        return;
+
+    match.chess.setComment("1/2-1/2");
+    match.chess.header("Result", "1/2-1/2");
+    endGame(matchId);
+}
+
 function updateActiveClock(match, matchId, io, rate) {
     let activeClock = match.chess.turn() == "w" ? match.clock.white : match.clock.black;
 
@@ -226,32 +236,15 @@ function initializeMatchHandlers(io, socket, socketUser) {
         else 
             match.drawState.whiteOffer = true;
 
-        // Emit draw offer to opponent
-        const opponentId = (color == "w") ? match.blackId : match.whiteId;
-        io.to(`user:${opponentId}`).emit("offerDraw");
-    });
-
-    socket.on("acceptDraw", async (matchId) => {
-        // Make sure match exists
-        const match = matches.get(matchId);
-        if (match == undefined) {
-            socket.emit("acceptDraw", "Match id not found");
-            return;
-        }
-        if (!isSocketMatchParticipant(match, socketUser)) {
-            socket.emit("moveError", "Invalid user for this match");
-            return;
-        }
-        
-        // Abort if a draw was not offered
-        const color = (socketUser.id == match.whiteId) ? "w" : "b";
-        if (color == "w" && !blackDrawAsk || color == "b" && !whiteDrawAsk) 
-            return;
-
-        // Save result to pgn
-        match.chess.setComment("1/2-1/2");
-        match.chess.header("Result", "1/2-1/2");
-        endGame(matchId);
+        if (match.drawState.whiteOffer && match.drawState.blackOffer) {
+            // Both players have agreed to draw
+            endGameOnDraw(matchId);
+            io.to(`match:${matchId}`).emit("acceptDraw");
+        } else {
+            // Emit draw offer to opponent
+            const opponentId = (color == "w") ? match.blackId : match.whiteId;
+            io.to(`user:${opponentId}`).emit("offerDraw");
+        }        
     });
 
     socket.on("declineDraw", (matchId) => {

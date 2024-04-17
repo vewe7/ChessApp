@@ -27,8 +27,8 @@ function generateNewMatch(whitePlayer, blackPlayer) {
         clock: {
             clockInterval: null, 
             pollInterval: null,
-            white: { remainingTime: 300000 },
-            black: { remainingTime: 300000}
+            white: { remainingTime: 60000 },
+            black: { remainingTime: 60000}
         }
     }
 };
