@@ -9,11 +9,7 @@ const Home = ({ curUsername, setCurUsername, setSearchedUsername }) => {
   
   return (
     <>
-      <Header 
-        className="Header" 
-        curUsername={curUsername} 
-        setSearchedUsername={setSearchedUsername} 
-      />
+      <Header className="Header" curUsername={curUsername} setSearchedUsername={setSearchedUsername} />
       <Invite />
       <Logout setCurUsername={setCurUsername} />
     </>

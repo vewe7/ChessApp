@@ -65,7 +65,7 @@ function Register() {
         throw new Error(responseData.error);
       }
 
-      navigate("../login");
+      navigate("/login");
     } catch (error) {
       console.error(error.message);
     }

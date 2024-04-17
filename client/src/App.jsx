@@ -37,49 +37,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<PrivateRoute />}>
-            <Route 
-              exact path="/" 
-              element={
-                <Home 
-                  curUsername={curUsername} 
-                  setCurUsername={setCurUsername}
-                  setSearchedUsername={setSearchedUsername}
-                />
-              }
-            />
+            <Route exact path="/home" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
+            <Route path="/profile" element={<Profile curUsername={curUsername} setSearchedUsername={setSearchedUsername} />} />
+            <Route path="/searched-profile" element={<SearchedProfile curUsername={curUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
+            <Route path="/game/:matchId/:color" element={<Game />} />
           </Route>
           <Route path="/login" element={<Login setCurUsername={setCurUsername} />} />
-          <Route path="/game/:matchId/:color" element={<Game />} />
           <Route path="/register" element={<Register />} />
-          <Route 
-            path="/profile" 
-            element={
-              <Profile 
-                curUsername={curUsername} 
-                setSearchedUsername={setSearchedUsername}
-              />
-            } 
-          />
-          <Route 
-            path="/searched-profile" 
-            element={
-              <SearchedProfile 
-                curUsername={curUsername} 
-                searchedUsername={searchedUsername} 
-                setSearchedUsername={setSearchedUsername}
-              />
-            } 
-          />
-          <Route 
-            path="/home" 
-            element={
-              <Home 
-                curUsername={curUsername} 
-                setCurUsername={setCurUsername} 
-                setSearchedUsername={setSearchedUsername}
-              />
-            } 
-          />
         </Routes>
       </BrowserRouter>
     </div>
