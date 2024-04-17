@@ -11,6 +11,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
+import Logout from './Logout';
+import { NavbarCollapse } from 'react-bootstrap';
 
 function toggleSearch() {
     var searchBar = document.getElementById("searchBar");
@@ -54,7 +56,7 @@ function setPBold() {
     normItem.style.fontWeight = "normal";
 }
 
-const Header = ({ curUsername, setSearchedUsername }) => {
+const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState('');
@@ -83,56 +85,63 @@ const Header = ({ curUsername, setSearchedUsername }) => {
     
     return (
         <Navbar className="navbar navbar-expand-md py-1 pink">
-        <Container style={{width:"100vw", paddingLeft:"0px"}}>
-            <Navbar.Brand href="/">
-                <Stack direction="vertical">
-                    <h2 style={{margin:"0px"}}>FAFOChess</h2>
-                    <p style={{fontSize:"50%", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
-                </Stack>
-            </Navbar.Brand>
+            <Container fluid style={{width:"100vw"}}>
+                <Navbar.Brand href="/">
+                    <Stack direction="horizontal">
+                        <img src="FAFOLogo.svg" width="50" height="50" style={{backgroundColor: "black"}}/>
+                        <Stack direction="vertical">
+                            <h2 style={{margin:"0px"}}>FAFOChess</h2>
+                            <p style={{fontSize:"50%", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
+                        </Stack>
+                    </Stack>
+                </Navbar.Brand>
 
-            <Nav variant="underline" id="NavigationBar">
-                <Nav.Item>
-                    <Nav.Link id="H" href="/" onSelect={setHBold}>Home</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link id="P" href="/profile" onSelect={setPBold}>Profile</Nav.Link>
-                </Nav.Item>  
-            </Nav>
+                <Nav variant="underline" id="NavigationBar">
+                    <Nav.Item>
+                        <Nav.Link id="H" href="/" onSelect={setHBold}>Home</Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link id="P" href="/profile" onSelect={setPBold}>Profile</Nav.Link>
+                    </Nav.Item>  
+                </Nav>
 
-          <Navbar.Collapse className="justify-content-end">
-          <Form inline="true" onSubmit={handleSubmit}>
-                <Row>
-                    <Col xs="auto">
-                        <Button className="porple" 
-                        variant="secondary"
-                        onClick={toggleSearch}
-                        >
-                            <img src="search.svg"></img>
-                        </Button>
-                    </Col>
-                    <Col xs="auto">
-                        <Form.Control
-                            type="text"
-                            placeholder="Search for User"
-                            className=" mr-sm-2"
-                            id="searchBar"
-                            style={{background:"none", display:"none"}}
-                            value={formData}
-                            onChange={handleChange} 
-                        />
-                    </Col>
-                </Row>
-            </Form>
-            <div style={{width:"10px"}} />
-          <Navbar.Text>
-            Signed in as: <a href="/profile">{curUsername}</a>
-          </Navbar.Text>
-        </Navbar.Collapse>
-        </Container>
-      </Navbar>
+                <NavbarCollapse className="justify-content-start" style={{margin: "0px 16px 0px 16px"}}>
+                    <Form inline="true" onSubmit={handleSubmit}>
+                        <Row>
+                            <Col xs="auto">
+                                <Button className="porple" 
+                                variant="secondary"
+                                onClick={toggleSearch}
+                                >
+                                    <img src="search.svg"></img>
+                                </Button>
+                            </Col>
+                            <Col xs="auto">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search for User"
+                                    className=" mr-sm-2"
+                                    id="searchBar"
+                                    style={{maxWidth: "137px", background:"none", display:"none"}}
+                                    value={formData}
+                                    onChange={handleChange} 
+                                />
+                            </Col>
+                        </Row>
+                    </Form>
+                </NavbarCollapse>
+
+                <Navbar.Collapse className="justify-content-end">    
+                    <Navbar.Text>
+                        Signed in as: <a href="/profile">{curUsername}</a>
+                    </Navbar.Text>
+                    <div style={{margin:"0px 16px 0px 16px"}}>
+                        <Logout setCurUsername={setCurUsername} />
+                    </div>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     );
-    
 }
 
 export default Header
