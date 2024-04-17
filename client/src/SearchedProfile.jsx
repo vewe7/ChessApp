@@ -44,7 +44,9 @@ const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername })
   }, []);
 
   useEffect(() => {
-    getPastGames();
+    if (profileData.user_id !== undefined) {
+      getPastGames();
+    }
   }, [profileData]);
 
   function truncateDate(dateString) {
