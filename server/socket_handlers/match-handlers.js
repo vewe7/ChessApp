@@ -135,6 +135,9 @@ function initializeMatchHandlers(io, socket, socketUser) {
             console.log("Move received from matchId: " + matchId);
             console.log(move);
 
+            if (move.promotion == "")
+                delete move.promotion;
+
             // Make sure match exists
             const match = matches.get(matchId);
             if (match == undefined) {

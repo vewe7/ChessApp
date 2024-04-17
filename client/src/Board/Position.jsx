@@ -27,7 +27,7 @@ export function initialPosition() {
 export function makeNewPosition(position, type, f0, r0, f1, r1, board) {
     const position2 = [...position];
 
-    const isUnflipped = (board[0][0] === "a8" ? true : false); // White POV -> False
+    const isUnflipped = (board[0][0] === "a8" ? true : false); // White POV === False
     
     function convertFile(f, isUnflipped) {
         let curFile = f.charCodeAt(0) - 'a'.charCodeAt(0);
@@ -79,8 +79,10 @@ export function makeNewPosition(position, type, f0, r0, f1, r1, board) {
         position2[r0][f1] = '';
     }
 
+    const isPromotion = (type.charAt(1) === 'p' && (r1 === 0 || r1 === 7)) ? true : false;
+
     position2[r0][f0] = '';
-    position2[r1][f1] = type;
+    position2[r1][f1] = isPromotion ? type.substring(0, 1) + "q" : type;
 
     return position2;
 }

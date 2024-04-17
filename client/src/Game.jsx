@@ -33,9 +33,9 @@ function Game() {
         return (isFlipped ? 7 - curRank : curRank);
     }
 
-    function sendMove(from, to) {
+    function sendMove(from, to, promotion) {
         window.console.log("Pieces sending move with matchId: " + matchId);
-        socket.emit("makeMove", parseInt(matchId), {from: from, to: to});
+        socket.emit("makeMove", parseInt(matchId), {from: from, to: to, promotion: promotion});
     }
 
     useEffect(() => {

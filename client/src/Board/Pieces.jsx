@@ -35,21 +35,24 @@ function Pieces({boardArray, currentPosition, setPosition, sendMove}) {
         const column = file.charCodeAt() - 'a'.charCodeAt();
 
         const startSquare = boardArray[row][column];
-        console.log(startSquare);
         const startFile = startSquare.charAt(0);
         const startRank = startSquare.charAt(1);
 
         const {endFile, endRank} = dropSquare(e);
 
-        console.log(endFile + endRank);
+        // Check for promotion and send to backend for validation
+        if (type === "wp" && endRank === "8" || type === "bp" && endRank === "1") {
+            sendMove(startFile + startRank, endFile + endRank, "q");
+        }
+        
+        else {
+            sendMove(startFile + startRank, endFile + endRank, "");
+        }
 
         // Make a new position, only changing the position of the piece that was moved
         /*
         const nextPosition = makeNewPosition(currentPosition, type, file, rank, newFile, newRank);
         setPosition(nextPosition);*/
-
-        // Send to backend
-        sendMove(startFile + startRank, endFile + endRank);
     }
 
     function onDragOver(e) {
