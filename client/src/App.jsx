@@ -36,8 +36,8 @@ function App() {
     <div className="App blankbackground">
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<PrivateRoute />}>
-            <Route exact path="/home" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
+          <Route element={<PrivateRoute />}>
+            <Route exact path="/" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
             <Route path="/profile" element={<Profile curUsername={curUsername} setSearchedUsername={setSearchedUsername} />} />
             <Route path="/searched-profile" element={<SearchedProfile curUsername={curUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
             <Route path="/game/:matchId/:color" element={<Game />} />
