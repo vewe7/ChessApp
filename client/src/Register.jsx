@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { Link } from 'react-router-dom';
@@ -18,8 +18,33 @@ import {
 }
 from 'mdb-react-ui-kit';
 
-function Register() {
+function Register({ setCurUsername }) {
   const navigate = useNavigate();
+
+  const logout = async () => {
+    try { 
+      const response = await fetch('http://localhost:5000/logout', {
+        method: 'POST',
+        credentials: 'include', // Include credentials (cookies) in the request
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }   
+      document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
+
+      setCurUsername('');
+
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
+  useEffect(() => {
+    logout();
+  }, []);
 
   const [formData, setFormData] = useState({
     username: '',

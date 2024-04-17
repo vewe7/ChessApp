@@ -43,7 +43,7 @@ function App() {
             <Route path="/game/:matchId/:color" element={<Game />} />
           </Route>
           <Route path="/login" element={<Login setCurUsername={setCurUsername} />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register setCurUsername={setCurUsername} />} />
         </Routes>
       </BrowserRouter>
     </div>
