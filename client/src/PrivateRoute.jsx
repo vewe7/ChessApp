@@ -14,7 +14,7 @@ const PrivateRoute = () => {
     async function onLoad() {
       window.console.log("Private Route OnLoad");
         try {
-          const response = await fetch("http://localhost:5000/session", {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/session`, {
             method: "GET",
             credentials: "include",
           });
