@@ -67,7 +67,6 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
       }
       // Login successful, set session cookie and redirect to home
       const data = await response.json();
-      document.cookie = `yourAuthToken=${data.token}; path=/; HttpOnly`;
 
       // Temporarily set username to be used elsewhere
       setCurUsername(username);

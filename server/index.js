@@ -16,19 +16,14 @@ require('dotenv').config()
 // Create explicit HTTP server for Express app
 const server = http.createServer(app);
 
-app.use(cors({ 
-  origin: process.env.CORS_CLIENT_ORIGIN,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type"], 
-  credentials: true 
-})); //Cross-Origin Resource Sharing
-
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.CORS_CLIENT_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", ["GET", "POST", "PUT", "DELETE"]);
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
+app.enable("trust proxy");
 app.use(express.json());
 app.use(auth.router); // Auth routes
 

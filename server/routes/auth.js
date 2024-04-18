@@ -14,10 +14,17 @@ initializePassport(passport);
 const jwt = require('jsonwebtoken');
 const CLIENT_PATH = path.join(__dirname, '../..', 'temp');
 
+
+
 const sessionMiddleware = session({
     secret: process.env.SESSION_SECRET, // TO-DO: GENERATE RANDOM SECRET
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV == "production" ? "none" : "strict",
+        secure: process.env.NODE_ENV == "production",
+    }
 });
 
 router.use(express.urlencoded({ extended: false }));
@@ -62,12 +69,13 @@ router.get('/session', checkAuthenticated, (req, res) => {
 router.post("/login", checkNotAuthenticated, passport.authenticate('local'), (req, res) => {
     console.log("POST /login")
     const token = generateSecureToken(req.user);
-    res.status(200).json({ token, user: req.user.username, message: 'Login successful'});
+    res.cookie('jwt', token, { httpOnly: true });
+    res.status(200).json({ user: req.user.username, message: 'Login successful'});
 });
 
 const generateSecureToken = (user) => {
     // Use jsonwebtoken to create a secure JWT
-    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn: '2h' });
+    const token = jwt.sign({ userId: user.id, username: user.username }, process.env.SESSION_SECRET, { expiresIn: '8h' });
     return token;
   };
 
