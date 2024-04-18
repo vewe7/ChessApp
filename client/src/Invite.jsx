@@ -65,7 +65,7 @@ const Invite = () => {
             <div className="BoxBackground">
                 <h2 style={{marginBottom:"0px"}}>Send an invite to play!</h2>
                 <div >
-                    <label for="username">Enter Username:</label>
+                    <label htmlFor="username">Enter Username:</label>
                     <input type="text" id="username" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
                 </div>
                 <Button variant="dark" onClick={sendInvite}>Invite</Button>
