@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-const Profile = ({ curUsername, setSearchedUsername }) => {
+const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
   const [show, setShow] = useState(false);
   const [profileData, setProfileData] = useState('');
   const [pastGames, setPastGames] = useState([]);
@@ -96,11 +96,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
 
   return (
     <div>
-      <Header 
-        className="Header" 
-        curUsername={curUsername} 
-        setSearchedUsername={setSearchedUsername} 
-      />
+      <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />
       <div className="BoxDivider" >
         <div className="BoxDiverRows">
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >

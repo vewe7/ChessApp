@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./Header";
 
-const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername }) => {
+const SearchedProfile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
   const [profileData, setProfileData] = useState('');
   const [pastGames, setPastGames] = useState([]);
 
@@ -57,11 +57,7 @@ const SearchedProfile = ({ curUsername, searchedUsername, setSearchedUsername })
 
   return (
     <div>
-      <Header 
-        className="Header" 
-        curUsername={curUsername} 
-        setSearchedUsername={setSearchedUsername} 
-      />
+      <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />
       <div className="BoxDivider" >
         <div className="BoxDiverRows">
           <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
