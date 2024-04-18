@@ -42,8 +42,8 @@ function App() {
             <Route path="/searched-profile" element={<SearchedProfile curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
             <Route path="/game/:matchId/:color" element={<Game />} />
           </Route>
-          <Route path="/login" element={<Login setCurUsername={setCurUsername} />} />
-          <Route path="/register" element={<Register setCurUsername={setCurUsername} />} />
+          <Route path="/login" element={<Login setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
+          <Route path="/register" element={<Register setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
         </Routes>
       </BrowserRouter>
     </div>

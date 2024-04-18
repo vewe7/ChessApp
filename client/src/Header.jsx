@@ -76,8 +76,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
             }
 
             setSearchedUsername(formData);
-            navigate("../searched-profile");
-            window.location.reload();
+            navigate("/searched-profile");
         } catch (err) {
             console.error(err.message);
         }
@@ -136,7 +135,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
                         Signed in as: <a href="/profile">{curUsername}</a>
                     </Navbar.Text>
                     <div style={{margin:"0px 16px 0px 16px"}}>
-                        <Logout setCurUsername={setCurUsername} />
+                        <Logout setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername}/>
                     </div>
                 </Navbar.Collapse>
             </Container>

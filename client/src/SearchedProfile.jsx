@@ -40,8 +40,10 @@ const SearchedProfile = ({ curUsername, setCurUsername, searchedUsername, setSea
   };
 
   useEffect(() => {
-    getProfileData();
-  }, []);
+    if (searchedUsername !== '') {
+      getProfileData();
+    }
+  }, [searchedUsername]);
 
   useEffect(() => {
     if (profileData.user_id !== undefined) {

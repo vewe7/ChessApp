@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-const Logout = ({ setCurUsername }) => {
+const Logout = ({ setCurUsername, setSearchedUsername }) => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try { 
@@ -19,6 +19,7 @@ const Logout = ({ setCurUsername }) => {
       document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
 
       setCurUsername('');
+      setSearchedUsername('');
 
       navigate("/login");
 

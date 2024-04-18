@@ -16,7 +16,7 @@ import {
 }
 from "mdb-react-ui-kit";
 
-const Login = ({ setCurUsername }) => {
+const Login = ({ setCurUsername, setSearchedUsername }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -36,6 +36,7 @@ const Login = ({ setCurUsername }) => {
       document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
 
       setCurUsername('');
+      setSearchedUsername('');
 
     } catch (error) {
       console.error('Error during logout:', error);

@@ -18,7 +18,7 @@ import {
 }
 from 'mdb-react-ui-kit';
 
-function Register({ setCurUsername }) {
+function Register({ setCurUsername, setSearchedUsername }) {
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -36,6 +36,7 @@ function Register({ setCurUsername }) {
       document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
 
       setCurUsername('');
+      setSearchedUsername('');
 
     } catch (error) {
       console.error('Error during logout:', error);
