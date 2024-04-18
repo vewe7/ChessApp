@@ -11,6 +11,8 @@ const pool = require("./db");
 const app = express();
 const PORT = 5000;
 
+require('dotenv').config()
+
 // Create explicit HTTP server for Express app
 const server = http.createServer(app);
 
