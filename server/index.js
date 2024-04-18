@@ -19,8 +19,7 @@ const server = http.createServer(app);
 // app.use(cors({ origin: process.env.CORS_CLIENT_ORIGIN, credentials: true })); //Cross-Origin Resource Sharing
 
 app.use(function(req, res, next) {
-  if (req.headers.origin === process.env.CORS_CLIENT_ORIGIN) 
-    res.header("Access-Control-Allow-Origin", process.env.CORS_CLIENT_ORIGIN);
+  res.header("Access-Control-Allow-Origin", process.env.CORS_CLIENT_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
