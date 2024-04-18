@@ -85,7 +85,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
     return (
         <Navbar className="navbar navbar-expand-md py-1 pink" style={{borderBottom:"2px solid black"}}>
             <Container fluid style={{width:"100vw"}}>
-                <Navbar.Brand href="/">
+                <Navbar.Brand onClick={() => navigate("/")} style={{cursor:"pointer"}}>
                     <Stack direction="horizontal">
                         <img src="FAFOLogo.svg" width="50" height="50" style={{backgroundColor: "black"}}/>
                         <Stack direction="vertical">
@@ -97,10 +97,10 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
 
                 <Nav variant="underline" id="NavigationBar">
                     <Nav.Item>
-                        <Nav.Link id="H" href="/" onSelect={setHBold}>Home</Nav.Link>
+                        <Nav.Link id="H" onClick={() => navigate("/")} style={{cursor:"pointer"}} onSelect={setHBold}>Home</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link id="P" href="/profile" onSelect={setPBold}>Profile</Nav.Link>
+                        <Nav.Link id="P" onClick={() => navigate("/profile")} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
                     </Nav.Item>  
                 </Nav>
 
@@ -109,7 +109,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
                         <Row>
                             <Col xs="auto">
                                 <Button className="porple" 
-                                variant="secondary"
+                                variant=""
                                 onClick={toggleSearch}
                                 >
                                     <img src="search.svg"></img>
@@ -132,7 +132,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
 
                 <Navbar.Collapse className="justify-content-end">    
                     <Navbar.Text>
-                        Signed in as: <a href="/profile">{curUsername}</a>
+                        Signed in as: <p onClick={() => navigate("/profile")} style={{display:"inline", fontWeight:"600", cursor:"pointer"}}>{curUsername}</p>
                     </Navbar.Text>
                     <div style={{margin:"0px 16px 0px 16px"}}>
                         <Logout setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername}/>
