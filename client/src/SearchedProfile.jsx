@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import "./App.css";
 import Header from "./Header";
+import { Accordion, Card, Container, Table } from "react-bootstrap";
 
 const SearchedProfile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
   const [profileData, setProfileData] = useState('');
@@ -32,6 +33,8 @@ const SearchedProfile = ({ curUsername, setCurUsername, searchedUsername, setSea
         })
       );
 
+      matches.reverse();
+
       setPastGames(matches);
 
     } catch (err) {
@@ -58,61 +61,54 @@ const SearchedProfile = ({ curUsername, setCurUsername, searchedUsername, setSea
   }
 
   return (
-    <div>
+    <Fragment>
       <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />
-      <div className="BoxDivider" >
-        <div className="BoxDiverRows">
-          <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
-            <img className="logo" src ="FAFOLogo.svg"></img>
-            <h2 style={{fontSize:"40px"}}>{profileData.username}</h2>
-            <p style={{fontSize: "20px"}}>Account Opening Date:</p>
-            <p style={{fontSize: "20px"}}>{truncateDate(profileData.date_opened)}</p>
-          </div>
-          <div className="ProfileBoxes"style={{width:"30vw", height:"40vh"}} >
-            <h2 style={{fontSize: "35px"}}>Bio</h2>
-            <p style={{fontSize: "20px"}}>{profileData.bio}</p>
-          </div>
-        </div>
-
-        <div className="BoxDividerRows">
-          <div className="ProfileBoxes" style={{width:"55vw", height:"30vh"}} >
-              <div className="StatBoxes">
-                <h1>Record</h1>
-                <div className="UnderlineBox"></div>
-                <div className="WinLossBoxes">
-                    <div className="StatBoxes">
-                      <h3>Wins</h3>
-                      <h3>{profileData.wins}</h3>
-                    </div>
-                    <div className="StatBoxes">
-                      <h3>Losses</h3>
-                      <h3>{profileData.losses}</h3>
-                    </div>
-                    <div className="StatBoxes">
-                      <h3>Draws</h3>
-                      <h3>{profileData.draws}</h3>
-                    </div>
-                </div>
-              </div>
-            </div>
-          <div className="ProfileBoxes" style={{width:"55vw", height:"40vh"}} >
-            <div className="StatBoxes" >
-              <h1>Past Games</h1>
-              <div className="UnderlineBox"></div>
-              <div style={{ maxHeight: '100%', overflowY: 'auto', width: '100%' }}>
-                {pastGames.map(pastGame => (
-                  <div key={pastGame.match_id} style={{ textAlign: 'left' }}>
-                    <h3 style={{ marginTop: '20px' }}>Match ID: {pastGame.match_id}</h3>
-                    <p style={{ whiteSpace: 'pre-line' }}>{pastGame.pgn}</p>
-                    <br />
-                  </div>
-                ))}
-              </div>
-            </div>
-        </div>
-        </div>
-      </div>
-    </div>
+      <Container className="d-flex flex-row justify-content-evenly mt-5" style={{ width:'100vw', height:'80vh' }}>
+        <Card bg="light" text="dark" border="dark" style={{ width:'35%', minWidth: '260px', display:"inline-block", borderWidth: '2px' }}>
+          <Card.Body style={{margin: '0px 0px 16px', padding: '16px 0px 16px', borderBottom: '1px solid black', borderTop: '1px solid black' }}>
+            <Card.Title>{profileData.username}</Card.Title>
+            <Card.Text>
+              Account Opening Date: {truncateDate(profileData.date_opened)}
+            </Card.Text>
+          </Card.Body>
+          <Card.Body style={{margin: '0px 0px 16px', padding: '0px 0px 16px', borderBottom: '1px solid black'}}>
+            <Card.Title>Bio</Card.Title>
+            <Card.Text>
+              {profileData.bio ? profileData.bio : "This user hasn't added a bio yet."}
+            </Card.Text>
+          </Card.Body>
+          <Card.Body style={{margin: '0px', padding: '0px 0px 16px', borderBottom: '1px solid black'}}>
+            <Card.Title>Stats</Card.Title>
+            <Table variant="light" borderless style={{ margin: '0px'}}>
+              <tbody>
+                <tr>
+                  <td>Wins: {profileData.wins}</td>
+                  <td>Losses: {profileData.losses}</td>
+                  <td>Draws: {profileData.draws}</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+        <Card bg="light" text="dark" border="dark" style={{ width:'50%', display:"inline-block", borderWidth: '2px' }}>
+          <Card.Body style={{ margin: '0px', padding: '16px 0px 16px', borderTop: '1px solid black' }}>
+            <Card.Title style={{ margin: '0px'}}>Previous Games</Card.Title>
+          </Card.Body>
+          <Card.Body style={{ maxHeight: '90%', overflowY: 'auto', border: '1px solid black', borderRadius: '3px' }}> 
+            <Accordion >
+              {pastGames.map(pastGame => (
+                <Accordion.Item key={pastGame.match_id} eventKey={pastGame.match_id}>
+                  <Accordion.Header>Game ID: {pastGame.match_id}</Accordion.Header>
+                  <Accordion.Body style={{ whiteSpace: 'pre-line', textAlign: 'left' }}>
+                    {pastGame.pgn}
+                  </Accordion.Body>
+                </Accordion.Item>
+              ))}
+            </Accordion>
+          </Card.Body>
+        </Card>
+      </Container>
+    </Fragment>
   )
 }
 

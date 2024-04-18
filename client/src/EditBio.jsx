@@ -37,7 +37,7 @@ const EditBio = ({ profileData, bio, setBio }) => {
 
     return(
         <Fragment>
-            <Button variant="dark" style={{margin: "20px", maxWidth: "100px"}} onClick={handleShow}>
+            <Button variant="dark" style={{margin: "0px", maxWidth: "100px"}} onClick={handleShow}>
                 Edit Bio
             </Button>
             <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
