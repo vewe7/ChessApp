@@ -100,7 +100,7 @@ const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUser
                         <Nav.Link id="H" onClick={() => navigate("/")} style={{cursor:"pointer"}} onSelect={setHBold}>Home</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link id="P" onClick={() => navigate(`/profile/${curUsername}`)} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
+                        <Nav.Link id="P" onClick={() => {setSearchedUsername(curUsername); navigate(`/profile/${curUsername}`);}} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
                     </Nav.Item>  
                 </Nav>
 
@@ -132,7 +132,7 @@ const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUser
 
                 <Navbar.Collapse className="justify-content-end">    
                     <Navbar.Text>
-                        Signed in as: <p onClick={() => navigate(`/profile/${curUsername}`)} style={{display:"inline", fontWeight:"600", cursor:"pointer"}}>{curUsername}</p>
+                        Signed in as: <p onClick={() => {setSearchedUsername(curUsername); navigate(`/profile/${curUsername}`);}} style={{display:"inline", fontWeight:"600", cursor:"pointer"}}>{curUsername}</p>
                     </Navbar.Text>
                     <div style={{margin:"0px 16px 0px 16px"}}>
                         <Logout setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername}/>
