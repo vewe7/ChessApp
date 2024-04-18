@@ -84,7 +84,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
     };
     
     return (
-        <Navbar className="navbar navbar-expand-md py-1 pink">
+        <Navbar className="navbar navbar-expand-md py-1 pink" style={{borderBottom:"2px solid black"}}>
             <Container fluid style={{width:"100vw"}}>
                 <Navbar.Brand href="/">
                     <Stack direction="horizontal">

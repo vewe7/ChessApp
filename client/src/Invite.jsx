@@ -61,34 +61,23 @@ const Invite = () => {
 
       
     return (
-        <>
-        <div>
+        <div style={{position:"relative", display:"flex", justifyContent:"center", alignItems:"center", width:"100vw", height:"100vh"}}>
             <div className="BoxBackground">
-                <h1>Invite</h1>
-                <label>
-                Invite User:
-                <input type="text" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
-                </label>
-                <button onClick={sendInvite}>
-                Invite
-                </button>     
-                <Alert show={show} variant="success">
-                <Alert.Heading>New invite from</Alert.Heading>
-                <h4>{username}</h4>
-                <div className="d-flex justify-content-end">
-                    <Button onClick={() => {setShow(false); acceptInvite()}} variant="outline-success">Accept</Button>
+                <h2 style={{marginBottom:"0px"}}>Send an invite to play!</h2>
+                <div >
+                    <label for="username">Enter Username:</label>
+                    <input type="text" id="username" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
                 </div>
-                <div className="d-flex justify-content-end">
-                  <Button onClick={() => {setShow(false); declineInvite()}} variant="danger">
-                    Decline
-                  </Button>
-                </div>
-              </Alert>
-
+                <Button variant="dark" onClick={sendInvite}>Invite</Button>
+                <Alert show={show} variant="secondary">
+                    <Alert.Heading>Game invite received from: {username}</Alert.Heading>
+                    <div style={{display:"flex", flexDirection:"row", justifyContent:"center", gap:"10px"}}>
+                        <Button onClick={() => {setShow(false); acceptInvite()}} variant="outline-dark">Accept</Button>
+                        <Button onClick={() => {setShow(false); declineInvite()}} variant="outline-dark">Decline</Button>
+                    </div>
+                </Alert>
             </div>
         </div>
-            
-        </>
     );
 }
 

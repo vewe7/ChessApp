@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = ({ setCurUsername }) => {
@@ -27,7 +28,7 @@ const Logout = ({ setCurUsername }) => {
   };
   
   return (
-    <button onClick = {handleLogout} >Logout</button>
+    <Button variant='dark' onClick={handleLogout}>Logout</Button>
   ); 
 }
 
