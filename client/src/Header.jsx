@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { MDBCardImage } from 'mdb-react-ui-kit';
 import Stack from 'react-bootstrap/Stack';
@@ -56,7 +56,7 @@ function setPBold() {
     normItem.style.fontWeight = "normal";
 }
 
-const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
+const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState('');
@@ -76,7 +76,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
             }
 
             setSearchedUsername(formData);
-            navigate("/searched-profile");
+            navigate(`/profile/${formData}`);
         } catch (err) {
             console.error(err.message);
         }
@@ -87,7 +87,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
             <Container fluid style={{width:"100vw"}}>
                 <Navbar.Brand onClick={() => navigate("/")} style={{cursor:"pointer"}}>
                     <Stack direction="horizontal">
-                        <img src="FAFOLogo.svg" width="50" height="50" style={{backgroundColor: "black"}}/>
+                        <img src="/FAFOLogo.svg" width="50" height="50" style={{backgroundColor: "black"}}/>
                         <Stack direction="vertical">
                             <h2 style={{margin:"0px"}}>FAFOChess</h2>
                             <p style={{fontSize:"50%", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
@@ -100,7 +100,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
                         <Nav.Link id="H" onClick={() => navigate("/")} style={{cursor:"pointer"}} onSelect={setHBold}>Home</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link id="P" onClick={() => navigate("/profile")} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
+                        <Nav.Link id="P" onClick={() => navigate(`/profile/${curUsername}`)} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
                     </Nav.Item>  
                 </Nav>
 
@@ -112,7 +112,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
                                 variant=""
                                 onClick={toggleSearch}
                                 >
-                                    <img src="search.svg"></img>
+                                    <img src="/search.svg"></img>
                                 </Button>
                             </Col>
                             <Col xs="auto">
@@ -132,7 +132,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
 
                 <Navbar.Collapse className="justify-content-end">    
                     <Navbar.Text>
-                        Signed in as: <p onClick={() => navigate("/profile")} style={{display:"inline", fontWeight:"600", cursor:"pointer"}}>{curUsername}</p>
+                        Signed in as: <p onClick={() => navigate(`/profile/${curUsername}`)} style={{display:"inline", fontWeight:"600", cursor:"pointer"}}>{curUsername}</p>
                     </Navbar.Text>
                     <div style={{margin:"0px 16px 0px 16px"}}>
                         <Logout setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername}/>

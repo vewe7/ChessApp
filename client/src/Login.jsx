@@ -90,7 +90,7 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
             <span className="h1 fw-bold mb-0">FAFOChess</span>
             <br />
             <span className="p fw-bold mb-0">Fun and Free Online Chess</span>
-            <MDBCardImage src="FAFOLogo.svg" alt="login form" className="white w-100"/>
+            <MDBCardImage src="/FAFOLogo.svg" alt="login form" className="white w-100"/>
           </MDBCol>
 
           <MDBCol md="6 white">

@@ -8,7 +8,6 @@ import Login from "./Login";
 import Game from "./Game";
 import Register from "./Register";
 import Profile from "./Profile";
-import SearchedProfile from "./SearchedProfile";
 
 import { socket } from "./socket.js"
 
@@ -37,9 +36,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<PrivateRoute />}>
-            <Route exact path="/" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
-            <Route path="/profile" element={<Profile curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />
-            <Route path="/searched-profile" element={<SearchedProfile curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
+            <Route exact path="/" element={<Home curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
+            <Route path="/profile/:username" element={<Profile curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />} />
             <Route path="/game/:matchId/:color" element={<Game />} />
           </Route>
           <Route path="/login" element={<Login setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />} />

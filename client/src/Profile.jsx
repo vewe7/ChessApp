@@ -3,15 +3,18 @@ import "./App.css";
 import Header from "./Header";
 import EditBio from "./EditBio";
 import { Accordion, Card, Container, Table } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
-const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
+const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
   const [profileData, setProfileData] = useState('');
   const [pastGames, setPastGames] = useState([]);
   const [bio, setBio] = useState('');
 
+  const { username } = useParams();
+
   const getProfileData = async () => {
     try {
-      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/profile/username/${curUsername}`);
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/profile/username/${username}`);
       const profileResponseData = await profileResponse.json();
 
       setProfileData(profileResponseData);
@@ -49,6 +52,12 @@ const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
   }, []);
 
   useEffect(() => {
+    if (searchedUsername !== '') {
+      getProfileData();
+    }
+  }, [searchedUsername]);
+
+  useEffect(() => {
     if (profileData.user_id !== undefined) {
       getPastGames();
     }
@@ -68,7 +77,7 @@ const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
 
   return (
     <Fragment>
-      <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} setSearchedUsername={setSearchedUsername} />
+      <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />
       <Container className="d-flex flex-row justify-content-evenly mt-5" style={{ width:'100vw', height:'80vh' }}>
         <Card bg="light" text="dark" border="dark" style={{ width:'35%', minWidth: '260px', display:"inline-block", borderWidth: '2px' }}>
           <Card.Body style={{margin: '0px 0px 16px', padding: '16px 0px 16px', borderBottom: '1px solid black', borderTop: '1px solid black' }}>
@@ -82,7 +91,9 @@ const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
             <Card.Text>
               {profileData.bio ? profileData.bio : "This user hasn't added a bio yet."}
             </Card.Text>
-            <EditBio profileData={profileData} bio={bio} setBio={setBio}/>
+            {((curUsername === username) && (
+              <EditBio profileData={profileData} bio={bio} setBio={setBio}/>
+            ))}
           </Card.Body>
           <Card.Body style={{margin: '0px', padding: '0px 0px 16px', borderBottom: '1px solid black'}}>
             <Card.Title>Stats</Card.Title>
