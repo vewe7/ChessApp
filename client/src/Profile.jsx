@@ -49,12 +49,6 @@ const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUse
 
   useEffect(() => {
     getProfileData();
-  }, []);
-
-  useEffect(() => {
-    if (searchedUsername !== '') {
-      getProfileData();
-    }
   }, [searchedUsername]);
 
   useEffect(() => {
