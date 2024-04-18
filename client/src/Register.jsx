@@ -55,8 +55,6 @@ function Register({ setCurUsername, setSearchedUsername }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log('Name:', name);
-    console.log('Value:', value);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,

@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./Header";
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import EditBio from "./EditBio";
 
 const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
-  const [show, setShow] = useState(false);
   const [profileData, setProfileData] = useState('');
   const [pastGames, setPastGames] = useState([]);
   const [bio, setBio] = useState('');
-
-  const handleClose = () => {
-    setShow(false);
-    setBio(profileData.bio);
-  };
-  const handleShow = () => setShow(true);
 
   const getProfileData = async () => {
     try {
@@ -67,27 +57,6 @@ const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
     }
   }, [profileData.bio]);
 
-  const updateBio = async (e) => {
-    e.preventDefault();
-    try {
-        const body = { bio };
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/bio/${profileData.username}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        });
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.error);
-        }
-
-        window.location.reload();
-    } catch (err) {
-        console.error(err.message);
-    }
-  };
-
   function truncateDate(dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -109,30 +78,7 @@ const Profile = ({ curUsername, setCurUsername, setSearchedUsername }) => {
             <h2 style={{fontSize: "35px"}}>Bio</h2>
             <div className="d-flex" style={{flexDirection: "column", alignItems: "center", justifyContent: "space-between", height: "100%"}}>
               <p style={{fontSize: "20px"}}>{profileData.bio}</p>
-              <Button variant="secondary" style={{margin: "20px", maxWidth: "100px"}} onClick={handleShow}>
-                Edit Bio
-              </Button>
-              <Modal
-                show={show}
-                onHide={handleClose}
-                backdrop="static"
-                keyboard={false}
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title>Edit Bio</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <InputGroup>
-                  <Form.Control as="textarea" value={bio} onChange={e => setBio(e.target.value)}/>
-                </InputGroup>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="dark" onClick={handleClose}>
-                    Close
-                  </Button>
-                  <Button variant="secondary" onClick={e => updateBio(e)}>Submit</Button>
-                </Modal.Footer>
-              </Modal>
+              <EditBio profileData={profileData} bio={bio} setBio={setBio}/>
             </div>
           </div>
         </div>
