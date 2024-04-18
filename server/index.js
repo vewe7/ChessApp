@@ -14,7 +14,7 @@ const PORT = 5000;
 // Create explicit HTTP server for Express app
 const server = http.createServer(app);
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); //Cross-Origin Resource Sharing
+app.use(cors({ origin: process.env.CORS_CLIENT_ORIGIN, credentials: true })); //Cross-Origin Resource Sharing
 app.use(express.json());
 app.use(auth.router); // Auth routes
 
@@ -87,7 +87,7 @@ app.put("/profile/bio/:username", async (req, res) => {
 // Create socket.io server instance
 const io = new Server(server, { 
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_CLIENT_ORIGIN,
     credentials: true
   }
 });
