@@ -68,7 +68,7 @@ const Header = ({ curUsername, setCurUsername, setSearchedUsername }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5000/player/username/${formData}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/player/username/${formData}`);
             const responseData = await response.json();
 
             if (!response.ok) {

@@ -20,7 +20,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
 
   const getProfileData = async () => {
     try {
-      const profileResponse = await fetch(`http://localhost:5000/profile/username/${curUsername}`);
+      const profileResponse = await fetch(`${import.meta.env.VITE_API_URL}/profile/username/${curUsername}`);
       const profileResponseData = await profileResponse.json();
 
       setProfileData(profileResponseData);
@@ -32,12 +32,12 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
 
   const getPastGames = async () => {
     try {
-      const playerMatchesResponse = await fetch(`http://localhost:5000/player_matches/user_id/${profileData.user_id}`);
+      const playerMatchesResponse = await fetch(`${import.meta.env.VITE_API_URL}/player_matches/user_id/${profileData.user_id}`);
       const playerMatchesData = await playerMatchesResponse.json();
 
       const matches = await Promise.all(
         playerMatchesData.map(async (playerMatch) => {
-          const matchResponse = await fetch(`http://localhost:5000/matches/match_id/${playerMatch.match_id}`);
+          const matchResponse = await fetch(`${import.meta.env.VITE_API_URL}/matches/match_id/${playerMatch.match_id}`);
           const matchData = await matchResponse.json();
 
           return matchData;
@@ -71,7 +71,7 @@ const Profile = ({ curUsername, setSearchedUsername }) => {
     e.preventDefault();
     try {
         const body = { bio };
-        const response = await fetch(`http://localhost:5000/profile/bio/${profileData.username}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/profile/bio/${profileData.username}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)

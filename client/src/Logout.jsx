@@ -6,7 +6,7 @@ const Logout = ({ setCurUsername }) => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try { 
-      const response = await fetch('http://localhost:5000/logout', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
         credentials: 'include', // Include credentials (cookies) in the request
         headers: {

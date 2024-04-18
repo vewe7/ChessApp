@@ -23,7 +23,7 @@ const Login = ({ setCurUsername }) => {
 
   const logout = async () => {
     try { 
-      const response = await fetch('http://localhost:5000/logout', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
         credentials: 'include', // Include credentials (cookies) in the request
         headers: {
@@ -49,7 +49,7 @@ const Login = ({ setCurUsername }) => {
   const handleLogin = async () => {
     try {
       // Send login request to backend
-      const response = await fetch("http://localhost:5000/login", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
         credentials: "include", // Include credentials (cookies) in the request
         headers: {

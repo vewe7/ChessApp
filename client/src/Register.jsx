@@ -23,7 +23,7 @@ function Register({ setCurUsername }) {
 
   const logout = async () => {
     try { 
-      const response = await fetch('http://localhost:5000/logout', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
         credentials: 'include', // Include credentials (cookies) in the request
         headers: {
@@ -78,7 +78,7 @@ function Register({ setCurUsername }) {
         password: formData.password
       };
 
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
