@@ -41,7 +41,7 @@ async function endGameOnFlag(io, matchId, color) {
     endGame(io, socket, matchId, "flag", (color == "w" ? "b" : "w"));
 }
 
-async function endGameOnDraw(io, matchId, status="draw") {
+async function endGameOnDraw(io, matchId, status) {
     const match = matches.get(matchId);
     if (match == undefined)
         return;
@@ -183,18 +183,18 @@ function initializeMatchHandlers(io, socket, socketUser) {
                     newStatus = "checkmate";
                     chess.header("Result", (turn == "w" ? "1-0" : "0-1"));
                     endGame(io, matchId, "checkmate", turn);
-                } else if (chess.isDraw()) {
-                    newStatus = "draw";
-                    endGameOnDraw(io, matchId, "draw")
-                } else if (chess.isStalemate()) {
-                    newStatus = "stalemate";
-                    endGameOnDraw(io, matchId, "stalemate");
                 } else if (chess.isThreefoldRepetition()) {
                     newStatus = "threefold";
                     endGameOnDraw(io, matchId, "threefold");
-                } else { // Insufficient material
+                } else if (chess.isInsufficientMaterial()) {
                     newStatus = "insufficient";
                     endGameOnDraw(io, matchId, "insufficient");
+                } else if (chess.isStalemate()) {
+                    newStatus = "stalemate";
+                    endGameOnDraw(io, matchId, "stalemate");
+                } else {
+                    newStatus = "draw";
+                    endGameOnDraw(io, matchId, "draw");
                 }
             } else if (chess.inCheck()) {
                 newStatus = "check";
