@@ -1,6 +1,10 @@
 .board {
     display: grid;
     position: relative;
+    width: 644px;
+    height: 644px;
+    border: 2px solid black;
+    border-radius: 3px;
 }
 
 .squares {

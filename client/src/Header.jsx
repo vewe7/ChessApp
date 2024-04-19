@@ -88,9 +88,9 @@ const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUser
                 <Navbar.Brand onClick={() => navigate("/")} style={{cursor:"pointer"}}>
                     <Stack direction="horizontal">
                         <img src="/FAFOLogo.svg" width="50" height="50" style={{backgroundColor: "black"}}/>
-                        <Stack direction="vertical">
-                            <h2 style={{margin:"0px"}}>FAFOChess</h2>
-                            <p style={{fontSize:"50%", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
+                        <Stack direction="vertical" className='justify-content-center'>
+                            <h2 style={{fontSize:"24px", margin:"0px"}}>FAFOChess</h2>
+                            <p style={{fontSize:"8px", margin:"-5px 0px 0px"}}>Fun and Free Online Chess</p>
                         </Stack>
                     </Stack>
                 </Navbar.Brand>

@@ -1,12 +1,13 @@
 import "./App.css";
 import "./Game.css"
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "./socket.js";
 import { initialPosition, makeNewPosition } from "./Board/Position"
 import { initialBoard } from "./Board/FlipBoard.jsx"
 import { flipBoard } from "./Board/FlipBoard.jsx"
 import { flipPosition } from "./Board/Position.jsx"
+import GameHeader from "./GameHeader";
 
 import Files from "./Border/Files"
 import Ranks from "./Border/Ranks"
@@ -102,27 +103,32 @@ function Game() {
     }, [currentPosition]);
 
     return (
-        <div className="game">
-            <div className="chess">
-                <Ranks ranks={ranks}/>
-                <Board boardArray={board} setBoard={setBoard} currentPosition={currentPosition} setPosition={setPosition} sendMove={sendMove}/>
-                <Files files={files}/>
+        <Fragment>
+            <GameHeader className="Header" />
+            <div className="container-fluid d-flex justify-content-center">
+                <div className="game">
+                    <div className="chess">
+                        <Ranks ranks={ranks}/>
+                        <Board boardArray={board} setBoard={setBoard} currentPosition={currentPosition} setPosition={setPosition} sendMove={sendMove}/>
+                        <Files files={files}/>
+                    </div>
+                    <Panel 
+                        bottomTime={bottomTime}
+                        setTopTime={setTopTime}
+                        topTime={topTime}
+                        setBottomTime={setBottomTime}
+                        boardArray={board}
+                        setBoard={setBoard}
+                        currentPosition={currentPosition}
+                        setPosition={setPosition}
+                        ranks={ranks}
+                        setRanks={setRanks}
+                        files={files}
+                        setFiles={setFiles}
+                    />
+                </div>
             </div>
-            <Panel 
-                bottomTime={bottomTime}
-                setTopTime={setTopTime}
-                topTime={topTime}
-                setBottomTime={setBottomTime}
-                boardArray={board}
-                setBoard={setBoard}
-                currentPosition={currentPosition}
-                setPosition={setPosition}
-                ranks={ranks}
-                setRanks={setRanks}
-                files={files}
-                setFiles={setFiles}
-            />
-        </div>
+        </Fragment>
     )
 }
 
