@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Timer from "./Timer.jsx"
 import Buttons from "./Buttons.jsx"
 
-function Panel({ bottomTime, setBottomTime, topTime, setTopTime, boardArray, setBoard, currentPosition, setPosition , ranks, setRanks, files, setFiles }) {
+function Panel({ bottomTime, setBottomTime, topTime, setTopTime, boardArray, setBoard, currentPosition, setPosition , ranks, setRanks, files, setFiles, sendDrawOffer, sendResignation }) {
     const [bottomName, setBottomName] = useState("You");
     const [topName, setTopName] = useState("Opponent");
     
@@ -28,6 +28,8 @@ function Panel({ bottomTime, setBottomTime, topTime, setTopTime, boardArray, set
                 setBottomName={setBottomName}
                 topName={topName}
                 setTopName={setTopName}
+                sendDrawOffer={sendDrawOffer}
+                sendResignation={sendResignation}
             />
             <Timer color={"white"} time={bottomTime}/>
             <h2 className="username">{bottomName}</h2>

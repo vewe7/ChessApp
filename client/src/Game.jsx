@@ -52,6 +52,14 @@ function Game() {
         socket.emit("makeMove", parseInt(matchId), {from: from, to: to, promotion: promotion});
     }
 
+    function sendDrawOffer() {
+        socket.emit("offerDraw", parseInt(matchId));
+    }
+
+    function sendResignation() {
+        socket.emit("resign", parseInt(matchId));
+    }
+
     useEffect(() => {
         function updateClock(color, time) {
             if (color == "w") {
@@ -137,6 +145,8 @@ function Game() {
                         setRanks={setRanks}
                         files={files}
                         setFiles={setFiles}
+                        sendDrawOffer={sendDrawOffer}
+                        sendResignation={sendResignation}
                     />
                 </div>
             </div>
