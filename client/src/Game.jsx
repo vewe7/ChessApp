@@ -7,6 +7,7 @@ import { initialPosition, makeNewPosition } from "./Board/Position"
 import { initialBoard } from "./Board/FlipBoard.jsx"
 import { flipBoard } from "./Board/FlipBoard.jsx"
 import { flipPosition } from "./Board/Position.jsx"
+import { useNavigate } from "react-router-dom";
 import GameHeader from "./GameHeader";
 
 import Files from "./Border/Files"
@@ -15,6 +16,9 @@ import Board from "./Board/Board"
 import Panel from "./Panel/Panel"
 
 function Game() {
+    const navigate = useNavigate();
+    const [isGameOver, setIsGameOver] = useState(false);
+
     const { matchId, color } = useParams();
 
     const rankNumbers = [8, 7, 6, 5, 4, 3, 2, 1];
@@ -128,6 +132,9 @@ function Game() {
                     />
                 </div>
             </div>
+            {/* {((isGameOver === true) && (
+                (render static background popup to allow navigation to home)
+            ))} */}
         </Fragment>
     )
 }
