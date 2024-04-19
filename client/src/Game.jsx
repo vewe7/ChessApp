@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
 import "./App.css";
-import './Game.css'
+import "./Game.css"
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "./socket.js";
 import { initialPosition, makeNewPosition } from "./Board/Position"
 import { initialBoard } from "./Board/FlipBoard.jsx"
 
-import Files from './Border/Files'
-import Ranks from './Border/Ranks'
-import Board from './Board/Board'
-import Panel from './Panel/Panel'
+import Files from "./Border/Files"
+import Ranks from "./Border/Ranks"
+import Board from "./Board/Board"
+import Panel from "./Panel/Panel"
 
 function Game() {
     const [ranks, setRanks] = useState([8, 7, 6, 5, 4, 3, 2, 1]);
-    const [files, setFiles] = useState(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']);
-
+    const [files, setFiles] = useState(["a", "b", "c", "d", "e", "f", "g", "h"]);
     const { matchId, color } = useParams();
     const [currentPosition, setPosition] = useState(initialPosition());
-    const [whiteTime, setWhiteTime] = useState(0); 
-    const [blackTime, setBlackTime] = useState(0);
+    const [bottomTime, setBottomTime] = useState(0); 
+    const [topTime, setTopTime] = useState(0);
     const [turn, setTurn] = useState("w");
-
     const [board, setBoard] = useState(initialBoard());
 
     function convertFile(f, isFlipped) {
-        const curFile = f.charCodeAt(0) - 'a'.charCodeAt(0);
+        const curFile = f.charCodeAt(0) - "a".charCodeAt(0);
         return (isFlipped ? 7 - curFile : curFile);
     }
 
@@ -40,10 +38,15 @@ function Game() {
 
     useEffect(() => {
         function updateClock(color, time) {
-            if (color == "w") 
-                setWhiteTime(time);
-            else 
-                setBlackTime(time);
+            if (color == "w") {
+                if (board[0][0] === "a8") setBottomTime(time);
+                else setTopTime(time);
+            }
+
+            else {
+                if (board[0][0] === "a8") setTopTime(time);
+                else setBottomTime(time);
+            }
         }
 
         function updateValidMove(move, newStatus) {
@@ -95,8 +98,10 @@ function Game() {
                 <Files files={files}/>
             </div>
             <Panel 
-                whiteTime={whiteTime}
-                blackTime={blackTime}
+                bottomTime={bottomTime}
+                setTopTime={setTopTime}
+                topTime={topTime}
+                setBottomTime={setBottomTime}
                 boardArray={board}
                 setBoard={setBoard}
                 currentPosition={currentPosition}
