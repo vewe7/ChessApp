@@ -48,7 +48,7 @@ async function endGameOnDraw(io, matchId, status="draw") {
 
     match.chess.setComment("1/2-1/2");
     match.chess.header("Result", "1/2-1/2");
-    endGame(io, matchId, "draw", "draw");
+    endGame(io, matchId, status, "d");
 }
 
 // End game, where [color] resigns
@@ -246,7 +246,7 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
         if (match.drawState.whiteOffer && match.drawState.blackOffer) {
             // Both players have agreed to draw
-            endGameOnDraw(io, matchId);
+            endGameOnDraw(io, matchId, "draw");
             io.to(`match:${matchId}`).emit("acceptDraw");
         } else {
             // Emit draw offer to opponent
