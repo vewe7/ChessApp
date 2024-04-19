@@ -237,7 +237,7 @@ function initializeMatchHandlers(io, socket, socketUser) {
         if (color == "w") 
             match.drawState.whiteOffer = true;
         else 
-            match.drawState.whiteOffer = true;
+            match.drawState.blackOffer = true;
 
         if (match.drawState.whiteOffer && match.drawState.blackOffer) {
             // Both players have agreed to draw
