@@ -81,6 +81,21 @@ app.get("/matches/match_id/:match_id", async (req, res) => {
   }
 });
 
+// Get all players
+app.get("/player", async (req, res) => {
+  try {
+      const players = await pool.query("SELECT * FROM player");
+
+      if (players.rows.length === 0) {
+        return res.status(404).json({ error: "No players found" });
+      }
+
+      res.json(players.rows);
+  } catch (err) {
+      console.error(err.message);
+  }
+});
+
 // Update profile bio
 app.put("/profile/bio/:username", async (req, res) => {
   try {
