@@ -18,6 +18,7 @@ function generateNewMatch(whitePlayer, blackPlayer) {
     return {
         chess: chess, 
         live: false,
+        over: false,
         whiteId: whitePlayer.id, 
         blackId: blackPlayer.id,
         drawState: {

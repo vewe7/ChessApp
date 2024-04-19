@@ -53,6 +53,14 @@ function Game() {
         socket.emit("makeMove", parseInt(matchId), {from: from, to: to, promotion: promotion});
     }
 
+    function sendDrawOffer() {
+        socket.emit("offerDraw", parseInt(matchId));
+    }
+
+    function sendResignation() {
+        socket.emit("resign", parseInt(matchId));
+    }
+
     useEffect(() => {
         function updateClock(color, time) {
             if (color == "w") {
@@ -88,24 +96,32 @@ function Game() {
             else 
                 setTurn("w");
         }
+        
+        function updateGameOver(status, color) {
+            setIsGameOver(true);
+            window.console.log("Game over! Status: " + status + " Winner: " + color);
+        }
 
         socket.on("updateClock", updateClock);
         socket.on("validMove", updateValidMove);
         socket.on("moveError", (error) => {
             window.console.log("Got move error event: " + error);
         });
+        socket.on("gameOver", updateGameOver);
 
         socket.emit("joinMatchRoom", parseInt(matchId));
         window.console.log(`Joined match with id ${matchId} as ${color}`);
 
         // Cleanup
         return () => {
+            console.log("Game.jsx cleanup");
             socket.emit("leaveMatchRoom", parseInt(matchId));
             socket.off("updateClock", updateClock);
             socket.off("validMove", updateValidMove);
             socket.off("moveError");
+            socket.off("gameOver", updateGameOver);
         };
-    }, [currentPosition]);
+    }, [currentPosition, isGameOver]);
 
     return (
         <Fragment>
@@ -130,6 +146,8 @@ function Game() {
                         setRanks={setRanks}
                         files={files}
                         setFiles={setFiles}
+                        sendDrawOffer={sendDrawOffer}
+                        sendResignation={sendResignation}
                     />
                 </div>
             </div>
