@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import React, {useEffect, useState} from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
 const PrivateRoute = () => {
     const [isAuthenticated, userHasAuthenticated] = useState(false);

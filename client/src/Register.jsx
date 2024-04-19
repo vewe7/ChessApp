@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
-import { Link } from 'react-router-dom';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Link } from "react-router-dom";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
-import Button from 'react-bootstrap/Button';
-import Stack from 'react-bootstrap/Stack';
+import Button from "react-bootstrap/Button";
+import Stack from "react-bootstrap/Stack";
 import {
   MDBBtn,
   MDBContainer,
@@ -16,7 +16,7 @@ import {
   MDBInput,
   MDBIcon
 }
-from 'mdb-react-ui-kit';
+from "mdb-react-ui-kit";
 
 function Register({ setCurUsername, setSearchedUsername }) {
   const navigate = useNavigate();
@@ -24,10 +24,10 @@ function Register({ setCurUsername, setSearchedUsername }) {
   const logout = async () => {
     try { 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
-        method: 'POST',
-        credentials: 'include', // Include credentials (cookies) in the request
+        method: "POST",
+        credentials: "include", // Include credentials (cookies) in the request
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
       })
       if (!response.ok) {
@@ -35,11 +35,11 @@ function Register({ setCurUsername, setSearchedUsername }) {
       }   
       document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
 
-      setCurUsername('');
-      setSearchedUsername('');
+      setCurUsername("");
+      setSearchedUsername("");
 
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -48,9 +48,9 @@ function Register({ setCurUsername, setSearchedUsername }) {
   }, []);
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    confirmPassword: ''
+    username: "",
+    password: "",
+    confirmPassword: ""
   });
 
   const handleChange = (e) => {
@@ -98,11 +98,11 @@ function Register({ setCurUsername, setSearchedUsername }) {
   return (
     <MDBContainer fluid>
 
-      <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-        <MDBCol col='12'>
+      <MDBRow className="d-flex justify-content-center align-items-center h-100">
+        <MDBCol col="12">
 
-          <MDBCard className='my-5 mx-auto white' style={{maxWidth: '500px', color:"black"}}>
-            <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
+          <MDBCard className="my-5 mx-auto white" style={{maxWidth: "500px", color:"black"}}>
+            <MDBCardBody className="p-5 d-flex flex-column align-items-center mx-auto w-100">
 
               <h2 className="fw-bold mb-2 text-uppercase" style={{paddingBottom:"20px"}}>Create Account</h2>
               
@@ -124,7 +124,7 @@ function Register({ setCurUsername, setSearchedUsername }) {
 
 
               <p className="small mb-3 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
-              <Button variant="dark" size="lg" className="porple" onClick={handleSubmit}>Create Account</Button>{' '}
+              <Button variant="dark" size="lg" className="porple" onClick={handleSubmit}>Create Account</Button>{" "}
 
 
               <Stack className="topPadding" direction="horizontal" gap={5}>

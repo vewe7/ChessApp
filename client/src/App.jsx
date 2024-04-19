@@ -12,14 +12,14 @@ import Profile from "./Profile";
 import { socket } from "./socket.js"
 
 function App() {
-  const [curUsername, setCurUsername] = useState(localStorage.getItem('curUsername') || '');
-  const [searchedUsername, setSearchedUsername] =useState(localStorage.getItem('searchedUsername') || '');
+  const [curUsername, setCurUsername] = useState(localStorage.getItem("curUsername") || "");
+  const [searchedUsername, setSearchedUsername] =useState(localStorage.getItem("searchedUsername") || "");
 
   useEffect(() => {
-    localStorage.setItem('curUsername', curUsername);
+    localStorage.setItem("curUsername", curUsername);
   }, [curUsername]);
   useEffect(() => {
-    localStorage.setItem('searchedUsername', searchedUsername);
+    localStorage.setItem("searchedUsername", searchedUsername);
   }, [searchedUsername]);
 
   useEffect(() => {

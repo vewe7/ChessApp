@@ -6,9 +6,9 @@ import { Accordion, Card, Container, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
-  const [profileData, setProfileData] = useState('');
+  const [profileData, setProfileData] = useState("");
   const [pastGames, setPastGames] = useState([]);
-  const [bio, setBio] = useState('');
+  const [bio, setBio] = useState("");
 
   const { username } = useParams();
 
@@ -65,22 +65,22 @@ const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUse
 
   function truncateDate(dateString) {
     const date = new Date(dateString);
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return date.toLocaleDateString(undefined, options);
   }
 
   return (
     <Fragment>
       <Header className="Header" curUsername={curUsername} setCurUsername={setCurUsername} searchedUsername={searchedUsername} setSearchedUsername={setSearchedUsername} />
-      <Container className="d-flex flex-row justify-content-evenly mt-5" style={{ width:'100vw', height:'80vh' }}>
-        <Card bg="light" text="dark" border="dark" style={{ width:'35%', minWidth: '260px', display:"inline-block", borderWidth: '2px' }}>
-          <Card.Body style={{margin: '0px 0px 16px', padding: '16px 0px 16px', borderBottom: '1px solid black', borderTop: '1px solid black' }}>
+      <Container className="d-flex flex-row justify-content-evenly mt-5" style={{ width:"100vw", height:"80vh" }}>
+        <Card bg="light" text="dark" border="dark" style={{ width:"35%", minWidth: "260px", display:"inline-block", borderWidth: "2px" }}>
+          <Card.Body style={{margin: "0px 0px 16px", padding: "16px 0px 16px", borderBottom: "1px solid black", borderTop: "1px solid black" }}>
             <Card.Title>{profileData.username}</Card.Title>
             <Card.Text>
               Account Opening Date: {truncateDate(profileData.date_opened)}
             </Card.Text>
           </Card.Body>
-          <Card.Body style={{margin: '0px 0px 16px', padding: '0px 0px 16px', borderBottom: '1px solid black'}}>
+          <Card.Body style={{margin: "0px 0px 16px", padding: "0px 0px 16px", borderBottom: "1px solid black"}}>
             <Card.Title>Bio</Card.Title>
             <Card.Text>
               {profileData.bio ? profileData.bio : "This user hasn't added a bio yet."}
@@ -89,9 +89,9 @@ const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUse
               <EditBio profileData={profileData} bio={bio} setBio={setBio}/>
             ))}
           </Card.Body>
-          <Card.Body style={{margin: '0px', padding: '0px 0px 16px', borderBottom: '1px solid black'}}>
+          <Card.Body style={{margin: "0px", padding: "0px 0px 16px", borderBottom: "1px solid black"}}>
             <Card.Title>Stats</Card.Title>
-            <Table variant="light" borderless style={{ margin: '0px'}}>
+            <Table variant="light" borderless style={{ margin: "0px"}}>
               <tbody>
                 <tr>
                   <td>Wins: {profileData.wins}</td>
@@ -102,16 +102,16 @@ const Profile = ({ curUsername, setCurUsername, searchedUsername, setSearchedUse
             </Table>
           </Card.Body>
         </Card>
-        <Card bg="light" text="dark" border="dark" style={{ width:'50%', display:"inline-block", borderWidth: '2px' }}>
-          <Card.Body style={{ margin: '0px', padding: '16px 0px 16px', borderTop: '1px solid black' }}>
-            <Card.Title style={{ margin: '0px'}}>Previous Games</Card.Title>
+        <Card bg="light" text="dark" border="dark" style={{ width:"50%", display:"inline-block", borderWidth: "2px" }}>
+          <Card.Body style={{ margin: "0px", padding: "16px 0px 16px", borderTop: "1px solid black" }}>
+            <Card.Title style={{ margin: "0px"}}>Previous Games</Card.Title>
           </Card.Body>
-          <Card.Body style={{ maxHeight: '90%', overflowY: 'auto', border: '1px solid black', borderRadius: '3px' }}> 
+          <Card.Body style={{ maxHeight: "90%", overflowY: "auto", border: "1px solid black", borderRadius: "3px" }}> 
             <Accordion >
               {pastGames.map(pastGame => (
                 <Accordion.Item key={pastGame.match_id} eventKey={pastGame.match_id}>
                   <Accordion.Header>Game ID: {pastGame.match_id}</Accordion.Header>
-                  <Accordion.Body style={{ whiteSpace: 'pre-line', textAlign: 'left' }}>
+                  <Accordion.Body style={{ whiteSpace: "pre-line", textAlign: "left" }}>
                     {pastGame.pgn}
                   </Accordion.Body>
                 </Accordion.Item>

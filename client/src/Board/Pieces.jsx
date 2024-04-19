@@ -32,7 +32,7 @@ function Pieces({boardArray, currentPosition, setPosition, sendMove}) {
     async function onDrop(e) {
         const [type, file, rank] = e.dataTransfer.getData("text").split("-");
         const row = 8 - parseInt(rank);
-        const column = file.charCodeAt() - 'a'.charCodeAt();
+        const column = file.charCodeAt() - "a".charCodeAt();
 
         const startSquare = boardArray[row][column];
         const startFile = startSquare.charAt(0);

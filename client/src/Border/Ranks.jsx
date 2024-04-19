@@ -1,4 +1,4 @@
-import './Ranks.css'
+import "./Ranks.css"
 
 function Ranks({ranks}) {
     return (

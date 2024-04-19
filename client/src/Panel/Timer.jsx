@@ -8,8 +8,8 @@ function Timer({ color, time }) {
         const seconds = totalSeconds % 60;
         const deciseconds = Math.floor(milliseconds / 100);
     
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(seconds).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, "0");
+        const formattedSeconds = String(seconds).padStart(2, "0");
         const formattedDeciseconds = String(deciseconds % 10);
         
         return `${formattedMinutes}:${formattedSeconds}.${formattedDeciseconds}`;

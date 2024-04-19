@@ -24,10 +24,10 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
   const logout = async () => {
     try { 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
-        method: 'POST',
-        credentials: 'include', // Include credentials (cookies) in the request
+        method: "POST",
+        credentials: "include", // Include credentials (cookies) in the request
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
       })
       if (!response.ok) {
@@ -35,11 +35,11 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
       }   
       document.cookie = `yourAuthToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; HttpOnly`;
 
-      setCurUsername('');
-      setSearchedUsername('');
+      setCurUsername("");
+      setSearchedUsername("");
 
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 

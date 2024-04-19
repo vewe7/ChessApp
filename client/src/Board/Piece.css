@@ -6,15 +6,15 @@
 }
 
 /* Images for the pieces */
-.piece.bb { background-image: url('../assets/bb.svg'); }
-.piece.bk { background-image: url('../assets/bk.svg'); }
-.piece.bn { background-image: url('../assets/bn.svg'); }
-.piece.bp { background-image: url('../assets/bp.svg'); }
-.piece.bq { background-image: url('../assets/bq.svg'); }
-.piece.br { background-image: url('../assets/br.svg'); }
-.piece.wb { background-image: url('../assets/wb.svg'); }
-.piece.wk { background-image: url('../assets/wk.svg'); }
-.piece.wn { background-image: url('../assets/wn.svg'); }
-.piece.wp { background-image: url('../assets/wp.svg'); }
-.piece.wq { background-image: url('../assets/wq.svg'); }
-.piece.wr { background-image: url('../assets/wr.svg'); }
+.piece.bb { background-image: url("../assets/bb.svg"); }
+.piece.bk { background-image: url("../assets/bk.svg"); }
+.piece.bn { background-image: url("../assets/bn.svg"); }
+.piece.bp { background-image: url("../assets/bp.svg"); }
+.piece.bq { background-image: url("../assets/bq.svg"); }
+.piece.br { background-image: url("../assets/br.svg"); }
+.piece.wb { background-image: url("../assets/wb.svg"); }
+.piece.wk { background-image: url("../assets/wk.svg"); }
+.piece.wn { background-image: url("../assets/wn.svg"); }
+.piece.wp { background-image: url("../assets/wp.svg"); }
+.piece.wq { background-image: url("../assets/wq.svg"); }
+.piece.wr { background-image: url("../assets/wr.svg"); }
