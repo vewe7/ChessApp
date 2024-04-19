@@ -93,7 +93,7 @@ const Invite = () => {
         <Container className="d-flex flex-row justify-content-evenly mt-5" style={{ width:'90vw', height:'70vh'}}>
             <Card bg="light" text="dark" border="dark" style={{ width:'20%', minWidth: '260px', display:"inline-block", borderWidth: '2px' }}>
                 <Card.Body style={{margin: '0px', padding: '16px 0px 16px', borderTop: '1px solid black' }}>
-                    <Card.Title style={{margin: '0px'}}>List of Users:</Card.Title>
+                    <Card.Title style={{margin: '0px'}}>List of users:</Card.Title>
                 </Card.Body>
                 <Card.Body style={{textAlign:'left', maxHeight: '70%', overflowY: 'auto', border: '1px solid black', borderRadius: '3px' }}>
                     {allPlayers.map(player => (
