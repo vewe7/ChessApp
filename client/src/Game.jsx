@@ -99,6 +99,8 @@ function Game() {
         
         function updateGameOver(status, color) {
             setIsGameOver(true);
+            setStatus(status);
+            setWinner(color);
             window.console.log("Game over! Status: " + status + " Winner: " + color);
         }
 

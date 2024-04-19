@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const GameOver = ({ status, winner }) => {
@@ -10,13 +10,13 @@ const GameOver = ({ status, winner }) => {
     useEffect(() => {
         try {
             switch (winner) {
-                case 'b':
+                case "b":
                     setWinningColor("Black");
                     break;
-                case 'w':
+                case "w":
                     setWinningColor("White");
                     break;
-                case 'd':
+                case "d":
                     setWinningColor("Draw");
                     break;
                 default:
