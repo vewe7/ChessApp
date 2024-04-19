@@ -87,7 +87,7 @@ export function makeNewPosition(position, type, f0, r0, f1, r1, board) {
     return position2;
 }
 
-export function flipPosition(currentPosition, setPosition) {
+export function flipPosition(currentPosition) {
     const newPosition = [];
 
     for (let i = 0; i < 8; i++) {
@@ -97,5 +97,5 @@ export function flipPosition(currentPosition, setPosition) {
         }
     }
 
-    setPosition(newPosition);
+    return newPosition;
 }

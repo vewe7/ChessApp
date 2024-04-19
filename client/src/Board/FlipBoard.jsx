@@ -11,7 +11,7 @@ export function initialBoard() {
     return boardArray;
 }
 
-export function flipBoard(boardArray, setBoard) {
+export function flipBoard(boardArray) {
     const newBoardArray = [];
 
     for (let i = 0; i < 8; i++) {
@@ -21,5 +21,5 @@ export function flipBoard(boardArray, setBoard) {
         }
     }
 
-    setBoard(newBoardArray);
+    return newBoardArray;
 }

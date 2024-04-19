@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { socket } from "./socket.js";
 import { initialPosition, makeNewPosition } from "./Board/Position"
 import { initialBoard } from "./Board/FlipBoard.jsx"
+import { flipBoard } from "./Board/FlipBoard.jsx"
+import { flipPosition } from "./Board/Position.jsx"
 
 import Files from "./Border/Files"
 import Ranks from "./Border/Ranks"
@@ -12,14 +14,23 @@ import Board from "./Board/Board"
 import Panel from "./Panel/Panel"
 
 function Game() {
-    const [ranks, setRanks] = useState([8, 7, 6, 5, 4, 3, 2, 1]);
-    const [files, setFiles] = useState(["a", "b", "c", "d", "e", "f", "g", "h"]);
     const { matchId, color } = useParams();
-    const [currentPosition, setPosition] = useState(initialPosition());
+
+    const rankNumbers = [8, 7, 6, 5, 4, 3, 2, 1];
+    const fileLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+    const initial_ranks = color === "white" ? rankNumbers : rankNumbers.slice().reverse();
+    const initial_files = color === "white" ? fileLetters : fileLetters.slice().reverse();
+    const initial_position = color === "white" ? initialPosition() : flipPosition(initialPosition());
+    const initial_board = color === "white" ? initialBoard() : flipBoard(initialBoard());
+
+    const [ranks, setRanks] = useState(initial_ranks);
+    const [files, setFiles] = useState(initial_files);
+    const [currentPosition, setPosition] = useState(initial_position);
     const [bottomTime, setBottomTime] = useState(0); 
     const [topTime, setTopTime] = useState(0);
     const [turn, setTurn] = useState("w");
-    const [board, setBoard] = useState(initialBoard());
+    const [board, setBoard] = useState(initial_board);
 
     function convertFile(f, isFlipped) {
         const curFile = f.charCodeAt(0) - "a".charCodeAt(0);
