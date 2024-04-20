@@ -19,6 +19,7 @@ from "mdb-react-ui-kit";
 const Login = ({ setCurUsername, setSearchedUsername }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showWarningLabel, setShowWarningLabel] = useState(false);
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -60,8 +61,7 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
       });
       // Throw error if login failed
       if (!response.ok) {
-        var warning = document.getElementById("warningLabel");
-        warning.style.display = "block";
+        setShowWarningLabel(true);
 
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -102,10 +102,11 @@ const Login = ({ setCurUsername, setSearchedUsername }) => {
                 <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
                   <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
                 </FloatingLabel>
+                { showWarningLabel ? 
                 <h5 id="warningLabel" 
                   className="fw-normal my-1 h6" 
-                  style={{letterSpacing: "1px", color:"red", display:"none"}}
-                  >Invalid Login</h5>
+                  style={{letterSpacing: "1px", color:"red", display:"block"}}
+                  >Invalid Login</h5> : null}
               </Stack>
               <Button variant="dark" size="lg" className="porple" onClick={handleLogin} >Login</Button>
 

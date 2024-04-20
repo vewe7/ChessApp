@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MDBCardImage } from "mdb-react-ui-kit";
 import Stack from "react-bootstrap/Stack";
@@ -14,52 +14,30 @@ import Collapse from "react-bootstrap/Collapse";
 import Logout from "./Logout";
 import { NavbarCollapse } from "react-bootstrap";
 
-function toggleSearch() {
-    var searchBar = document.getElementById("searchBar");
-    var displaySetting = searchBar.style.display;
-
-    if (displaySetting == "block")
-    {
-        searchBar.style.display = "none";
-    }
-    else
-    {
-        searchBar.style.display = "block";
-    }
-}
-
-function activateHome() {
-    var navBar = document.getElementById("NavigationBar")
-    navBar.active = document.getElementById("home");
-    navBar.disabled = document.getElementById("profile");
-}
-
-function activateProfile() {
-    var navBar = document.getElementById("NavigationBar")
-    navBar.active = document.getElementById("profile");
-    navBar.disabled = document.getElementById("home");
-}
-
-function setHBold() {
-    var boldItem = document.getElementById("H");
-    var normItem = document.getElementById("P");
-
-    boldItem.style.fontWeight = "bold";
-    normItem.style.fontWeight = "normal";
-}
-
-function setPBold() {
-    var boldItem = document.getElementById("P");
-    var normItem = document.getElementById("H");
-
-    boldItem.style.fontWeight = "bold";
-    normItem.style.fontWeight = "normal";
-}
-
 const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUsername }) => {
     const navigate = useNavigate();
-
+    const hRef = useRef(null);
+    const pRef = useRef(null);
+    const searchRef = useRef(null);
     const [formData, setFormData] = useState("");
+    const [showSearch, setShowSearch] = useState(false);
+
+    function toggleSearch() {
+        if (showSearch) 
+            setShowSearch(false);
+        else 
+            setShowSearch(true); 
+    }
+    
+    function setHBold() {
+        hRef.style.fontWeight = "bold";
+        pRef.style.fontWeight = "normal";
+    }
+    
+    function setPBold() {
+        hRef.style.fontWeight = "bold";
+        pRef.style.fontWeight = "normal";
+    }
 
     const handleChange = (e) => {
         setFormData(e.target.value);
@@ -97,10 +75,10 @@ const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUser
 
                 <Nav variant="underline" id="NavigationBar">
                     <Nav.Item>
-                        <Nav.Link id="H" onClick={() => navigate("/")} style={{cursor:"pointer"}} onSelect={setHBold}>Home</Nav.Link>
+                        <Nav.Link ref={hRef} onClick={() => navigate("/")} style={{cursor:"pointer"}} onSelect={setHBold}>Home</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link id="P" onClick={() => {setSearchedUsername(searchedUsername ? "" : curUsername); navigate(`/profile/${curUsername}`);}} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
+                        <Nav.Link ref={pRef} onClick={() => {setSearchedUsername(searchedUsername ? "" : curUsername); navigate(`/profile/${curUsername}`);}} style={{cursor:"pointer"}} onSelect={setPBold}>Profile</Nav.Link>
                     </Nav.Item>  
                 </Nav>
 
@@ -116,15 +94,16 @@ const Header = ({ curUsername, setCurUsername, searchedUsername, setSearchedUser
                                 </Button>
                             </Col>
                             <Col xs="auto">
+                                { showSearch ?
                                 <Form.Control
                                     type="text"
                                     placeholder="Search for User"
                                     className=" mr-sm-2"
                                     id="searchBar"
-                                    style={{maxWidth: "137px", background:"none", display:"none"}}
+                                    style={{maxWidth: "137px", background:"none", display:"block"}}
                                     value={formData}
                                     onChange={handleChange} 
-                                />
+                                /> : null }
                             </Col>
                         </Row>
                     </Form>

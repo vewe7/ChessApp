@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { Link } from "react-router-dom";
@@ -20,6 +20,8 @@ from "mdb-react-ui-kit";
 
 function Register({ setCurUsername, setSearchedUsername }) {
   const navigate = useNavigate();
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("Passwords do not match");
 
   const logout = async () => {
     try { 
@@ -65,12 +67,7 @@ function Register({ setCurUsername, setSearchedUsername }) {
     e.preventDefault();
     try {
       if (formData.password !== formData.confirmPassword)
-      {
-        var warning = document.getElementById("notMatching");
-        warning.style.display = "block";
-        
-        throw new Error("Passwords do not match!");
-      }
+        throw new Error("Passwords do not match");
 
       const body = {
         username: formData.username,
@@ -91,7 +88,8 @@ function Register({ setCurUsername, setSearchedUsername }) {
 
       navigate("/login");
     } catch (error) {
-      console.error(error.message);
+      setErrorMessage(error.message);
+      setShowError(true);
     }
   };
 
@@ -116,10 +114,11 @@ function Register({ setCurUsername, setSearchedUsername }) {
                 <FloatingLabel controlId="floatingConfirmPassword" label="Confirm Password" className="mb-3">
                   <Form.Control type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange}/>
                 </FloatingLabel>
+                { showError ? 
                 <h5 id="notMatching" 
                   className="fw-normal my-1 h6" 
-                  style={{letterSpacing: "1px", color:"red", display:"none"}}
-                  >Passwords do not match</h5>
+                  style={{letterSpacing: "1px", color:"red", display:"block"}}
+                  >{errorMessage}</h5> : null }
               </Stack>
               
               <Button variant="dark" size="lg" className="porple" onClick={handleSubmit}>Create Account</Button>{" "}
