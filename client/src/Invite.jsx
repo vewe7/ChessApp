@@ -9,10 +9,11 @@ import { socket } from "./socket.js";
 
 const Invite = () => {
     const [inviteName, setInviteName] = useState("");
+    const [inviteId, setInviteId] = useState(0);
     const [show, setShow] = useState(false);
+    const [username, setUsername] = useState("");
 
     const [allPlayers, setAllPlayers] = useState([]);
-    const [invites, setInvites] = useState([]);
 
     const getAllPlayers = async () => {
         try {
@@ -38,28 +39,21 @@ const Invite = () => {
           console.error(err.message);
         }
       };
-    
-    const addNewInvite = (inviteId, username) => {
-        setInvites([...invites, [inviteId, username]]);
-    }
-
-    const removeInvite = (inviteId) => {
-        setInvites(invites.filter(inv => inv[0] !== inviteId));
-      };
 
     const navigate = useNavigate();
 
-    
-
     useEffect(() => {
         getAllPlayers();
+    }, []);
+
+    useEffect(() => {
+        // socket.connect();
+
         socket.on("inviteAsk", (username, incomingInviteId) => {
-            /*
             window.console.log(`invite from username "${username}" | invite id ${inviteId}`);
             setInviteId(incomingInviteId);
             setUsername(username);
-            setShow(true); */
-            addNewInvite(incomingInviteId, username);
+            setShow(true);
         });
         
         socket.on("invite", (message) => {
@@ -78,20 +72,19 @@ const Invite = () => {
             socket.off("invite");
             socket.off("startMatch");
         };
-    }, [invites]);
+    }, []);
     
     function sendInvite() {
         // Send invite to socket server
         socket.emit("invite", inviteName);
     }
 
-    function acceptInvite(inviteId) {
+    function acceptInvite() {
         socket.emit("inviteAnswer", "accept", inviteId);
     }
 
-    function declineInvite(inviteId) {
+    function declineInvite() {
         socket.emit("inviteAnswer", "decline", inviteId);
-        removeInvite(inviteId);
     }
     
 
@@ -109,24 +102,19 @@ const Invite = () => {
                 </Card.Body>
             </Card>
             <Card bg="light" text="dark" border="dark" style={{ width:"65%", display:"inline-block", borderWidth: "2px" }}>
-                <Card.Body style={{margin: "0px", padding: "16px 0px 16px", borderTop: "1px solid black" }}> 
+                <Card.Body style={{margin: "0px", padding: "16px 0px 16px", borderBottom: "1px solid black", borderTop: "1px solid black" }}> 
                     <Card.Title style={{margin: "0px 0px 16px"}}>Send an invite to play!</Card.Title>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "0px 0px 16px"}}>
                         <input type="text" id="username" placeholder="Enter Username:" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
                         <Button variant="dark" onClick={sendInvite} style={{ marginLeft: "10px" }}>Invite</Button>
                     </div>
-                </Card.Body>
-                <Card.Body style={{margin: "0px", padding: "16px 0px 16px", borderTop: "1px solid black" }}>
-                    <Card.Title style={{margin: "0px"}}>Invites</Card.Title>
-                </Card.Body>
-                <Card.Body style={{textAlign:"left", maxHeight: "60%", overflowY: "auto", border: "1px solid black", borderRadius: "3px" }}>
-                    {invites.map(([inviteId, username]) => (
-                        <div key={username}>
-                            Game invite received from: {username}
-                            <Button onClick={() => {setShow(false); acceptInvite(inviteId)}} variant="outline-dark">Accept</Button>
-                            <Button onClick={() => {setShow(false); declineInvite(inviteId)}} variant="outline-dark">Decline</Button>
+                    <Alert show={show} variant="secondary" style={{margin: "0px"}}>
+                        <Alert.Heading>Game invite received from: {username}</Alert.Heading>
+                        <div style={{display:"flex", flexDirection:"row", justifyContent:"center", gap:"10px"}}>
+                            <Button onClick={() => {setShow(false); acceptInvite()}} variant="outline-dark">Accept</Button>
+                            <Button onClick={() => {setShow(false); declineInvite()}} variant="outline-dark">Decline</Button>
                         </div>
-                    ))}
+                    </Alert>
                 </Card.Body>
             </Card>
         </Container>
