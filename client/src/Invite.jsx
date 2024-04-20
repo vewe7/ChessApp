@@ -12,6 +12,8 @@ const Invite = () => {
     const [inviteId, setInviteId] = useState(0);
     const [show, setShow] = useState(false);
     const [username, setUsername] = useState("");
+    const [showError, setShowError] = useState(false);
+    const [errorDisplay, setDisplay] = useState("none")
 
     const [allPlayers, setAllPlayers] = useState([]);
 
@@ -58,6 +60,8 @@ const Invite = () => {
         
         socket.on("invite", (message) => {
             window.console.log(message);  
+            setDisplay(message);
+            setShowError(true);
         });
 
         socket.on("startMatch", (matchId, color) => {
@@ -108,6 +112,12 @@ const Invite = () => {
                         <input type="text" id="username" placeholder="Enter Username:" value={inviteName} onChange={(e) => setInviteName(e.target.value)} />
                         <Button variant="dark" onClick={sendInvite} style={{ marginLeft: "10px" }}>Invite</Button>
                     </div>
+                    { showError ? 
+                        <h5 id="notMatching" 
+                        className="fw-normal my-1 h6" 
+                        style={{letterSpacing: "1px", color:"red", display:"block"}}
+                        >{errorDisplay}</h5> : null }
+                        
                     <Alert show={show} variant="secondary" style={{margin: "0px"}}>
                         <Alert.Heading>Game invite received from: {username}</Alert.Heading>
                         <div style={{display:"flex", flexDirection:"row", justifyContent:"center", gap:"10px"}}>
