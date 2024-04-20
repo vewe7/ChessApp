@@ -38,7 +38,7 @@ async function endGameOnFlag(io, matchId, color) {
     match.chess.setComment(result);
     match.chess.header("Result", result);
 
-    endGame(io, socket, matchId, "flag", (color == "w" ? "b" : "w"));
+    endGame(io, matchId, "flag", (color == "w" ? "b" : "w"));
 }
 
 async function endGameOnDraw(io, matchId, status) {

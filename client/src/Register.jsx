@@ -121,9 +121,7 @@ function Register({ setCurUsername, setSearchedUsername }) {
                   style={{letterSpacing: "1px", color:"red", display:"none"}}
                   >Passwords do not match</h5>
               </Stack>
-
-
-              <p className="small mb-3 pb-lg-2"><a className="text-white-50" href="#!">Forgot password?</a></p>
+              
               <Button variant="dark" size="lg" className="porple" onClick={handleSubmit}>Create Account</Button>{" "}
 
 

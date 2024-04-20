@@ -17,9 +17,11 @@ import Panel from "./Panel/Panel"
 import Notification from "./Notification/Notification.jsx"
 
 function Game() {
-    const [isGameOver, setIsGameOver] = useState(false);
-    const [status, setStatus] = useState("");
-    const [winner, setWinner] = useState("");
+    const [isGameOver, setIsGameOver] = useState(
+        localStorage.getItem("isGameOver") === "true"
+    );
+    const [status, setStatus] = useState(localStorage.getItem("status") || "");
+    const [winner, setWinner] = useState(localStorage.getItem("winner") || "");
 
     const { matchId, color } = useParams();
 
@@ -112,11 +114,14 @@ function Game() {
                 setTurn("w");
         }
         
-        function updateGameOver(status, color) {
+        function updateGameOver(statusParam, colorParam) {
             setIsGameOver(true);
-            setStatus(status);
-            setWinner(color);
-            window.console.log("Game over! Status: " + status + " Winner: " + color);
+            localStorage.setItem("isGameOver", true);
+            setStatus(statusParam);
+            localStorage.setItem("status", statusParam);
+            setWinner(colorParam);
+            localStorage.setItem("winner", colorParam);
+            window.console.log("Game over! Status: " + statusParam + " Winner: " + colorParam);
         }
 
         function offerDraw() {
@@ -177,7 +182,7 @@ function Game() {
             </div>
             { messageVisibility && <Notification type={messageType}/> }
             {((isGameOver === true) && (
-                <GameOver status={status} winner={winner}/>
+                <GameOver status={status} winner={winner} setIsGameOver={setIsGameOver} setStatus={setStatus} setWinner={setWinner} />
             ))}
         </Fragment>
     )
