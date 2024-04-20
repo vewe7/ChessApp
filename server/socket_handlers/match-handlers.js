@@ -79,7 +79,6 @@ function pollClocks(match, matchId, io) {
     const turn = match.chess.turn();
     const clock = turn == "w" ? match.clock.white : match.clock.black;
     io.to(`match:${matchId}`).emit("updateClock", turn, clock.remainingTime);
-    console.log("clocks polled");
 }
 
 function startMatchClock(matchId, io) {
@@ -88,7 +87,6 @@ function startMatchClock(matchId, io) {
         return;
 
     match.live = true;
-    console.log("Starting match clock for match " + matchId);
 
     io.to(`match:${matchId}`).emit("updateClock", "b", match.clock.black.remainingTime);
     io.to(`match:${matchId}`).emit("updateClock", "w", match.clock.white.remainingTime);
@@ -130,7 +128,6 @@ function initializeMatchHandlers(io, socket, socketUser) {
 
         // Start clock when both players have joined
         const matchSockets = await io.in(`match:${matchId}`).fetchSockets();
-        console.log("Match sockets: " + matchSockets.length);
         if (matchSockets.length > 1 && !match.live) {
             startMatchClock(matchId, io);
         }
