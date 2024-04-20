@@ -1,0 +1,13 @@
+.notification {
+    display: flex;
+    justify-content: center;
+}
+
+.message {
+    margin-top: 25px;
+    font-size: 20px;
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 7px;
+}

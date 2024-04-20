@@ -14,6 +14,7 @@ import Files from "./Border/Files"
 import Ranks from "./Border/Ranks"
 import Board from "./Board/Board"
 import Panel from "./Panel/Panel"
+import Notification from "./Notification/Notification.jsx"
 
 function Game() {
     const [isGameOver, setIsGameOver] = useState(false);
@@ -37,6 +38,8 @@ function Game() {
     const [topTime, setTopTime] = useState(0);
     const [turn, setTurn] = useState("w");
     const [board, setBoard] = useState(initial_board);
+    const [messageVisibility, setMessageVisibility] = useState(false);
+    const [messageType, setMessageType] = useState("");
 
     function convertFile(f, isFlipped) {
         const curFile = f.charCodeAt(0) - "a".charCodeAt(0);
@@ -55,6 +58,9 @@ function Game() {
 
     function sendDrawOffer() {
         socket.emit("offerDraw", parseInt(matchId));
+
+        setMessageVisibility(true);
+        setMessageType("draw-sent");
     }
 
     function sendResignation() {
@@ -91,6 +97,15 @@ function Game() {
             const nextPosition = makeNewPosition(currentPosition, type, file, rank, newFile, newRank, board);
             setPosition(nextPosition);
 
+            if (messageVisibility && messageType !== "draw-declined") {
+                setMessageType("draw-declined");
+            }
+
+            else {
+                setMessageVisibility(false);
+                setMessageType("");
+            }
+
             if (turn == "w") 
                 setTurn("b");
             else 
@@ -104,12 +119,18 @@ function Game() {
             window.console.log("Game over! Status: " + status + " Winner: " + color);
         }
 
+        function offerDraw() {
+            setMessageVisibility(true);
+            setMessageType("draw-offer");
+        }
+
         socket.on("updateClock", updateClock);
         socket.on("validMove", updateValidMove);
         socket.on("moveError", (error) => {
             window.console.log("Got move error event: " + error);
         });
         socket.on("gameOver", updateGameOver);
+        socket.on("offerDraw", offerDraw);
 
         socket.emit("joinMatchRoom", parseInt(matchId));
         window.console.log(`Joined match with id ${matchId} as ${color}`);
@@ -122,8 +143,9 @@ function Game() {
             socket.off("validMove", updateValidMove);
             socket.off("moveError");
             socket.off("gameOver", updateGameOver);
+            socket.off("offerDraw", offerDraw);
         };
-    }, [currentPosition, isGameOver]);
+    }, [currentPosition, isGameOver, messageType, messageVisibility]);
 
     return (
         <Fragment>
@@ -153,6 +175,7 @@ function Game() {
                     />
                 </div>
             </div>
+            { messageVisibility && <Notification type={messageType}/> }
             {((isGameOver === true) && (
                 <GameOver status={status} winner={winner}/>
             ))}
